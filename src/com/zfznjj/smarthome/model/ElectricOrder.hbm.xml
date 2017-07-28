@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-8-14 20:23:50 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.ElectricOrder" table="ELECTRICORDERS">
+        <id name="id" type="java.lang.Integer">
+            <column name="order_id" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="master_code" />
+        </property>
+        <property name="electricCode" type="java.lang.String">
+            <column name="electric_code" />
+        </property>
+        <property name="orderData" type="java.lang.String">
+            <column name="order_data" />
+        </property>
+        <property name="orderInfo" type="java.lang.String">
+            <column name="order_info" />
+        </property>
+        <property name="writeTime" type="java.lang.String">
+            <column name="write_time" />
+        </property>
+        <property name="readTime" type="java.lang.String">
+            <column name="read_time" />
+        </property>
+        <property name="isReaded" type="java.lang.Character">
+            <column name="is_readed" />
+        </property>
+    </class>
+</hibernate-mapping>

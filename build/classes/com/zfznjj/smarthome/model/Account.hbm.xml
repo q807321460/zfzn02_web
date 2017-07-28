@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-10 8:53:07 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.Account" table="ACCOUNTS">
+        <id name="accountId" type="int">
+            <column name="account_id" />
+            <generator class="native" />
+        </id>
+        <property name="accountCode" type="java.lang.String">
+            <column name="account_code" />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="password" />
+        </property>
+        <property name="accountName" type="java.lang.String">
+            <column name="account_name" />
+        </property>
+        <property name="accountPhone" type="java.lang.String">
+            <column name="account_phone" />
+        </property>
+        <property name="accountAddress" type="java.lang.String">
+            <column name="account_address" />
+        </property>
+        <property name="accountEmail" type="java.lang.String">
+            <column name="account_email" />
+        </property>
+        <property name="lePhone" type="java.lang.String">
+        	<column name="le_phone"></column>
+        </property>
+        <property name="leSign" type="int">
+        	<column name="le_sign"></column>
+        </property>
+        <property name="photo" type="image" >
+        	<column name="photo"></column>
+        </property>
+        <property name="signTime" type="java.lang.String">
+            <column name="sign_time" />
+        </property>
+        <property name="accountTime" type="java.lang.String">
+            <column name="account_time" />
+        </property>
+        <property name="userTime" type="java.lang.String">
+            <column name="user_time" />
+        </property>
+    </class>
+</hibernate-mapping>

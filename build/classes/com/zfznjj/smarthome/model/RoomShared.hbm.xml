@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-24 9:55:35 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.RoomShared" table="ROOMSHARED">
+        <id name="sRoomId" type="int">
+            <column name="S_ROOM_ID" />
+            <generator class="native" />
+        </id>
+        <property name="roomId" type="int" access="field">
+            <column name="ROOM_ID" />
+        </property>
+        <property name="userId" type="int">
+            <column name="USER_ID" />
+        </property>
+        <property name="sRoomName" type="java.lang.String" access="field">
+            <column name="SROOM_NAME" />
+        </property>
+        <property name="sRoomSequ" type="int" access="field">
+            <column name="S_ROOM_SEQU" />
+        </property>
+    </class>
+</hibernate-mapping>

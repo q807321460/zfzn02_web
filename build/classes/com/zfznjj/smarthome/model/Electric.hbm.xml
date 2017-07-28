@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-24 9:48:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.Electric" table="ELECTRICS">
+        <id name="electricId" type="int">
+            <column name="electric_id" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+        	<column name="master_code"></column>
+        </property>
+        <property name="roomIndex" type="int">
+            <column name="room_index" />
+        </property>
+        <property name="electricIndex" type="int">
+            <column name="electric_index" />
+        </property>
+        <property name="electricName" type="java.lang.String">
+            <column name="electric_name" />
+        </property>
+        <property name="electricSequ" type="int">
+            <column name="electric_sequ" />
+        </property>
+        <property name="electricCode" type="java.lang.String">
+            <column name="electric_code" />
+        </property>
+        <property name="orderInfo" type="java.lang.String">
+        	<column name="order_info"></column>
+        </property>
+        <property name="electricType" type="int">
+            <column name="electric_type" />
+        </property>
+        <property name="sceneIndex" type="java.lang.Integer">
+        	<column name="scene_index"></column>
+        </property>
+        <property name="belong" type="int">
+            <column name="belong" />
+        </property>
+        <property name="extras" type="java.lang.String">
+            <column name="extras" />
+        </property>
+    </class>
+</hibernate-mapping>

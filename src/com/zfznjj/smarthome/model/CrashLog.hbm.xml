@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-12 15:28:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.CrashLog" table="crash_log">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="logName" type="java.lang.String">
+            <column name="log_name" />
+        </property>
+        <property name="logDetail" type="binary">
+            <column name="log_detail" />
+        </property>
+        <property name="logTime" type="java.lang.String">
+            <column name="log_time" />
+        </property>
+        <property name="appName" type="java.lang.String">
+            <column name="app_name" />
+        </property>
+    </class>
+</hibernate-mapping>

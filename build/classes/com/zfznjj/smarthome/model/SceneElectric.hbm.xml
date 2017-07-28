@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-11-2 19:48:22 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.SceneElectric" table="SCENEELECTRICS">
+        <id name="seId" type="int">
+            <column name="SE_ID" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="MASTER_CODE" />
+        </property>
+        <property name="electricIndex" type="int">
+        	<column name="electric_index"></column>
+        </property>
+        <property name="electricName" type="java.lang.String">
+        	<column name="electric_name"></column>
+        </property>
+        <property name="electricCode" type="java.lang.String">
+            <column name="ELECTRIC_CODE" />
+        </property>
+        <property name="electricOrder" type="java.lang.String">
+            <column name="ELECTRIC_ORDER" />
+        </property>
+        <property name="orderInfo" type="java.lang.String">
+        	<column name="order_info"></column>
+        </property>
+        <property name="roomIndex" type="int">
+        	<column name="room_index"></column>
+        </property>
+        <property name="electricType" type="int">
+        	<column name="electric_type"></column>
+        </property>
+        <property name="sceneIndex" type="int">
+            <column name="SCENE_INDEX" />
+        </property>
+    </class>
+</hibernate-mapping>

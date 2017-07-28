@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-24 9:48:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.ElectricShared" table="ELECTRICSHARED">
+        <id name="sElecId" type="int">
+            <column name="S_ELEC_ID" />
+            <generator class="native" />
+        </id>
+        <property name="userId" type="int" >
+            <column name="USER_ID" />
+        </property>
+        <property name="electricId" type="int">
+            <column name="ELECTRIC_ID" />
+        </property>
+        <property name="sElecName" type="java.lang.String">
+            <column name="S_ELEC_NAME" />
+        </property>
+        <property name="sElecSequ" type="int">
+            <column name="S_ELEC_SEQU" />
+        </property>
+        <property name="isShared" type="int">
+        	<column name="IS_SHARED"></column>
+        </property>
+    </class>
+</hibernate-mapping>

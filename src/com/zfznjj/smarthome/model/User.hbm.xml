@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-10 9:06:12 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.User" table="USERS">
+        <id name="userId" type="int">
+            <column name="USER_ID" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="MASTER_CODE" />
+        </property>
+        <property name="accountCode" type="java.lang.String">
+            <column name="ACCOUNT_CODE" />
+        </property>
+        <property name="userName" type="java.lang.String">
+            <column name="USER_NAME" />
+        </property>
+        <property name="userIp" type="java.lang.String">
+        	<column name="USER_IP"></column>
+        </property>
+        <property name="isAdmin" type="int">
+        	<column name="IS_ADMIN"></column>
+        </property>
+        <property name="areaTime" type="java.lang.String">
+            <column name="AREA_TIME" />
+        </property>
+        <property name="sceneTime" type="java.lang.String">
+            <column name="SCENE_TIME" />
+        </property>
+        <property name="electricTime" type="java.lang.String">
+            <column name="ELECTRIC_TIME" />
+        </property>
+        <property name="sceneELectricTime" type="java.lang.String">
+            <column name="SCENE_ELECTRIC_TIME" />
+        </property>
+    </class>
+</hibernate-mapping>

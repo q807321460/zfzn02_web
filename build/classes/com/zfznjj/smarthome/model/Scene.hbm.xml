@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-11-2 19:48:22 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.Scene" table="SCENES">
+        <id name="sceneId" type="int">
+            <column name="SCENE_ID" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="MASTER_CODE" />
+        </property>
+        <property name="sceneName" type="java.lang.String">
+            <column name="SCENE_NAME" />
+        </property>
+        <property name="sceneIndex" type="int">
+            <column name="SCENE_INDEX" />
+        </property>
+        <property name="sceneSequ" type="int">
+            <column name="SCENE_SEQU" />
+        </property>
+        <property name="sceneImg" type="int">
+            <column name="SCENE_IMG" />
+        </property>
+        <property name="buildTime" type="java.lang.String">
+            <column name="BUILD_TIME" />
+        </property>
+    </class>
+</hibernate-mapping>

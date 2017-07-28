@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-3-28 10:34:19 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.ETAirDevice" table="etairdevice">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="master_code" />
+        </property>
+        <property name="electricIndex" type="int">
+            <column name="electric_index" />
+        </property>
+        <property name="airBrand" type="int">
+            <column name="air_brand" />
+        </property>
+        <property name="airIndex" type="int">
+            <column name="air_index" />
+        </property>
+        <property name="airTemp" type="int">
+            <column name="air_temp" />
+        </property>
+        <property name="airRate" type="int">
+            <column name="air_rate" />
+        </property>
+        <property name="airDir" type="int">
+            <column name="air_dir" />
+        </property>
+        <property name="airAutoDir" type="int">
+            <column name="AIRAUTODIR" />
+        </property>
+        <property name="airMode" type="int">
+            <column name="AIRMODE" />
+        </property>
+        <property name="airPower" type="int">
+            <column name="AIRPOWER" />
+        </property>
+    </class>
+</hibernate-mapping>

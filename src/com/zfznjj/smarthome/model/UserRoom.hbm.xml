@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-24 9:48:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.UserRoom" table="USERROOMS">
+        <id name="roomId" type="int">
+            <column name="ROOM_ID" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="MASTER_CODE" />
+        </property>
+        <property name="roomIndex" type="int">
+            <column name="ROOM_INDEX" />
+        </property>
+        <property name="roomName" type="java.lang.String">
+            <column name="ROOM_NAME" />
+        </property>
+        <property name="roomSequ" type="int">
+            <column name="ROOM_SEQU" />
+        </property>
+        <property name="roomImg" type="int">
+            <column name="ROOM_IMG" />
+        </property>
+    </class>
+</hibernate-mapping>

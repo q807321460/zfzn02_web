@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!-- Web应用的类加载路径有两类：
+		A WEB-INF/classes目录。
+		B WEB-INF/lib 目录
+	 -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+	
+	<!-- 配置数据源 -->
+	
+	<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="sa"></property>
+		<property name="password" value="zfznjj"></property>
+		<property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+		<property name="jdbcUrl" value="jdbc:sqlserver://101.201.211.87:1433;DatabaseName=zfzn02"></property>
+		<property name="initialPoolSize" value="100"></property>
+		<property name="maxPoolSize" value="300"></property>
+	</bean> -->
+	
+		
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="root"></property>
+		<property name="password" value="123456"></property>
+		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+		<property name="jdbcUrl" value="jdbc:mysql:///zfzn02"></property>
+		<property name="initialPoolSize" value="10"></property>
+		<property name="maxPoolSize" value="100"></property>
+	</bean>
+	
+	
+	<!-- 配置Hibernate 的SessionFactory 实例 :通过Spring提供的LocalSessionFactoryBean进行配置-->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 加入基本属性 -->
+		<!-- 配置数据源属性 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 配置Hibernate配置文件的位置及名称 -->
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+		<!-- 使用HibernateProperties 属性来配置Hibernate 原生的属性 -->
+		<!--  
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		-->
+		<!-- 配置Hibernate映射文件的位置及名称，可以使用通配符 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/zfznjj/smarthome/model/Account.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/ChildNode.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/Electric.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/ElectricOrder.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/ElectricShared.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/MasterNode.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/RoomShared.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/User.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/UserRoom.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/Scene.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/SceneElectric.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/SceneOrder.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/ETKey.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/ETAirDevice.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/CrashLog.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 配置bean -->
+	<bean id="masterNodeDao" class="com.zfznjj.smarthome.dao.impl.MasterNodeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="accountDao" class="com.zfznjj.smarthome.dao.impl.AccountDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="userDao" class="com.zfznjj.smarthome.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="userRoomDao" class="com.zfznjj.smarthome.dao.impl.UserRoomDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="electricDao" class="com.zfznjj.smarthome.dao.impl.ElectricDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="childNodeDao" class="com.zfznjj.smarthome.dao.impl.ChildNodeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="electricSharedDao" class="com.zfznjj.smarthome.dao.impl.ElectricSharedDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="roomSharedDao" class="com.zfznjj.smarthome.dao.impl.RoomSharedDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="sceneDao" class="com.zfznjj.smarthome.dao.impl.SceneDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="sceneElectricDao" class="com.zfznjj.smarthome.dao.impl.SceneElectricDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="electricOrderDao" class="com.zfznjj.smarthome.dao.impl.ElectricOrderDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="sceneOrderDao" class="com.zfznjj.smarthome.dao.impl.SceneOrderDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="otherDao" class="com.zfznjj.smarthome.dao.impl.OtherDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="eTKeyDao" class="com.zfznjj.smarthome.dao.impl.ETKeyDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="eTAirDeviceDao" class="com.zfznjj.smarthome.dao.impl.ETAirDeviceDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="crashDao" class="com.zfznjj.smarthome.dao.impl.CrashDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	
+	<bean id="smarthomeService" class="com.zfznjj.smarthome.service.impl.SmarthomeServiceImpl">
+		<property name="masterNodeDao" ref="masterNodeDao"></property>
+		<property name="accountDao" ref="accountDao"></property>
+		<property name="userDao" ref="userDao"></property>
+		<property name="userRoomDao" ref="userRoomDao"></property>
+		<property name="electricDao" ref="electricDao"></property>
+		<property name="electricOrderDao" ref="electricOrderDao"></property>
+		<property name="childNodeDao" ref="childNodeDao"></property>
+		<property name="electricSharedDao" ref="electricSharedDao"></property>
+		<property name="roomSharedDao" ref="roomSharedDao"></property>
+		<property name="sceneDao" ref="sceneDao"></property>
+		<property name="sceneElectricDao" ref="sceneElectricDao"></property>
+		<property name="sceneOrderDao" ref="sceneOrderDao"></property>
+		<property name="otherDao" ref="otherDao"></property>
+		<property name="eTKeyDao" ref="eTKeyDao"></property>
+		<property name="eTAirDeviceDao" ref="eTAirDeviceDao"></property>
+		<property name="crashDao" ref="crashDao"></property>
+	</bean>
+	
+	<bean id="smarthomeWs" class="com.zfznjj.smarthome.ws.impl.SmarthomeWsImpl">
+		<property name="smarthomeService" ref="smarthomeService"></property>
+	</bean>
+	
+	
+	<!-- 配置Spring的声明式事务 -->
+	<!-- 1. 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 2. 配置事务属性，需要事务管理器 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- 3. 配置事务切点，并把切点和事务属性关联起来 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.zfznjj.smarthome.*.*.*(..))" 
+			id="txPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+	</aop:config>
+
+	<!-- implementor指定Webservice的服务提供者，支持两种形式：
+		A 直接给定服务提供者的类名
+		B 设置为容器中的一个bean。
+	 -->
+	<jaxws:endpoint
+		implementor="#smarthomeWs"
+		address="/smarthome">
+		
+	</jaxws:endpoint>
+</beans>

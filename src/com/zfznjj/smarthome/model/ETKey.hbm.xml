@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-3-28 10:34:19 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.ETKey" table="etkey">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="master_code" />
+        </property>
+        <property name="electricIndex" type="int">
+            <column name="electric_index" />
+        </property>
+        <property name="did" type="int">
+            <column name="did" />
+        </property>
+        <property name="keyName" type="java.lang.String">
+            <column name="key_name" />
+        </property>
+        <property name="keyRes" type="int">
+            <column name="key_res" />
+        </property>
+        <property name="keyX" type="float">
+            <column name="key_x" />
+        </property>
+        <property name="keyY" type="float">
+            <column name="key_y" />
+        </property>
+        <property name="keyValue" type="java.lang.String">
+            <column name="key_value" />
+        </property>
+        <property name="keyKey" type="int">
+            <column name="key_key" />
+        </property>
+        <property name="keyBrandIndex" type="int">
+            <column name="key_brandindex" />
+        </property>
+        <property name="keyBrandPos" type="int">
+            <column name="key_brandpos" />
+        </property>
+        <property name="keyRow" type="int">
+            <column name="key_row" />
+        </property>
+        <property name="keyState" type="int">
+            <column name="key_state" />
+        </property>
+    </class>
+</hibernate-mapping>
