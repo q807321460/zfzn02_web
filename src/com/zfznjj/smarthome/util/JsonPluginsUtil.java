@@ -126,24 +126,15 @@ public class JsonPluginsUtil {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static String beanListToJson(List beans) {
-         
-        StringBuffer rest = new StringBuffer();
-         
-        rest.append("[");
-         
+    public static String beanListToJson(List beans) {       
+        StringBuffer rest = new StringBuffer();        
+        rest.append("[");        
         int size = beans.size();
-         
-        for (int i = 0; i < size; i++) {
-             
+        for (int i = 0; i < size; i++) {        
             rest.append(beanToJson(beans.get(i))+((i<size-1)?",":""));
- 
         }
-         
         rest.append("]");
-         
         return rest.toString();
- 
     }
      
     /**

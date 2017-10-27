@@ -15,18 +15,27 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import javax.el.ArrayELResolver;
 import javax.swing.border.EtchedBorder;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
+//import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.zfznjj.smarthome.dao.AccountDao;
 import com.zfznjj.smarthome.dao.ChildNodeDao;
 import com.zfznjj.smarthome.dao.CrashDao;
+import com.zfznjj.smarthome.dao.DoorRecordDao;
 import com.zfznjj.smarthome.dao.ETAirDeviceDao;
 import com.zfznjj.smarthome.dao.ETKeyDao;
 import com.zfznjj.smarthome.dao.ElectricDao;
@@ -43,6 +52,7 @@ import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
 import com.zfznjj.smarthome.entity.ElectricState;
 import com.zfznjj.smarthome.model.Account;
 import com.zfznjj.smarthome.model.CrashLog;
+import com.zfznjj.smarthome.model.DoorRecord;
 import com.zfznjj.smarthome.model.ETKey;
 import com.zfznjj.smarthome.model.Electric;
 import com.zfznjj.smarthome.model.Scene;
@@ -50,6 +60,9 @@ import com.zfznjj.smarthome.model.User;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.service.impl.SmarthomeServiceImpl;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
+import com.zfznjj.smarthome.util.SmsUtil;
+import com.zfznjj.smarthome.util.WebSocket;
+import com.zfznjj.smarthome.util.WriteLog;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
 
 public class TestClass {
@@ -60,6 +73,7 @@ public class TestClass {
 	private UserDao userDao = null;
 
 	private ElectricDao electricDao;
+	private DoorRecordDao doorRecordDao;
 	private UserRoomDao userRoomDao;
 	private ChildNodeDao childNodeDao;
 	private ElectricOrderDao electricOrderDao;
@@ -74,6 +88,7 @@ public class TestClass {
 
 	{
 		ctx = new ClassPathXmlApplicationContext("ApplicationContext.xml");
+		doorRecordDao = ctx.getBean(DoorRecordDao.class);
 		masterNodeDao = ctx.getBean(MasterNodeDao.class);
 		accountDao = ctx.getBean(AccountDao.class);
 		userDao = ctx.getBean(UserDao.class);
@@ -90,15 +105,39 @@ public class TestClass {
 		smarthomeService = ctx.getBean(SmarthomeService.class);
 		smarthomeWs = ctx.getBean(SmarthomeWs.class);
 	}
-
-	@Test
-	public void test() {
-		String str;
-		str = smarthomeWs.updateElectric1("AA00FFD9", "02004F95", 2, "22", 3, "SG");
-		//str = smarthomeWs.isExistAccount("181056319608");
-		System.out.println(str);
+	
+	private SessionFactory sessionFactory;
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	/**
+	 * 获取和当前线程绑定的Session
+	 * @return
+	 */
+	private Session getSession(){
+		return sessionFactory.getCurrentSession();
 	}
 
+	@Test
+	public void test() throws Exception {
+		String str = "";
+//		smarthomeService.addElectric("AA00FFD9",  5, "020021B34E0B", 0, "1", 3, 2, "", "01");
+//		smarthomeService.addElectric("AA00FFD9",  6, "020021B34E0B", 0, "2", 4, 2, "", "02");
+//		smarthomeService.addElectric("AA00FFD9",  7, "020021B34E0B", 0, "3", 5, 2, "", "01");
+//		smarthomeService.addElectric("AA00FFD9",  8, "020021B34E0B", 0, "4", 6, 2, "", "02");
+//		smarthomeService.addElectric("AA00FFD9",  9, "020021B34E0B", 0, "5", 7, 2, "", "01");
+//		smarthomeService.addElectric("AA00FFD9", 10, "020021B34E0B", 0, "6", 8, 2, "", "02");
+		str = smarthomeWs.deleteElectric1("AA00FFD9", "020021B34E0B", 8, 5, 0);
+		System.out.println("finish");
+	}
+
+	class MyLogHander extends Formatter { 
+	    @Override 
+	    public String format(LogRecord record) { 
+	            return record.getLevel() + ":" + record.getMessage()+"\n" ; 
+	    } 
+	}
+	
 	private byte[] getBytes(String filePath) {
 		byte[] buffer = null;
 		try {
@@ -122,3 +161,4 @@ public class TestClass {
 	}
 
 }
+

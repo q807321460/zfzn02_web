@@ -19,36 +19,26 @@ public class ElectricStateServlet extends BaseServlet{
 			throws IOException , ServletException
 		{
 			String state = request.getParameter("electricState");
+			System.out.println(state);
+			String masterCode = "", electricCode = "", electricState = "", stateInfo = "";
 			if(state.length() == 22) {//旧电器，编号只有8位
-				String masterCode = state.substring(1,9);
-				String electricCode = state.substring(9,17);
-				String electricState = state.substring(17,19);
-				String stateInfo = state.substring(19,21);
-				System.out.println(state);
-				StringBuffer sb = new StringBuffer(stateInfo);
-				while(sb.length() < 10){
-					sb.append('*');
-				}
-				stateInfo = sb.toString();
-				// 获取系统的业务逻辑组件
-				SmarthomeService smarthomeService = (SmarthomeService)getCtx().getBean("smarthomeService");
-				// 更新状态信息
-				smarthomeService.updateElectricState(masterCode,electricCode,electricState,stateInfo);
+				masterCode = state.substring(1,9);
+				electricCode = state.substring(9,17);
+				electricState = state.substring(17,19);
+				stateInfo = state.substring(19,21);
 			}else if (state.length() == 26) {//新电器，编号有12位
-				String masterCode = state.substring(1,9);
-				String electricCode = state.substring(9,21);
-				String electricState = state.substring(21,23);
-				String stateInfo = state.substring(23,25);
-				System.out.println(state);
-				StringBuffer sb = new StringBuffer(stateInfo);
-				while(sb.length() < 10){
-					sb.append('*');
-				}
-				stateInfo = sb.toString();
-				// 获取系统的业务逻辑组件
-				SmarthomeService smarthomeService = (SmarthomeService)getCtx().getBean("smarthomeService");
-				// 更新状态信息
-				smarthomeService.updateElectricState(masterCode,electricCode,electricState,stateInfo);
+				masterCode = state.substring(1,9);
+				electricCode = state.substring(9,21);
+				electricState = state.substring(21,23);
+				stateInfo = state.substring(23,25);
 			}
+			StringBuffer sb = new StringBuffer(stateInfo);
+			while(sb.length() < 10){
+				sb.append('*');
+			}
+			stateInfo = sb.toString();
+			// 获取系统的业务逻辑组件，更新状态信息
+			SmarthomeService smarthomeService = (SmarthomeService)getCtx().getBean("smarthomeService");
+			smarthomeService.updateElectricState(masterCode,electricCode,electricState,stateInfo);
 		}
 }

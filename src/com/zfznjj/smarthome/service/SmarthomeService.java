@@ -1,5 +1,6 @@
 package com.zfznjj.smarthome.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.cxf.tools.corba.common.idltypes.IdlString;
@@ -18,12 +19,12 @@ import com.zfznjj.smarthome.model.SceneElectric;
 import com.zfznjj.smarthome.model.User;
 import com.zfznjj.smarthome.model.UserRoom;
 
-import sun.tools.jar.resources.jar;
+//import sun.tools.jar.resources.jar;
 
 
 public interface SmarthomeService {
 	
-	String validLogin(String accountCode, String password);
+	String validLogin(String accountCode, String password) throws Exception;
 	int addAccount(String accountCode,String password, String accountName);
 	int addUser(String accountCode,String masterCode, String userName, String userIp);
 	List<String> getAccountCodesByMaster(String masterCode);
@@ -34,7 +35,7 @@ public interface SmarthomeService {
 	int addSceneElectric(String masterCode, String electricCode, String electricOrder, String accountCode,int sceneIndex, String orderInfo,
 			int electricIndex,String electricName, int roomIndex, int electricType);
 	int addElectric(String masterCode, int electricIndex, String electricCode,int roomIndex, String electricName,
-			int electricSequ, int electricType, String extras, String orderInfo);
+			int electricSequ, int electricType, String extras, String orderInfo) throws Exception;
 	int addELectricOrder(String masterCode,String electricCode, String order, String orderInfo);
 	int addSceneOrder(String masterCode, String electricCode, String electricOrder, String orderInfo, int sceneIndex);
 	
@@ -57,9 +58,9 @@ public interface SmarthomeService {
 	int updateRoomSequ(String masterCode, int roomSequ);
 	int updateElectric(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex);
 	int updateSceneElectrics(String masterCode, int electricIndex, String electricName);
-	int updateElectricSequ(String masterCode, int electricSequ, int roomIndex);
+	
 	int updateSceneSequ(String masterCode, int sceneSequ);
-	int updateElectricState(String masterCode,String electricCode, String electricState, String stateInfo);
+	
 	
 	int updateIRKeyValue(String masterCode, int electricIndex, int keyKey, String keyValue);
 	int adminSharedElectric(List<AdminElectricBean> adminElectricBeans);
@@ -109,4 +110,8 @@ public interface SmarthomeService {
 	String resetAccountPassword(String accountCode, String newPassword);
 	String isExistAccount(String accountCode);
 	int updateElectric1(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex, String electricOrder);
+	int updateElectricState(String masterCode,String electricCode, String electricState, String stateInfo) throws IOException;
+	String loadDoorRecord(String masterCode, String electricCode);
+	int getElectricSequ(String masterCode, int electricIndex);
+	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException;
 }

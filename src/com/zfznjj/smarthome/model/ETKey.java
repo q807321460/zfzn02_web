@@ -1,7 +1,7 @@
 package com.zfznjj.smarthome.model;
 
-import com.sun.beans.editors.FloatEditor;
-import com.sun.org.apache.xml.internal.security.keys.keyresolver.implementations.PrivateKeyResolver;
+//import com.sun.beans.editors.FloatEditor;
+//import com.sun.org.apache.xml.internal.security.keys.keyresolver.implementations.PrivateKeyResolver;
 
 public class ETKey {
 	private int id;

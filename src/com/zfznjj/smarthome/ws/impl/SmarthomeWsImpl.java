@@ -1,6 +1,7 @@
 package com.zfznjj.smarthome.ws.impl;
 
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import com.zfznjj.smarthome.model.UserRoom;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
+import com.zfznjj.smarthome.util.WebSocket;
+import com.zfznjj.smarthome.util.WriteLog;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
 
 public class SmarthomeWsImpl implements SmarthomeWs {
@@ -27,7 +30,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	}
 	
 	@Override
-	public String validLogin(String accountCode, String password) {
+	public String validLogin(String accountCode, String password) throws Exception {
 		return smarthomeService.validLogin(accountCode, password);
 	}
 	
@@ -102,14 +105,15 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String addElectric(String masterCode, int electricIndex, String electricCode, int roomIndex,
-			String electricName, int electricSequ, int electricType, String extra, String orderInfo) {
+			String electricName, int electricSequ, int electricType, String extra, String orderInfo) throws Exception {
+		WriteLog.writeLog("electrics.log", "【addElectric】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex + "  electricCode:" + electricCode +
+				"  roomIndex:" + roomIndex + "  electricName:" + electricName + "  electricSequ:" + electricSequ + "  electricType:" + electricType + "  extra:" + extra + "  orderInfo:" + orderInfo);
 		return ""+smarthomeService.addElectric(masterCode, electricIndex, electricCode, roomIndex,
-				electricName, electricSequ, electricType, extra,orderInfo);
+				electricName, electricSequ, electricType, extra, orderInfo);
 	}
 	
 	@Override
 	public String addCrashLog(String logName, byte[] logDetail, String appName) {
-		// TODO Auto-generated method stub
 		return String.valueOf(smarthomeService.addCrashLog(logName, logDetail, appName));
 	}
 	
@@ -240,70 +244,83 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	}
 	
 	@Override
-	public String deleteElectric(String masterCode, int electricIndex, int electricSequ,int roomIndex) {
+	public String deleteElectric(String masterCode, int electricIndex, int electricSequ,int roomIndex) throws IOException {
+		//将添加电器的记录保存到log中
+		WriteLog.writeLog("electrics.log", "【deleteElectric1】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex + "  roomIndex:" + roomIndex + "  electricSequ:" + electricSequ);
+		//这里的electricSequ是客户端上传的参数，这个参数可能是不正确的，现查看之
+		int newElectricSequ = smarthomeService.getElectricSequ(masterCode, electricIndex);
+		if (newElectricSequ != electricSequ) {
+			WriteLog.writeLog("error.log",
+					"【updateElectricSequ错误】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex
+							+ "  roomIndex:" + roomIndex + "  electricSequ:" + electricSequ + "  newElectircSequ:"
+							+ newElectricSequ);
+		}
 		int result = smarthomeService.deleteElectric(masterCode, electricIndex);
 		if(result > 0){
-			smarthomeService.updateElectricSequ(masterCode, electricSequ,roomIndex);
+			smarthomeService.updateElectricSequ(masterCode, electricIndex, newElectricSequ, roomIndex);
 		}
 		return String.valueOf(result);
 	}
 	
 	@Override
-	public String deleteElectric1(String masterCode, String electricCode, int electricIndex, int electricSequ,int roomIndex) {
+	public String deleteElectric1(String masterCode, String electricCode, int electricIndex, int electricSequ,int roomIndex) throws IOException {
+		//将添加电器的记录保存到log中
+		WriteLog.writeLog("electrics.log",
+				"【deleteElectric1】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex + "  roomIndex:" + roomIndex + "  electricSequ:" + electricSequ
+						+ "  electricCode:" + electricCode);
+		//这里的electricSequ是客户端上传的参数，这个参数可能是不正确的，现查看之
+		int newElectricSequ = smarthomeService.getElectricSequ(masterCode, electricIndex);
+		if (newElectricSequ != electricSequ) {
+			WriteLog.writeLog("error.log",
+					"【updateElectricSequ错误】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex + "  roomIndex:" + roomIndex + "  electricSequ:" + electricSequ
+							+ "  newElectircSequ:" + newElectricSequ);
+		}
 		int result = smarthomeService.deleteElectric(masterCode, electricCode, electricIndex);
 		if(result > 0){
-			smarthomeService.updateElectricSequ(masterCode, electricSequ,roomIndex);
+			smarthomeService.updateElectricSequ(masterCode, electricIndex, newElectricSequ, roomIndex);
 		}
 		return String.valueOf(result);
 	}
 	
 	@Override
 	public String deleteSceneElectric(String masterCode, int electricIndex, int sceneIndex) {
-		// TODO Auto-generated method stub
 		return String.valueOf(smarthomeService.deleteSceneElectric(masterCode, electricIndex, sceneIndex));
 	}
 
 	@Override
 	public List<UserRoom> loadUserRoomFromWs(String accountCode,String masterCode, String areaTime) {
-		// TODO Auto-generated method stub
 		return smarthomeService.loadUserRoomFromWs(accountCode,masterCode, areaTime);
 	}
 
 	@Override
 	public List<Electric> loadElectricFromWs(String accountCode,String masterCode, String electricTime) {
-		// TODO Auto-generated method stub
 		return smarthomeService.loadElectricFromWs(accountCode,masterCode, electricTime);
 	}
 
 	@Override
 	public String addScene(String accountCode, String masterCode, String sceneName, int sceneIndex,int sceneSequ, int sceneImg) {
-		// TODO Auto-generated method stub
 		return ""+smarthomeService.addScene(accountCode, masterCode, sceneName, sceneIndex,sceneSequ,sceneImg);
 	}
 
 	@Override
 	public String addSceneElectric(String masterCode, String electricCode, String electricOrder, String accountCode,
 			int sceneIndex, String orderInfo,int electricIndex,String electricName, int roomIndex, int electricType) {
-		// TODO Auto-generated method stub
 		return ""+smarthomeService.addSceneElectric(masterCode, electricCode, electricOrder, accountCode, sceneIndex, orderInfo,
 				electricIndex, electricName, roomIndex, electricType);
 	}
 	
 	@Override
 	public void updateElectricOrder(String masterCode,String electricCode, String order,String orderInfo) {
-		// TODO Auto-generated method stub
 		smarthomeService.addELectricOrder(masterCode, electricCode, order, orderInfo);
 	}
 
 	@Override
 	public String giveUpAdmin(String masterCode, String owner) {
-		// TODO Auto-generated method stub
 		return ""+smarthomeService.giveUpAdmin(masterCode, owner);
 	}
 
 	@Override
 	public String accessAdmin(String masterCode, String owner) {
-		// TODO Auto-generated method stub
 		return ""+smarthomeService.accessAdmin(masterCode, owner);
 	}
 
@@ -370,7 +387,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	}
 
 	@Override
-	public void updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo) {
+	public void updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo) throws IOException {
 		smarthomeService.updateElectricState(masterCode, electricCode, electricState, stateInfo);
 	}
 
@@ -388,15 +405,22 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		return result;
 	}
 
+	//专门用于测试
 	@Override
-	public String sayHello(String masterCode) {
-		System.out.println("hello"+masterCode);
-		return "hello"+masterCode;
+	public String sayHello() throws IOException {
+		System.out.println("hello");
+		WebSocket.sendMessage("AA00FFD9", "<030036C9E0BZZ603********00>");
+		return "hello";
 	}
 
 	@Override
 	public String updateUserName(String accountCode, String masterCode, String userName) {
 		return String.valueOf(smarthomeService.updateUserName(accountCode, masterCode, userName));
+	}
+	
+	@Override
+	public String loadDoorRecord(String masterCode, String electricCode) {
+		return String.valueOf(smarthomeService.loadDoorRecord(masterCode, electricCode));
 	}
 	
 }

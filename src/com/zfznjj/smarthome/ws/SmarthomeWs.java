@@ -1,5 +1,6 @@
 package com.zfznjj.smarthome.ws;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -29,7 +30,7 @@ public interface SmarthomeWs {
     @WebMethod
 	String validLogin(
 			@WebParam(name="accountCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String accountCode , 
-			@WebParam(name="password",targetNamespace="http://ws.smarthome.zfznjj.com/")String password);
+			@WebParam(name="password",targetNamespace="http://ws.smarthome.zfznjj.com/")String password) throws Exception;
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
@@ -130,7 +131,7 @@ public interface SmarthomeWs {
 			@WebParam(name="electricSequ",targetNamespace="http://ws.smarthome.zfznjj.com/")int electricSequ, 
 			@WebParam(name="electricType",targetNamespace="http://ws.smarthome.zfznjj.com/")int electricType, 
 			@WebParam(name="extra",targetNamespace="http://ws.smarthome.zfznjj.com/")String extra,
-			@WebParam(name="orderInfo",targetNamespace="http://ws.smarthome.zfznjj.com/")String orderInfo);
+			@WebParam(name="orderInfo",targetNamespace="http://ws.smarthome.zfznjj.com/")String orderInfo) throws Exception;
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
@@ -264,7 +265,7 @@ public interface SmarthomeWs {
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
 			@WebParam(name="electricIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int electricIndex, 
 			@WebParam(name="electricSequ",targetNamespace="http://ws.smarthome.zfznjj.com/")int electricSequ,
-			@WebParam(name="roomIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int roomIndex);
+			@WebParam(name="roomIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int roomIndex) throws IOException;
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
@@ -273,7 +274,7 @@ public interface SmarthomeWs {
 			@WebParam(name="electricCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String electricCode, 
 			@WebParam(name="electricIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int electricIndex, 
 			@WebParam(name="electricSequ",targetNamespace="http://ws.smarthome.zfznjj.com/")int electricSequ,
-			@WebParam(name="roomIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int roomIndex);
+			@WebParam(name="roomIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int roomIndex) throws IOException;
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
@@ -425,7 +426,7 @@ public interface SmarthomeWs {
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode,
 			@WebParam(name="electricCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String electricCode,
 			@WebParam(name="electricState",targetNamespace="http://ws.smarthome.zfznjj.com/")String electricState,
-			@WebParam(name="stateInfo",targetNamespace="http://ws.smarthome.zfznjj.com/")String stateInfo);
+			@WebParam(name="stateInfo",targetNamespace="http://ws.smarthome.zfznjj.com/")String stateInfo) throws IOException;
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")
 	@WebMethod
@@ -445,7 +446,11 @@ public interface SmarthomeWs {
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")
 	@WebMethod
-	String sayHello(
-			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode);
+	String sayHello() throws IOException;
 	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String loadDoorRecord(
+			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
+			@WebParam(name="electricCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String electricCode);
 }

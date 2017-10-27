@@ -53,7 +53,23 @@ public class ElectricDaoImpl implements ElectricDao{
 				+ "electrics.master_code = :masterCode AND electrics.electric_sequ > :electricSequ AND electrics.room_index = :roomIndex";
 		return getSession().createSQLQuery(sql).setString("masterCode", masterCode).setInteger("electricSequ", electricSequ).setInteger("roomIndex", roomIndex).executeUpdate();
 	}
-
+	
+	@Override
+	public int getMaxElectricSequ(String masterCode, int roomIndex) {
+		String sql = "SELECT MAX(electric_sequ) FROM electrics WHERE master_code = :masterCode AND room_index = :roomIndex";
+		Object object = getSession().createSQLQuery(sql).setString("masterCode", masterCode).setInteger("roomIndex", roomIndex).uniqueResult();
+		if (object==null) {
+			return -1;
+		}else {
+			return (int)object;
+		}
+	}
+	
+	@Override
+	public int saveDoorRecord(String masterCode, String electricCode, String stateInfo) {
+		return 1;
+	}
+	
 	@Override
 	public Electric select(String masterCode, int electricIndex) {
 		String hql = "FROM Electric e WHERE e.masterCode = :masterCode and e.electricIndex = :electricIndex";
