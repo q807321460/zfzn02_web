@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-10-29 10:37:35 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.zfznjj.smarthome.model.AlarmRecord" table="ALARMRECORD">
+        <id name="alarmRecordId" type="int">
+            <column name="alarm_record_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="masterCode" type="java.lang.String">
+            <column name="master_code" />
+        </property>
+        <property name="electricCode" type="java.lang.String">
+            <column name="electric_code" />
+        </property>
+        <property name="electricState" type="java.lang.String">
+            <column name="electric_sate" />
+        </property>
+        <property name="stateInfo" type="java.lang.String">
+            <column name="state_info" />
+        </property>
+        <property name="recordSequ" type="int">
+            <column name="record_sequ" />
+        </property>
+        <property name="alarmTime" type="java.lang.String">
+            <column name="alarm_time" />
+        </property>
+        <property name="extras" type="java.lang.String">
+            <column name="extras" />
+        </property>
+    </class>
+</hibernate-mapping>

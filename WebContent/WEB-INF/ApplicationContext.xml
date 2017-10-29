@@ -64,6 +64,7 @@
 		<property name="mappingResources">
 			<list>
 				<value>com/zfznjj/smarthome/model/Account.hbm.xml</value>
+				<value>com/zfznjj/smarthome/model/AlarmRecord.hbm.xml</value>
 				<value>com/zfznjj/smarthome/model/ChildNode.hbm.xml</value>
 				<value>com/zfznjj/smarthome/model/DoorRecord.hbm.xml</value>
 				<value>com/zfznjj/smarthome/model/Electric.hbm.xml</value>
@@ -84,6 +85,9 @@
 	</bean>
 	
 	<!-- 配置bean -->
+	<bean id="alarmRecordDao" class="com.zfznjj.smarthome.dao.impl.AlarmRecordDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 	<bean id="doorRecordDao" class="com.zfznjj.smarthome.dao.impl.DoorRecordDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
