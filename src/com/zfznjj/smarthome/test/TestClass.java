@@ -120,14 +120,8 @@ public class TestClass {
 
 	@Test
 	public void test() throws Exception {
-		String str = "";
-//		smarthomeService.addElectric("AA00FFD9",  5, "020021B34E0B", 0, "1", 3, 2, "", "01");
-//		smarthomeService.addElectric("AA00FFD9",  6, "020021B34E0B", 0, "2", 4, 2, "", "02");
-//		smarthomeService.addElectric("AA00FFD9",  7, "020021B34E0B", 0, "3", 5, 2, "", "01");
-//		smarthomeService.addElectric("AA00FFD9",  8, "020021B34E0B", 0, "4", 6, 2, "", "02");
-//		smarthomeService.addElectric("AA00FFD9",  9, "020021B34E0B", 0, "5", 7, 2, "", "01");
-//		smarthomeService.addElectric("AA00FFD9", 10, "020021B34E0B", 0, "6", 8, 2, "", "02");
-		str = smarthomeWs.deleteElectric1("AA00FFD9", "020021B34E0B", 8, 5, 0);
+		int a = smarthomeService.updateElectricState("AA00FFD9", "1000AAF28715", "zf", "2*********");
+		System.out.print(a);
 		System.out.println("finish");
 	}
 

@@ -23,14 +23,10 @@ public class ElectricOrderServlet extends BaseServlet {
 			// 获取系统的业务逻辑组件
 			SmarthomeService smarthomeService = (SmarthomeService)getCtx().getBean("smarthomeService");
 			// 获取状状态信息
-			//String result = smarthomeService.ugetElectricOrderByMasterNode(masterNode);
 			String result = smarthomeService.ugetSceneOrderByMasterNode(masterCode);
 			if(result.equals("none")){
 				result = smarthomeService.ugetElectricOrderByMasterNode(masterCode);
 			}
-			
-			//System.out.println("IP:"+getRemortIP(request)+"port:" + request.getRemotePort());
-			//System.out.println("读取的指令："+result);
 			
 			response.setContentType("text/html; charset=utf-8");
 			request.getSession(true).setAttribute("result" , result);

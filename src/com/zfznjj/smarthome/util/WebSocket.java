@@ -21,16 +21,14 @@ import javax.websocket.server.ServerEndpoint;
 
 /** 
  * @Class: WebSocket
- * @Description: 服务器websocket类，不成熟的技术，有待调试
+ * @Description: 服务器websocket类，这个类专门提供给移动端使用，还有一个类专门提供给主机使用
  * @author 孔翰文
  */
 @ServerEndpoint(value="/websocket/{masterCode}")
 public class WebSocket {
     private Session session;
     private String masterCode;
-    //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
-//    private static CopyOnWriteArraySet<WebSocket> webSocketSet = new CopyOnWriteArraySet<WebSocket>();
-    private static Map<String, List<WebSocket>> map;// = new HashMap<String, List<WebSocket>>();//用于保存各个主机对应的一组session，服务器主动发送数据时，会根据主机编号给该编号下的所有的session发送数据
+    private static Map<String, List<WebSocket>> map;//用于保存各个主机对应的一组session，服务器主动发送数据时，会根据主机编号给该编号下的所有的session发送数据
     static {  
     	map = new HashMap<String, List<WebSocket>>();  
     }  

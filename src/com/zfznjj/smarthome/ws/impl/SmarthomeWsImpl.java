@@ -122,6 +122,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		return ""+smarthomeService.updateElectric(masterCode, electricCode, electricIndex, electricName, sceneIndex);
 	}
 	
+	//用于选择门磁的开关状态
 	@Override
 	public String updateElectric1(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex, String electricOrder) {
 		return ""+smarthomeService.updateElectric1(masterCode, electricCode, electricIndex, electricName, sceneIndex, electricOrder);
@@ -129,7 +130,6 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String updateUserRoom(String masterCode, int roomIndex, String roomName, int roomImg) {
-		// TODO Auto-generated method stub
 		return ""+smarthomeService.updateUserRoom(masterCode, roomIndex, roomName, roomImg);
 	}
 	

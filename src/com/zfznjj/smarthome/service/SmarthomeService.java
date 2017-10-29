@@ -114,4 +114,6 @@ public interface SmarthomeService {
 	String loadDoorRecord(String masterCode, String electricCode);
 	int getElectricSequ(String masterCode, int electricIndex);
 	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException;
+	int saveDoorRecord(String masterCode, String electricCode, String stateInfo);
+	int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo);
 }

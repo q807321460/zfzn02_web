@@ -980,68 +980,6 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		for (SceneOrder sceneOrder : list) {
 			sceneOrderDao.updateIsReaded(sceneOrder.getId());
 		}
-
-	}
-
-	// 短信通知 konnn
-	private void checkIfSendSms(String masterCode, String electricCode, String electricState, String stateInfo) {
-		if (electricCode.startsWith("0D") && stateInfo.startsWith("01")) {
-			List<Electric> electrics = electricDao.select(masterCode, electricCode);
-			String electricName = "";
-			if (electrics.size() > 0) {
-				electricName = electrics.get(0).getElectricName();
-			}
-			// <0D215239ZFAB0000******>
-			// A=0，B=0~7
-			// 00 没事
-			// 01 报警
-			// 02 防拆
-			// 03 报警+防拆
-			// 04 电量低
-			// 05 报警+电量低
-			// 06 防拆+电量低
-			// 07 报警+防拆+电量低
-			// 00~07均为字符串
-			ChildNode childNode = childNodeDao.select(masterCode, electricCode);
-			String oldStateInfo = childNode.getStateInfo();
-			if (stateInfo.equals(oldStateInfo) == true) {// 状态不变，则退出
-				return;
-			}
-			boolean isOldAlarm;// 旧状态是否处于警报状态
-			boolean isAlarm;// 当前新状态是否处于警报状态
-			String flag = oldStateInfo.substring(0, 2);
-			if (flag.equals("00") || flag.equals("02") || flag.equals("04") || flag.equals("06")) {
-				isOldAlarm = false;
-			} else {
-				isOldAlarm = true;
-			}
-			flag = stateInfo.substring(0, 2);
-			if (flag.equals("00") || flag.equals("02") || flag.equals("04") || flag.equals("06")) {
-				isAlarm = false;
-			} else {
-				isAlarm = true;
-			}
-			if (isOldAlarm == isAlarm) {// 报警的状态没有改变的话，是不需要发送短信的
-				return;
-			}
-
-			Timestamp timestamp = new Timestamp(new Date().getTime());
-			String time = SmartHomeUtil.TimestampToString(timestamp);
-			String msg = time + " 传感器：" + electricName + " ： " + electricCode + "状态切换为：" + stateInfo;
-			System.out.println(msg);
-
-			List<User> list = userDao.selectByMasterCodeAll(masterCode);
-			List<String> phones = new ArrayList<String>();
-
-			for (User user : list) {
-				phones.add(user.getAccountCode());
-			}
-			try {
-				SmsUtil.sendAlarm(phones, electricName, time, isAlarm);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	@Override
@@ -1324,21 +1262,39 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	}
 
 	// 以下为konnn添加或修复的接口
-
-	/**
-	 * 更新电气状态
-	 * @throws IOException 
-	 */
+	
+	//更新电器状态，当主机返回当前电器状态时进入这个函数，重要性高
 	@Override
 	public int updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo) throws IOException {
-		//调用websocket发送当前电器状态字符串到指定的socket客户端
-		String message = "<" + electricCode + electricState + stateInfo + "00>"; 
-		WebSocket.sendMessage(masterCode, message);
-		// 检测是否需要发送短信
-		checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
-		// 判断是否为门锁，如果是，则保存相应的记录到数据库中的extras中去
+			//调用websocket发送当前电器状态字符串到指定的socket客户端
+			String message = "<" + electricCode + electricState + stateInfo + "00>"; 
+			WebSocket.sendMessage(masterCode, message);
+			//保存门锁记录，触发错误也不return，因为需要让程序继续跑下去
+			saveDoorRecord(masterCode, electricCode, stateInfo);
+			//保存报警记录，触发错误也不return，因为需要让程序继续跑下去
+			saveAlarmRecord(masterCode, electricCode, electricState, stateInfo);
+			//检测是否需要发送短信
+			checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
+			// 如果是新门锁类型电器，需要将记录保存到数据库中
+			return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
+		}
+	
+	@Override
+	public int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo) {
+		if (electricCode.startsWith("0D")) {
+			String sFlag = stateInfo.substring(0, 2);
+			if (sFlag.equals("01") || sFlag.equals("03") || sFlag.equals("05") || sFlag.equals("07")) {
+				return 1;
+			}
+			return -2;
+		}
+		return -2;
+	}
+	
+	//保存门锁记录
+	@Override
+	public int saveDoorRecord(String masterCode, String electricCode, String stateInfo) {
 		String pre = electricCode.substring(0, 4);
-		// 如果是新门锁类型电器，需要将记录保存到数据库中
 		if (pre.equals("1000")) {
 			String sFlag = stateInfo.substring(0, 1);
 			if (sFlag.equals("2") || sFlag.equals("4")) {// 说明是开锁
@@ -1356,15 +1312,75 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				}else {
 					doorRecord.setRecordSequ(newSequ);
 				}
-				int re = doorRecordDao.saveOrUpdate(doorRecord);// 保存记录
-				if (re != 1) {
-					return -2;
-				}
+				return doorRecordDao.saveOrUpdate(doorRecord);// 保存记录
+			}
+			return 0;
+		}
+		return 0;
+	}
+	
+	// 发送短信报警通知
+	private void checkIfSendSms(String masterCode, String electricCode, String electricState, String stateInfo) {
+//		if (electricCode.startsWith("0D") && stateInfo.startsWith("01")) {
+		if (electricCode.startsWith("0D")) {
+			List<Electric> electrics = electricDao.select(masterCode, electricCode);
+			String electricName = "";
+			if (electrics.size() > 0) {
+				electricName = electrics.get(0).getElectricName();
+			}
+			// <0D215239ZFAB0000******>
+			// A=0，B=0~7
+			// 00 没事
+			// 01 报警
+			// 02 防拆
+			// 03 报警+防拆
+			// 04 电量低
+			// 05 报警+电量低
+			// 06 防拆+电量低
+			// 07 报警+防拆+电量低
+			// 00~07均为字符串
+			ChildNode childNode = childNodeDao.select(masterCode, electricCode);
+			String oldStateInfo = childNode.getStateInfo();
+			if (stateInfo.equals(oldStateInfo) == true) {// 状态不变，则退出
+				return;
+			}
+			boolean isOldAlarm;// 旧状态是否处于警报状态
+			boolean isAlarm;// 当前新状态是否处于警报状态
+			String flag = oldStateInfo.substring(0, 2);
+			if (flag.equals("00") || flag.equals("02") || flag.equals("04") || flag.equals("06")) {
+				isOldAlarm = false;
+			} else {
+				isOldAlarm = true;
+			}
+			flag = stateInfo.substring(0, 2);
+			if (flag.equals("00") || flag.equals("02") || flag.equals("04") || flag.equals("06")) {
+				isAlarm = false;
+			} else {
+				isAlarm = true;
+			}
+			if (isOldAlarm == isAlarm) {// 报警的状态没有改变的话，是不需要发送短信的
+				return;
+			}
+
+			Timestamp timestamp = new Timestamp(new Date().getTime());
+			String time = SmartHomeUtil.TimestampToString(timestamp);
+			String msg = time + " 传感器：" + electricName + " ： " + electricCode + "状态切换为：" + stateInfo;
+			System.out.println(msg);
+
+			List<User> list = userDao.selectByMasterCodeAll(masterCode);
+			List<String> phones = new ArrayList<String>();
+
+			for (User user : list) {
+				phones.add(user.getAccountCode());
+			}
+			try {
+				SmsUtil.sendAlarm(phones, electricName, time, isAlarm);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-		return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
 	}
-
+	
 	@Override
 	public int updateSceneElectricOrder(String masterCode, int electricIndex, String electricCode, int sceneIndex,
 			String electricOrder, String orderInfo) {
@@ -1388,9 +1404,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return sceneOrderDao.insert(sceneOrder);
 	}
 
-	/**
-	 * 更新传感器的布防状态，针对门磁电器类型，需要更新json字符串
-	 */
+	//更新传感器的布防状态，针对门磁电器类型，需要更新json字符串
 	@Override
 	public int updateSensorExtras(String masterCode, String electricCode, int electricIndex, String extras) {
 		// 更新电器时间

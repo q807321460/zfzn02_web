@@ -23,11 +23,6 @@ public class SmsUtil {
     private static final String URL_SEND="https://api.netease.im/sms/sendcode.action";//发送验证码
     private static final String URL_CHECK="https://api.netease.im/sms/verifycode.action";//检测验证码
     
-//    //网易云信分配的账号，请替换你在管理后台应用下申请的Appkey
-//    private static final String APP_KEY="932ac78b037970050a2aff5e606b3e75";
-//    //网易云信分配的密钥，请替换你在管理后台应用下申请的appSecret
-//    private static final String APP_SECRET="09052eb160af";
-    
     //网易云信分配的账号，请替换你在管理后台应用下申请的Appkey
     private static final String APP_KEY="48b57114db28a54515b69ff944adb260";
     //网易云信分配的密钥，请替换你在管理后台应用下申请的appSecret
