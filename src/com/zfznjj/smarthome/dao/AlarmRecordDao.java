@@ -1,5 +1,13 @@
 package com.zfznjj.smarthome.dao;
 
-public interface AlarmRecordDao {
+import java.util.List;
 
+import com.zfznjj.smarthome.model.AlarmRecord;
+
+public interface AlarmRecordDao {
+	int saveOrUpdate(AlarmRecord alarmRecord);
+	List<AlarmRecord> select(String electricCode);
+	int getMaxRecordSequ(String electricCode);
+	int delete(String electricCode, int recordSequ);
+	int updateAlarmRecordSequ(String electricCode);
 }

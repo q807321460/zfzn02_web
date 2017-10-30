@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2017-10-29 10:37:35 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.zfznjj.smarthome.model.AlarmRecord" table="ALARMRECORD">
+    <class name="com.zfznjj.smarthome.model.AlarmRecord" table="alarmrecords">
         <id name="alarmRecordId" type="int">
             <column name="alarm_record_id" />
             <generator class="assigned" />
@@ -15,7 +15,7 @@
             <column name="electric_code" />
         </property>
         <property name="electricState" type="java.lang.String">
-            <column name="electric_sate" />
+            <column name="electric_state" />
         </property>
         <property name="stateInfo" type="java.lang.String">
             <column name="state_info" />

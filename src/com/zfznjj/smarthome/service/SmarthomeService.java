@@ -11,6 +11,7 @@ import com.zfznjj.smarthome.entity.ElectricForVoice;
 import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
 import com.zfznjj.smarthome.entity.ElectricState;
 import com.zfznjj.smarthome.model.Account;
+import com.zfznjj.smarthome.model.AlarmRecord;
 import com.zfznjj.smarthome.model.CrashLog;
 import com.zfznjj.smarthome.model.ETKey;
 import com.zfznjj.smarthome.model.Electric;
@@ -111,6 +112,7 @@ public interface SmarthomeService {
 	String isExistAccount(String accountCode);
 	int updateElectric1(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex, String electricOrder);
 	int updateElectricState(String masterCode,String electricCode, String electricState, String stateInfo) throws IOException;
+	List<AlarmRecord> loadAlarmRecord(String masterCode);
 	String loadDoorRecord(String masterCode, String electricCode);
 	int getElectricSequ(String masterCode, int electricIndex);
 	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException;

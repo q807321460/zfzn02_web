@@ -142,6 +142,7 @@
 	
 	
 	<bean id="smarthomeService" class="com.zfznjj.smarthome.service.impl.SmarthomeServiceImpl">
+		<property name="alarmRecordDao" ref="alarmRecordDao"></property>
 		<property name="doorRecordDao" ref="doorRecordDao"></property>
 		<property name="masterNodeDao" ref="masterNodeDao"></property>
 		<property name="accountDao" ref="accountDao"></property>

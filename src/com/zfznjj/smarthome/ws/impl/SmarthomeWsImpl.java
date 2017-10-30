@@ -10,6 +10,7 @@ import com.zfznjj.smarthome.entity.ElectricForVoice;
 import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
 import com.zfznjj.smarthome.entity.ElectricState;
 import com.zfznjj.smarthome.model.Account;
+import com.zfznjj.smarthome.model.AlarmRecord;
 import com.zfznjj.smarthome.model.Electric;
 import com.zfznjj.smarthome.model.Scene;
 import com.zfznjj.smarthome.model.SceneElectric;
@@ -147,7 +148,6 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String updateAccountPhoto(String accountCode, byte[] photo) {
-		// TODO Auto-generated method stub
 		return String.valueOf(smarthomeService.updateAccountPhoto(accountCode, photo));
 	}
 	
@@ -164,16 +164,13 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 
 	@Override
 	public List<ElectricState> getElectricStateByUser(String accountCode, String masterCode) {
-		// TODO Auto-generated method stub
 		return smarthomeService.getElectricStateByUser(accountCode, masterCode);
 	}
 	
 	@Override
 	public List<User> loadUserFromWs(String accountCode,String userTime) {
-		// TODO Auto-generated method stub
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return smarthomeService.loadUserFromWs(accountCode, userTime);
-		
 	}
 	
 	@Override
@@ -416,6 +413,11 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	@Override
 	public String updateUserName(String accountCode, String masterCode, String userName) {
 		return String.valueOf(smarthomeService.updateUserName(accountCode, masterCode, userName));
+	}
+	
+	@Override
+	public List<AlarmRecord> loadAlarmRecord(String masterCode) {
+		return smarthomeService.loadAlarmRecord(masterCode);		
 	}
 	
 	@Override

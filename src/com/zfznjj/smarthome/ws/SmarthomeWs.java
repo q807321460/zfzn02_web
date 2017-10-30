@@ -15,6 +15,7 @@ import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
 import com.zfznjj.smarthome.entity.ElectricState;
 import com.zfznjj.smarthome.entity.UserLocal;
 import com.zfznjj.smarthome.model.Account;
+import com.zfznjj.smarthome.model.AlarmRecord;
 import com.zfznjj.smarthome.model.ETKey;
 import com.zfznjj.smarthome.model.Electric;
 import com.zfznjj.smarthome.model.Scene;
@@ -447,6 +448,12 @@ public interface SmarthomeWs {
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")
 	@WebMethod
 	String sayHello() throws IOException;
+	
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	List<AlarmRecord> loadAlarmRecord(
+			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode);
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod

@@ -32,6 +32,7 @@ import com.mysql.fabric.xmlrpc.base.Data;
 //import com.sun.org.apache.xpath.internal.operations.And;
 //import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.zfznjj.smarthome.dao.AccountDao;
+import com.zfznjj.smarthome.dao.AlarmRecordDao;
 import com.zfznjj.smarthome.dao.ChildNodeDao;
 import com.zfznjj.smarthome.dao.CrashDao;
 import com.zfznjj.smarthome.dao.DoorRecordDao;
@@ -54,6 +55,7 @@ import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
 import com.zfznjj.smarthome.entity.ElectricState;
 import com.zfznjj.smarthome.entity.OrderInfo;
 import com.zfznjj.smarthome.model.Account;
+import com.zfznjj.smarthome.model.AlarmRecord;
 import com.zfznjj.smarthome.model.ChildNode;
 import com.zfznjj.smarthome.model.CrashLog;
 import com.zfznjj.smarthome.model.DoorRecord;
@@ -88,6 +90,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	private ElectricOrderDao electricOrderDao;
 	private ChildNodeDao childNodeDao;
 	private ElectricSharedDao electricSharedDao;
+	private AlarmRecordDao alarmRecordDao;
 	private DoorRecordDao doorRecordDao;
 	private RoomSharedDao roomSharedDao;
 	private SceneDao sceneDao;
@@ -121,6 +124,10 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		this.roomSharedDao = roomSharedDao;
 	}
 
+	public void setAlarmRecordDao(AlarmRecordDao alarmRecordDao) {
+		this.alarmRecordDao = alarmRecordDao;
+	}
+	
 	public void setDoorRecordDao(DoorRecordDao doorRecordDao) {
 		this.doorRecordDao = doorRecordDao;
 	}
@@ -1274,7 +1281,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			//保存报警记录，触发错误也不return，因为需要让程序继续跑下去
 			saveAlarmRecord(masterCode, electricCode, electricState, stateInfo);
 			//检测是否需要发送短信
-			checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
+//			checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
 			// 如果是新门锁类型电器，需要将记录保存到数据库中
 			return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
 		}
@@ -1284,7 +1291,23 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		if (electricCode.startsWith("0D")) {
 			String sFlag = stateInfo.substring(0, 2);
 			if (sFlag.equals("01") || sFlag.equals("03") || sFlag.equals("05") || sFlag.equals("07")) {
-				return 1;
+				AlarmRecord alarmRecord = new AlarmRecord();
+				alarmRecord.setMasterCode(masterCode);
+				alarmRecord.setElectricCode(electricCode);
+				alarmRecord.setElectricState(electricState);
+				alarmRecord.setStateInfo(stateInfo);
+				Timestamp timestamp = new Timestamp(new Date().getTime());
+				alarmRecord.setAlarmTime(SmartHomeUtil.TimestampToString(timestamp));
+				int newSequ = alarmRecordDao.getMaxRecordSequ(electricCode) + 1;
+				int maxSequ = 30;//当前需求为30
+				if (newSequ==maxSequ) {
+					alarmRecordDao.delete(electricCode, 0);
+					alarmRecordDao.updateAlarmRecordSequ(electricCode);
+					alarmRecord.setRecordSequ(newSequ-1);
+				}else {
+					alarmRecord.setRecordSequ(newSequ);
+				}
+				return alarmRecordDao.saveOrUpdate(alarmRecord);// 保存记录
 			}
 			return -2;
 		}
@@ -1314,9 +1337,9 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				}
 				return doorRecordDao.saveOrUpdate(doorRecord);// 保存记录
 			}
-			return 0;
+			return -2;
 		}
-		return 0;
+		return -2;
 	}
 	
 	// 发送短信报警通知
@@ -1444,6 +1467,13 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			return electricDao.saveOrUpdate(electric);
 		}
 		return 0;
+	}
+	
+	@Override
+	public List<AlarmRecord> loadAlarmRecord(String masterCode) {
+		List<AlarmRecord> alarmRecords;
+		alarmRecords = alarmRecordDao.select(masterCode);
+		return alarmRecords;
 	}
 	
 	@Override

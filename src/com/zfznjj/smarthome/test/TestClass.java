@@ -33,6 +33,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 //import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.zfznjj.smarthome.dao.AccountDao;
+import com.zfznjj.smarthome.dao.AlarmRecordDao;
 import com.zfznjj.smarthome.dao.ChildNodeDao;
 import com.zfznjj.smarthome.dao.CrashDao;
 import com.zfznjj.smarthome.dao.DoorRecordDao;
@@ -51,6 +52,7 @@ import com.zfznjj.smarthome.entity.ElectricForVoice;
 import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
 import com.zfznjj.smarthome.entity.ElectricState;
 import com.zfznjj.smarthome.model.Account;
+import com.zfznjj.smarthome.model.AlarmRecord;
 import com.zfznjj.smarthome.model.CrashLog;
 import com.zfznjj.smarthome.model.DoorRecord;
 import com.zfznjj.smarthome.model.ETKey;
@@ -73,6 +75,7 @@ public class TestClass {
 	private UserDao userDao = null;
 
 	private ElectricDao electricDao;
+	private AlarmRecordDao alarmRecordDao;
 	private DoorRecordDao doorRecordDao;
 	private UserRoomDao userRoomDao;
 	private ChildNodeDao childNodeDao;
@@ -88,6 +91,7 @@ public class TestClass {
 
 	{
 		ctx = new ClassPathXmlApplicationContext("ApplicationContext.xml");
+		alarmRecordDao = ctx.getBean(AlarmRecordDao.class);
 		doorRecordDao = ctx.getBean(DoorRecordDao.class);
 		masterNodeDao = ctx.getBean(MasterNodeDao.class);
 		accountDao = ctx.getBean(AccountDao.class);
@@ -120,8 +124,9 @@ public class TestClass {
 
 	@Test
 	public void test() throws Exception {
-		int a = smarthomeService.updateElectricState("AA00FFD9", "1000AAF28715", "zf", "2*********");
-		System.out.print(a);
+//		int a = smarthomeService.updateElectricState("AA00FFD9", "0D00127380FE", "ZF", "03********");
+//		int a = smarthomeService.updateElectricState("AA00FFD9", "1000AAF28715", "ZF", "2*********");
+		List<AlarmRecord> alarmRecords = smarthomeWs.loadAlarmRecord("0D00127380FE");
 		System.out.println("finish");
 	}
 
