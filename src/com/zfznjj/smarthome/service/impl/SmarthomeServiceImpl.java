@@ -1278,19 +1278,16 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			WebSocket.sendMessage(masterCode, message);
 			//保存门锁记录，触发错误也不return，因为需要让程序继续跑下去
 			saveDoorRecord(masterCode, electricCode, stateInfo);
-			//保存报警记录，触发错误也不return，因为需要让程序继续跑下去
-			saveAlarmRecord(masterCode, electricCode, electricState, stateInfo);
-			//检测是否需要发送短信
-//			checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
-			// 如果是新门锁类型电器，需要将记录保存到数据库中
+			//传感器报警，发送短信提醒，并将记录保存到数据库中
+			checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
 			return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
 		}
 	
 	@Override
 	public int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo) {
-		if (electricCode.startsWith("0D")) {
-			String sFlag = stateInfo.substring(0, 2);
-			if (sFlag.equals("01") || sFlag.equals("03") || sFlag.equals("05") || sFlag.equals("07")) {
+//		if (electricCode.startsWith("0D")) {
+//			String sFlag = stateInfo.substring(0, 2);
+//			if (sFlag.equals("01") || sFlag.equals("03") || sFlag.equals("05") || sFlag.equals("07")) {
 				AlarmRecord alarmRecord = new AlarmRecord();
 				alarmRecord.setMasterCode(masterCode);
 				alarmRecord.setElectricCode(electricCode);
@@ -1308,10 +1305,10 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 					alarmRecord.setRecordSequ(newSequ);
 				}
 				return alarmRecordDao.saveOrUpdate(alarmRecord);// 保存记录
-			}
-			return -2;
-		}
-		return -2;
+//			}
+//			return -2;
+//		}
+//		return -2;
 	}
 	
 	//保存门锁记录
@@ -1384,20 +1381,22 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			if (isOldAlarm == isAlarm) {// 报警的状态没有改变的话，是不需要发送短信的
 				return;
 			}
-
+			//保存到报警列表中去
+			if (isAlarm==true) {
+				saveAlarmRecord(masterCode, electricCode, electricState, stateInfo);
+			}
 			Timestamp timestamp = new Timestamp(new Date().getTime());
 			String time = SmartHomeUtil.TimestampToString(timestamp);
 			String msg = time + " 传感器：" + electricName + " ： " + electricCode + "状态切换为：" + stateInfo;
 			System.out.println(msg);
-
+			//发送给所有被分享的手机号上去
 			List<User> list = userDao.selectByMasterCodeAll(masterCode);
 			List<String> phones = new ArrayList<String>();
-
 			for (User user : list) {
 				phones.add(user.getAccountCode());
 			}
 			try {
-				SmsUtil.sendAlarm(phones, electricName, time, isAlarm);
+				SmsUtil.sendAlarm(phones, electricName, time, isAlarm);//根据是报警还是解除，确定发送短信的格式
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1470,10 +1469,41 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	}
 	
 	@Override
-	public List<AlarmRecord> loadAlarmRecord(String masterCode) {
-		List<AlarmRecord> alarmRecords;
-		alarmRecords = alarmRecordDao.select(masterCode);
-		return alarmRecords;
+	public String loadAlarmRecord(String masterCode) {
+		List<AlarmRecord> alarmRecords = alarmRecordDao.select(masterCode);
+		int size = alarmRecords.size();
+		String sReturn = "[";
+		for (int i=0;i<size;i++) {
+			List<Electric> electrics = electricDao.select(masterCode, alarmRecords.get(i).getElectricCode());
+			String electricName = "", roomName = "";
+			int roomIndex = -1, electricType = -1;
+			if (electrics.size()>0) {
+				int foot = electrics.size() - 1;
+				electricName = electrics.get(foot).getElectricName();
+				electricType = electrics.get(foot).getElectricType();
+				roomIndex = electrics.get(foot).getRoomIndex();
+				UserRoom userRoom = userRoomDao.select(masterCode, roomIndex);
+				roomName = userRoom.getRoomName();
+			}else {
+				continue;
+			}
+			sReturn = sReturn + "{"
+					+ "\"electricCode\"" + ":" + "\"" + alarmRecords.get(i).getElectricCode() + "\"" + "," 
+					+ "\"electricState\"" + ":" + "\"" + alarmRecords.get(i).getElectricState() + "\""  + "," 
+					+ "\"electricName\"" + ":" + "\"" + electricName + "\""  + "," 
+					+ "\"electricType\"" + ":" + electricType + "," 
+					+ "\"roomName\"" + ":" + "\"" + roomName + "\""  + "," 
+					+ "\"stateInfo\"" + ":" + "\"" + alarmRecords.get(i).getStateInfo() + "\""  + "," 
+					+ "\"alarmTime\"" + ":" + "\"" + alarmRecords.get(i).getAlarmTime() + "\""  + "," 
+					+ "\"recordSequ\"" + ":" + alarmRecords.get(i).getRecordSequ()
+					+ "}";
+			if(i!=size-1) {
+				sReturn += ",";
+			}
+		}
+		sReturn+="]";
+		System.out.println(sReturn);
+		return sReturn;
 	}
 	
 	@Override

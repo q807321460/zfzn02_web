@@ -112,7 +112,7 @@ public interface SmarthomeService {
 	String isExistAccount(String accountCode);
 	int updateElectric1(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex, String electricOrder);
 	int updateElectricState(String masterCode,String electricCode, String electricState, String stateInfo) throws IOException;
-	List<AlarmRecord> loadAlarmRecord(String masterCode);
+	String loadAlarmRecord(String masterCode);
 	String loadDoorRecord(String masterCode, String electricCode);
 	int getElectricSequ(String masterCode, int electricIndex);
 	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException;

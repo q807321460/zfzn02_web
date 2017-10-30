@@ -452,7 +452,7 @@ public interface SmarthomeWs {
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
-	List<AlarmRecord> loadAlarmRecord(
+	String loadAlarmRecord(
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode);
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  

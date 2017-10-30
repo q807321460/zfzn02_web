@@ -57,9 +57,6 @@ public class DoorRecordDaoImpl implements DoorRecordDao {
 	public String select2(String electricCode) {
 		String sql = "SELECT record_sequ, open_time from doorrecords WHERE electric_code = :electricCode";
 		Query query = getSession().createSQLQuery(sql).setString("electricCode", electricCode);
-//		query.setFirstResult(0);
-//		int maxSequ = 300;//当前需求为300条
-//		query.setMaxResults(maxSequ);
 		List<Object[]> lists = query.list();
 		//这里需要做进一步处理
 		//[{"masterCode":"AA00FFD9","extras":"","recordSequ":0,"electricCode":"1000AAF28715","doorRecordId":1,"openTime":"2017-10-17 15:05:47"}]
@@ -67,7 +64,6 @@ public class DoorRecordDaoImpl implements DoorRecordDao {
 		int size = lists.size();
 		for (int i=0;i<size;i++) {
 			sReturn = sReturn + "{" + "\"recordSequ\"" + ":" + lists.get(i)[0].toString() + "," + "\"openTime\"" + ":" + "\"" + lists.get(i)[1].toString() + "\"" + "}";
-//			sReturn = sReturn+ "{" + lists.get(i)[0].toString() + ":" + "\"" + lists.get(i)[1].toString() + "\"" + "}";
 			if(i!=size-1) {
 				sReturn += ",";
 			}

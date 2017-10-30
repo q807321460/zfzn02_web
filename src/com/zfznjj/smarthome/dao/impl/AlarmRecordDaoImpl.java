@@ -3,11 +3,14 @@ package com.zfznjj.smarthome.dao.impl;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.zfznjj.smarthome.dao.AlarmRecordDao;
+import com.zfznjj.smarthome.dao.ElectricDao;
 import com.zfznjj.smarthome.model.AlarmRecord;
+import com.zfznjj.smarthome.model.Electric;
 
 public class AlarmRecordDaoImpl implements AlarmRecordDao {
 	
@@ -37,7 +40,35 @@ public class AlarmRecordDaoImpl implements AlarmRecordDao {
 	@Override
 	public List<AlarmRecord> select(String masterCode) {
 		String hql = "FROM AlarmRecord a WHERE a.masterCode = :masterCode";
-		return getSession().createQuery(hql).setString("electricCode", masterCode).list();
+		Query query = getSession().createQuery(hql).setString("masterCode", masterCode);
+		List<AlarmRecord> alarmRecords = query.list();
+		return alarmRecords;
+//		int size = alarmRecords.size();
+//		String sReturn = "[";
+//		
+//		for (int i=0;i<size;i++) {
+//			List<Electric> electrics = 
+//			String electricName = "";
+//			
+//			sReturn = sReturn + "{"
+//					+ "\"electricCode\"" + ":" + "\"" + alarmRecords.get(i).getElectricCode() + "\"" + "," 
+//					+ "\"electricState\"" + ":" + "\"" + alarmRecords.get(i).getElectricState() + "\""  + "," 
+//					+ "\"electricName\"" + ":" + "\"" + electricName + "\""  + "," 
+//					+ "\"roomName\"" + ":" + "\"" + alarmRecords.get(i).getElectricState() + "\""  + "," 
+//					+ "\"stateInfo\"" + ":" + "\"" + alarmRecords.get(i).getStateInfo() + "\""  + "," 
+//					+ "\"alarmTime\"" + ":" + "\"" + alarmRecords.get(i).getAlarmTime() + "\""  + "," 
+//					
+//					
+//					+ "\"recordSequ\"" + ":" + alarmRecords.get(i).getRecordSequ() + "\""  + "," 
+//					
+//					+ "}";
+//			if(i!=size-1) {
+//				sReturn += ",";
+//			}
+//		}
+//		sReturn+="]";
+//		System.out.println(sReturn);
+//		return sReturn;
 	}
 	
 	//获取报警记录表中，当前主机下的最大sequ值

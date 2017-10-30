@@ -416,7 +416,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	}
 	
 	@Override
-	public List<AlarmRecord> loadAlarmRecord(String masterCode) {
+	public String loadAlarmRecord(String masterCode) {
 		return smarthomeService.loadAlarmRecord(masterCode);		
 	}
 	
