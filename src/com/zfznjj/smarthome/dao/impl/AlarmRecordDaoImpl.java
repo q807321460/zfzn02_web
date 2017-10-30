@@ -40,10 +40,11 @@ public class AlarmRecordDaoImpl implements AlarmRecordDao {
 		return getSession().createQuery(hql).setString("electricCode", masterCode).list();
 	}
 	
+	//获取报警记录表中，当前主机下的最大sequ值
 	@Override
-	public int getMaxRecordSequ(String electricCode) {
-		String sql = "SELECT MAX(record_sequ) FROM alarmrecords WHERE electric_code = :electricCode";
-		Object object = getSession().createSQLQuery(sql).setString("electricCode", electricCode).uniqueResult();
+	public int getMaxRecordSequ(String masterCode) {
+		String sql = "SELECT MAX(record_sequ) FROM alarmrecords WHERE master_code = :masterCode";
+		Object object = getSession().createSQLQuery(sql).setString("masterCode", masterCode).uniqueResult();
 		if (object==null) {
 			return -1;
 		}else {
@@ -52,15 +53,15 @@ public class AlarmRecordDaoImpl implements AlarmRecordDao {
 	}
 	
 	@Override
-	public int delete(String electricCode, int recordSequ) {
-		String hql = "DELETE AlarmRecord a WHERE a.electricCode = :electricCode AND a.recordSequ = :recordSequ";
-		return getSession().createQuery(hql).setString("electricCode", electricCode).setInteger("recordSequ", recordSequ).executeUpdate();
+	public int delete(String masterCode, int recordSequ) {
+		String hql = "DELETE AlarmRecord a WHERE a.masterCode = :masterCode AND a.recordSequ = :recordSequ";
+		return getSession().createQuery(hql).setString("masterCode", masterCode).setInteger("recordSequ", recordSequ).executeUpdate();
 	}
 	
 	@Override
-	public int updateAlarmRecordSequ(String electricCode) {
-		String sql = "UPDATE alarmrecords SET record_sequ = record_sequ - 1 WHERE electric_code = :electricCode";
-		return getSession().createSQLQuery(sql).setString("electricCode", electricCode).executeUpdate();
+	public int updateAlarmRecordSequ(String masterCode) {
+		String sql = "UPDATE alarmrecords SET record_sequ = record_sequ - 1 WHERE master_code = :masterCode";
+		return getSession().createSQLQuery(sql).setString("masterCode", masterCode).executeUpdate();
 	}
 	
 }

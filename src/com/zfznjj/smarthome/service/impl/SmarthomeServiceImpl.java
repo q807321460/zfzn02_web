@@ -1298,11 +1298,11 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				alarmRecord.setStateInfo(stateInfo);
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				alarmRecord.setAlarmTime(SmartHomeUtil.TimestampToString(timestamp));
-				int newSequ = alarmRecordDao.getMaxRecordSequ(electricCode) + 1;
-				int maxSequ = 30;//当前需求为30
+				int newSequ = alarmRecordDao.getMaxRecordSequ(masterCode) + 1;
+				int maxSequ = 30;//每个传感器的记录设置为30条，应该够用了吧？
 				if (newSequ==maxSequ) {
-					alarmRecordDao.delete(electricCode, 0);
-					alarmRecordDao.updateAlarmRecordSequ(electricCode);
+					alarmRecordDao.delete(masterCode, 0);
+					alarmRecordDao.updateAlarmRecordSequ(masterCode);
 					alarmRecord.setRecordSequ(newSequ-1);
 				}else {
 					alarmRecord.setRecordSequ(newSequ);
