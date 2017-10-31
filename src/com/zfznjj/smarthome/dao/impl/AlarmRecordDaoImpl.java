@@ -6,11 +6,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.sql.Delete;
 
 import com.zfznjj.smarthome.dao.AlarmRecordDao;
 import com.zfznjj.smarthome.dao.ElectricDao;
 import com.zfznjj.smarthome.model.AlarmRecord;
-import com.zfznjj.smarthome.model.Electric;
 
 public class AlarmRecordDaoImpl implements AlarmRecordDao {
 	
@@ -43,32 +43,14 @@ public class AlarmRecordDaoImpl implements AlarmRecordDao {
 		Query query = getSession().createQuery(hql).setString("masterCode", masterCode);
 		List<AlarmRecord> alarmRecords = query.list();
 		return alarmRecords;
-//		int size = alarmRecords.size();
-//		String sReturn = "[";
-//		
-//		for (int i=0;i<size;i++) {
-//			List<Electric> electrics = 
-//			String electricName = "";
-//			
-//			sReturn = sReturn + "{"
-//					+ "\"electricCode\"" + ":" + "\"" + alarmRecords.get(i).getElectricCode() + "\"" + "," 
-//					+ "\"electricState\"" + ":" + "\"" + alarmRecords.get(i).getElectricState() + "\""  + "," 
-//					+ "\"electricName\"" + ":" + "\"" + electricName + "\""  + "," 
-//					+ "\"roomName\"" + ":" + "\"" + alarmRecords.get(i).getElectricState() + "\""  + "," 
-//					+ "\"stateInfo\"" + ":" + "\"" + alarmRecords.get(i).getStateInfo() + "\""  + "," 
-//					+ "\"alarmTime\"" + ":" + "\"" + alarmRecords.get(i).getAlarmTime() + "\""  + "," 
-//					
-//					
-//					+ "\"recordSequ\"" + ":" + alarmRecords.get(i).getRecordSequ() + "\""  + "," 
-//					
-//					+ "}";
-//			if(i!=size-1) {
-//				sReturn += ",";
-//			}
-//		}
-//		sReturn+="]";
-//		System.out.println(sReturn);
-//		return sReturn;
+	}
+	
+	@Override
+	public List<AlarmRecord> select(String masterCode, String electricCode) {
+		String hql = "FROM AlarmRecord a WHERE a.masterCode = :masterCode AND a.electricCode = :electricCode";
+		Query query = getSession().createQuery(hql).setString("masterCode", masterCode).setString("electricCode", electricCode);
+		List<AlarmRecord> alarmRecords = query.list();
+		return alarmRecords;
 	}
 	
 	//获取报警记录表中，当前主机下的最大sequ值
@@ -93,6 +75,12 @@ public class AlarmRecordDaoImpl implements AlarmRecordDao {
 	public int updateAlarmRecordSequ(String masterCode) {
 		String sql = "UPDATE alarmrecords SET record_sequ = record_sequ - 1 WHERE master_code = :masterCode";
 		return getSession().createSQLQuery(sql).setString("masterCode", masterCode).executeUpdate();
+	}
+	
+	@Override
+	public int updateAlarmRecordSequ(String masterCode, int recordSequ) {
+		String sql = "UPDATE alarmrecords SET record_sequ = record_sequ - 1 WHERE master_code = :masterCode AND record_sequ > :recordSequ";
+		return getSession().createSQLQuery(sql).setString("masterCode", masterCode).setInteger("recordSequ", recordSequ).executeUpdate();
 	}
 	
 }

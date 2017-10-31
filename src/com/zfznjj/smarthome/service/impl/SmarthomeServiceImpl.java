@@ -550,9 +550,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return userRoomDao.updateRoomSequ(masterCode, roomSequ);
 	}
 
-	/**
-	 * 删除电器时： 1、更新user的electric_time 2、删除情景模式电器表中的电器 3、删除分享电器表中的电器
-	 */
+	//不再使用，删除电器时： 1、更新user的electric_time 2、删除情景模式电器表中的电器 3、删除分享电器表中的电器
 	@Override
 	public int deleteElectric(String masterCode, int electricIndex) {
 		// 更新电器时间
@@ -634,6 +632,15 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			}
 			// 删除红外电器中指令表中的数据
 			eTKeyDao.delete(masterCode, electricIndex);
+		}
+		//如果是传感器，则在报警列表中删除对应的电器，从后向前循环，让sequ值都保证是正确的
+		List<AlarmRecord> alarmRecords = alarmRecordDao.select(masterCode, electricCode);
+		int size = alarmRecords.size();
+		for (int i=size-1;i>=0;i--) {
+			int recordSequ = alarmRecords.get(i).getRecordSequ();
+			int a = alarmRecordDao.delete(masterCode, recordSequ);
+			int b = alarmRecordDao.updateAlarmRecordSequ(masterCode, recordSequ);
+			System.out.println(a +" " + b);
 		}
 		return electricDao.delete(masterCode, electricIndex);
 	}
@@ -1272,43 +1279,37 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	
 	//更新电器状态，当主机返回当前电器状态时进入这个函数，重要性高
 	@Override
-	public int updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo) throws IOException {
-			//调用websocket发送当前电器状态字符串到指定的socket客户端
-			String message = "<" + electricCode + electricState + stateInfo + "00>"; 
-			WebSocket.sendMessage(masterCode, message);
-			//保存门锁记录，触发错误也不return，因为需要让程序继续跑下去
-			saveDoorRecord(masterCode, electricCode, stateInfo);
-			//传感器报警，发送短信提醒，并将记录保存到数据库中
-			checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
-			return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
-		}
+	public int updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo)
+			throws IOException {
+		// 调用websocket发送当前电器状态字符串到指定的socket客户端
+		String message = "<" + electricCode + electricState + stateInfo + "00>";
+		WebSocket.sendMessage(masterCode, message);
+		// 保存门锁记录，触发错误也不return，因为需要让程序继续跑下去
+		saveDoorRecord(masterCode, electricCode, stateInfo);
+		// 传感器报警，发送短信提醒，并将记录保存到数据库中
+		checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
+		return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
+	}
 	
 	@Override
 	public int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo) {
-//		if (electricCode.startsWith("0D")) {
-//			String sFlag = stateInfo.substring(0, 2);
-//			if (sFlag.equals("01") || sFlag.equals("03") || sFlag.equals("05") || sFlag.equals("07")) {
-				AlarmRecord alarmRecord = new AlarmRecord();
-				alarmRecord.setMasterCode(masterCode);
-				alarmRecord.setElectricCode(electricCode);
-				alarmRecord.setElectricState(electricState);
-				alarmRecord.setStateInfo(stateInfo);
-				Timestamp timestamp = new Timestamp(new Date().getTime());
-				alarmRecord.setAlarmTime(SmartHomeUtil.TimestampToString(timestamp));
-				int newSequ = alarmRecordDao.getMaxRecordSequ(masterCode) + 1;
-				int maxSequ = 30;//每个传感器的记录设置为30条，应该够用了吧？
-				if (newSequ==maxSequ) {
-					alarmRecordDao.delete(masterCode, 0);
-					alarmRecordDao.updateAlarmRecordSequ(masterCode);
-					alarmRecord.setRecordSequ(newSequ-1);
-				}else {
-					alarmRecord.setRecordSequ(newSequ);
-				}
-				return alarmRecordDao.saveOrUpdate(alarmRecord);// 保存记录
-//			}
-//			return -2;
-//		}
-//		return -2;
+		AlarmRecord alarmRecord = new AlarmRecord();
+		alarmRecord.setMasterCode(masterCode);
+		alarmRecord.setElectricCode(electricCode);
+		alarmRecord.setElectricState(electricState);
+		alarmRecord.setStateInfo(stateInfo);
+		Timestamp timestamp = new Timestamp(new Date().getTime());
+		alarmRecord.setAlarmTime(SmartHomeUtil.TimestampToString(timestamp));
+		int newSequ = alarmRecordDao.getMaxRecordSequ(masterCode) + 1;
+		int maxSequ = 30;// 每个传感器的记录设置为30条，应该够用了吧？
+		if (newSequ == maxSequ) {
+			alarmRecordDao.delete(masterCode, 0);
+			alarmRecordDao.updateAlarmRecordSequ(masterCode);
+			alarmRecord.setRecordSequ(newSequ - 1);
+		} else {
+			alarmRecord.setRecordSequ(newSequ);
+		}
+		return alarmRecordDao.saveOrUpdate(alarmRecord);// 保存记录
 	}
 	
 	//保存门锁记录
@@ -1502,7 +1503,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			}
 		}
 		sReturn+="]";
-		System.out.println(sReturn);
+//		System.out.println(sReturn);
 		return sReturn;
 	}
 	

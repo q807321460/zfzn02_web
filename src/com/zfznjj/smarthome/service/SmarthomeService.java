@@ -22,7 +22,6 @@ import com.zfznjj.smarthome.model.UserRoom;
 
 //import sun.tools.jar.resources.jar;
 
-
 public interface SmarthomeService {
 	
 	String validLogin(String accountCode, String password) throws Exception;
