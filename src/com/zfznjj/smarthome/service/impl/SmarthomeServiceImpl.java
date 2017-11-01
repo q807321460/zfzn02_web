@@ -73,7 +73,7 @@ import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.util.JsonPluginsUtil;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
-import com.zfznjj.smarthome.util.WebSocket;
+import com.zfznjj.smarthome.util.AppWebSocket;
 import com.zfznjj.smarthome.util.WriteLog;
 
 //import javafx.scene.chart.ScatterChart;
@@ -127,7 +127,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	public void setAlarmRecordDao(AlarmRecordDao alarmRecordDao) {
 		this.alarmRecordDao = alarmRecordDao;
 	}
-	
+
 	public void setDoorRecordDao(DoorRecordDao doorRecordDao) {
 		this.doorRecordDao = doorRecordDao;
 	}
@@ -256,8 +256,6 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		accountDao.updateUserTimeByMasterCode(masterCode);
 		return userDao.updateUserIP(masterCode, userIP);
 	}
-
-	
 
 	/**
 	 * return -2:插入失败，1：插入成功，2：该用户已注册
@@ -550,7 +548,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return userRoomDao.updateRoomSequ(masterCode, roomSequ);
 	}
 
-	//不再使用，删除电器时： 1、更新user的electric_time 2、删除情景模式电器表中的电器 3、删除分享电器表中的电器
+	// 不再使用，删除电器时： 1、更新user的electric_time 2、删除情景模式电器表中的电器 3、删除分享电器表中的电器
 	@Override
 	public int deleteElectric(String masterCode, int electricIndex) {
 		// 更新电器时间
@@ -633,14 +631,14 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			// 删除红外电器中指令表中的数据
 			eTKeyDao.delete(masterCode, electricIndex);
 		}
-		//如果是传感器，则在报警列表中删除对应的电器，从后向前循环，让sequ值都保证是正确的
+		// 如果是传感器，则在报警列表中删除对应的电器，从后向前循环，让sequ值都保证是正确的
 		List<AlarmRecord> alarmRecords = alarmRecordDao.select(masterCode, electricCode);
 		int size = alarmRecords.size();
-		for (int i=size-1;i>=0;i--) {
+		for (int i = size - 1; i >= 0; i--) {
 			int recordSequ = alarmRecords.get(i).getRecordSequ();
 			int a = alarmRecordDao.delete(masterCode, recordSequ);
 			int b = alarmRecordDao.updateAlarmRecordSequ(masterCode, recordSequ);
-			System.out.println(a +" " + b);
+			System.out.println(a + " " + b);
 		}
 		return electricDao.delete(masterCode, electricIndex);
 	}
@@ -1276,21 +1274,21 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	}
 
 	// 以下为konnn添加或修复的接口
-	
-	//更新电器状态，当主机返回当前电器状态时进入这个函数，重要性高
+
+	// 更新电器状态，当主机返回当前电器状态时进入这个函数，重要性高
 	@Override
 	public int updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo)
 			throws IOException {
 		// 调用websocket发送当前电器状态字符串到指定的socket客户端
 		String message = "<" + electricCode + electricState + stateInfo + "00>";
-		WebSocket.sendMessage(masterCode, message);
+		AppWebSocket.sendMessage(masterCode, message);
 		// 保存门锁记录，触发错误也不return，因为需要让程序继续跑下去
 		saveDoorRecord(masterCode, electricCode, stateInfo);
 		// 传感器报警，发送短信提醒，并将记录保存到数据库中
 		checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
 		return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
 	}
-	
+
 	@Override
 	public int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo) {
 		AlarmRecord alarmRecord = new AlarmRecord();
@@ -1311,8 +1309,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}
 		return alarmRecordDao.saveOrUpdate(alarmRecord);// 保存记录
 	}
-	
-	//保存门锁记录
+
+	// 保存门锁记录
 	@Override
 	public int saveDoorRecord(String masterCode, String electricCode, String stateInfo) {
 		String pre = electricCode.substring(0, 4);
@@ -1325,12 +1323,12 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				doorRecord.setOpenTime(SmartHomeUtil.TimestampToString(timestamp));
 				int newSequ = doorRecordDao.getMaxRecordSequ(electricCode) + 1;
-				int maxSequ = 300;//当前需求为300
-				if (newSequ==maxSequ) {//
+				int maxSequ = 300;// 当前需求为300
+				if (newSequ == maxSequ) {//
 					doorRecordDao.delete(electricCode, 0);
 					doorRecordDao.updateDoorRecordSequ(electricCode);
-					doorRecord.setRecordSequ(newSequ-1);
-				}else {
+					doorRecord.setRecordSequ(newSequ - 1);
+				} else {
 					doorRecord.setRecordSequ(newSequ);
 				}
 				return doorRecordDao.saveOrUpdate(doorRecord);// 保存记录
@@ -1339,10 +1337,10 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}
 		return -2;
 	}
-	
+
 	// 发送短信报警通知
 	private void checkIfSendSms(String masterCode, String electricCode, String electricState, String stateInfo) {
-//		if (electricCode.startsWith("0D") && stateInfo.startsWith("01")) {
+		// if (electricCode.startsWith("0D") && stateInfo.startsWith("01")) {
 		if (electricCode.startsWith("0D")) {
 			List<Electric> electrics = electricDao.select(masterCode, electricCode);
 			String electricName = "";
@@ -1382,28 +1380,28 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			if (isOldAlarm == isAlarm) {// 报警的状态没有改变的话，是不需要发送短信的
 				return;
 			}
-			//保存到报警列表中去
-			if (isAlarm==true) {
+			// 保存到报警列表中去
+			if (isAlarm == true) {
 				saveAlarmRecord(masterCode, electricCode, electricState, stateInfo);
 			}
 			Timestamp timestamp = new Timestamp(new Date().getTime());
 			String time = SmartHomeUtil.TimestampToString(timestamp);
 			String msg = time + " 传感器：" + electricName + " ： " + electricCode + "状态切换为：" + stateInfo;
 			System.out.println(msg);
-			//发送给所有被分享的手机号上去
+			// 发送给所有被分享的手机号上去
 			List<User> list = userDao.selectByMasterCodeAll(masterCode);
 			List<String> phones = new ArrayList<String>();
 			for (User user : list) {
 				phones.add(user.getAccountCode());
 			}
 			try {
-				SmsUtil.sendAlarm(phones, electricName, time, isAlarm);//根据是报警还是解除，确定发送短信的格式
+				SmsUtil.sendAlarm(phones, electricName, time, isAlarm);// 根据是报警还是解除，确定发送短信的格式
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	@Override
 	public int updateSceneElectricOrder(String masterCode, int electricIndex, String electricCode, int sceneIndex,
 			String electricOrder, String orderInfo) {
@@ -1427,7 +1425,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return sceneOrderDao.insert(sceneOrder);
 	}
 
-	//更新传感器的布防状态，针对门磁电器类型，需要更新json字符串
+	// 更新传感器的布防状态，针对门磁电器类型，需要更新json字符串
 	@Override
 	public int updateSensorExtras(String masterCode, String electricCode, int electricIndex, String extras) {
 		// 更新电器时间
@@ -1468,56 +1466,54 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}
 		return 0;
 	}
-	
+
 	@Override
 	public String loadAlarmRecord(String masterCode) {
 		List<AlarmRecord> alarmRecords = alarmRecordDao.select(masterCode);
 		int size = alarmRecords.size();
 		String sReturn = "[";
-		for (int i=0;i<size;i++) {
+		for (int i = 0; i < size; i++) {
 			List<Electric> electrics = electricDao.select(masterCode, alarmRecords.get(i).getElectricCode());
 			String electricName = "", roomName = "";
 			int roomIndex = -1, electricType = -1;
-			if (electrics.size()>0) {
+			if (electrics.size() > 0) {
 				int foot = electrics.size() - 1;
 				electricName = electrics.get(foot).getElectricName();
 				electricType = electrics.get(foot).getElectricType();
 				roomIndex = electrics.get(foot).getRoomIndex();
 				UserRoom userRoom = userRoomDao.select(masterCode, roomIndex);
 				roomName = userRoom.getRoomName();
-			}else {
+			} else {
 				continue;
 			}
-			sReturn = sReturn + "{"
-					+ "\"electricCode\"" + ":" + "\"" + alarmRecords.get(i).getElectricCode() + "\"" + "," 
-					+ "\"electricState\"" + ":" + "\"" + alarmRecords.get(i).getElectricState() + "\""  + "," 
-					+ "\"electricName\"" + ":" + "\"" + electricName + "\""  + "," 
-					+ "\"electricType\"" + ":" + electricType + "," 
-					+ "\"roomName\"" + ":" + "\"" + roomName + "\""  + "," 
-					+ "\"stateInfo\"" + ":" + "\"" + alarmRecords.get(i).getStateInfo() + "\""  + "," 
-					+ "\"alarmTime\"" + ":" + "\"" + alarmRecords.get(i).getAlarmTime() + "\""  + "," 
-					+ "\"recordSequ\"" + ":" + alarmRecords.get(i).getRecordSequ()
-					+ "}";
-			if(i!=size-1) {
+			sReturn = sReturn + "{" + "\"electricCode\"" + ":" + "\"" + alarmRecords.get(i).getElectricCode() + "\""
+					+ "," + "\"electricState\"" + ":" + "\"" + alarmRecords.get(i).getElectricState() + "\"" + ","
+					+ "\"electricName\"" + ":" + "\"" + electricName + "\"" + "," + "\"electricType\"" + ":"
+					+ electricType + "," + "\"roomName\"" + ":" + "\"" + roomName + "\"" + "," + "\"stateInfo\"" + ":"
+					+ "\"" + alarmRecords.get(i).getStateInfo() + "\"" + "," + "\"alarmTime\"" + ":" + "\""
+					+ alarmRecords.get(i).getAlarmTime() + "\"" + "," + "\"recordSequ\"" + ":"
+					+ alarmRecords.get(i).getRecordSequ() + "}";
+			if (i != size - 1) {
 				sReturn += ",";
 			}
 		}
-		sReturn+="]";
-//		System.out.println(sReturn);
+		sReturn += "]";
+		// System.out.println(sReturn);
 		return sReturn;
 	}
-	
+
 	@Override
 	public String loadDoorRecord(String masterCode, String electricCode) {
 		return doorRecordDao.select2(electricCode);
 	}
-	
+
 	@Override
-	public int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException {
+	public int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex)
+			throws IOException {
 		userDao.updateUserELectricTime(masterCode);
 		return electricDao.updateElectricSequ(masterCode, electricSequ, roomIndex);
 	}
-	
+
 	/**
 	 * return -2:插入失败，1：插入成功，2：已添加过该电器
 	 */
@@ -1549,9 +1545,9 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			if (newElectricSequ != electricSequ) {
 				// 保存log文件
 				WriteLog.writeLog("error.log",
-						"【addElectric错误】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex + "  electricCode:"
-								+ electricCode + "  roomIndex:" + roomIndex + "  electricSequ:" + electricSequ
-								+ "  newElectircSequ:" + newElectricSequ);
+						"【addElectric错误】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex
+								+ "  electricCode:" + electricCode + "  roomIndex:" + roomIndex + "  electricSequ:"
+								+ electricSequ + "  newElectircSequ:" + newElectricSequ);
 			}
 			electric.setElectricSequ(newElectricSequ);
 			electric.setElectricType(electricType);
@@ -1572,13 +1568,13 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}
 		return 2;
 	}
-	
+
 	@Override
 	public int getElectricSequ(String masterCode, int electricIndex) {
-		Electric electric = (Electric)electricDao.select(masterCode, electricIndex);
-		if (electric!=null) {
+		Electric electric = (Electric) electricDao.select(masterCode, electricIndex);
+		if (electric != null) {
 			return electric.getElectricSequ();
-		}else {
+		} else {
 			return -1;
 		}
 	}

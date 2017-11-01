@@ -19,7 +19,7 @@ import com.zfznjj.smarthome.model.UserRoom;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
-import com.zfznjj.smarthome.util.WebSocket;
+import com.zfznjj.smarthome.util.AppWebSocket;
 import com.zfznjj.smarthome.util.WriteLog;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
 
@@ -406,7 +406,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	@Override
 	public String sayHello() throws IOException {
 		System.out.println("hello");
-		WebSocket.sendMessage("AA00FFD9", "<030036C9E0BZZ603********00>");
+		AppWebSocket.sendMessage("AA00FFD9", "<030036C9E0BZZ603********00>");
 		return "hello";
 	}
 

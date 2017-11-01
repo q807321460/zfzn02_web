@@ -63,7 +63,7 @@ import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.service.impl.SmarthomeServiceImpl;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
-import com.zfznjj.smarthome.util.WebSocket;
+import com.zfznjj.smarthome.util.AppWebSocket;
 import com.zfznjj.smarthome.util.WriteLog;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
 
