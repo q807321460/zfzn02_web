@@ -6,7 +6,7 @@
     <class name="com.zfznjj.smarthome.model.AlarmRecord" table="alarmrecords">
         <id name="alarmRecordId" type="int">
             <column name="alarm_record_id" />
-            <generator class="assigned" />
+            <generator class="native" />
         </id>
         <property name="masterCode" type="java.lang.String">
             <column name="master_code" />
