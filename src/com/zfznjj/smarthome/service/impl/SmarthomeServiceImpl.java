@@ -71,6 +71,7 @@ import com.zfznjj.smarthome.model.User;
 import com.zfznjj.smarthome.model.UserRoom;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.util.JsonPluginsUtil;
+import com.zfznjj.smarthome.util.MasterWebSocket;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
 import com.zfznjj.smarthome.util.AppWebSocket;
@@ -209,12 +210,12 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	}
 
 	@Override
-	public String isExistAccount(String accountCode) {
+	public int isExistAccount(String accountCode) {
 		Account account = accountDao.select(accountCode);
 		if (account == null) {
-			return "0";
+			return 0;
 		} else {
-			return "1";
+			return 1;
 		}
 	}
 
@@ -368,6 +369,9 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			sceneOrder.setIsReaded('N');
 			Timestamp timestamp = new Timestamp(new Date().getTime());
 			sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
+			
+			
+			MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 			sceneOrderDao.insert(sceneOrder);
 
 			userDao.updateUserSceneELectricTime(masterCode);
@@ -420,6 +424,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		sceneOrder.setIsReaded('N');
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
+		
+		MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 		return sceneOrderDao.insert(sceneOrder);
 	}
 
@@ -569,6 +575,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				sceneOrder.setIsReaded('N');
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
+				
+				MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 				sceneOrderDao.insert(sceneOrder);
 			}
 		}
@@ -608,6 +616,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				sceneOrder.setIsReaded('N');
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
+				
+				MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 				sceneOrderDao.insert(sceneOrder);
 			}
 		}
@@ -653,6 +663,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		sceneOrder.setOrderInfo("**");
 		sceneOrder.setSceneIndex(sceneIndex);
 		sceneOrder.setIsReaded('N');
+		
+		MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 		sceneOrderDao.insert(sceneOrder);
 
 		// 删除该情景模式中的所有电器
@@ -684,6 +696,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				sceneOrder.setIsReaded('N');
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
+				
+				MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 				sceneOrderDao.insert(sceneOrder);
 			}
 		}
@@ -701,7 +715,6 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	 */
 	@Override
 	public List<ElectricState> getElectricStateByUser(String accountCode, String masterCode) {
-		// TODO Auto-generated method stub
 		return childNodeDao.getStateByMasterCode(masterCode);
 	}
 
@@ -1030,6 +1043,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	/**
 	 * 更新电器指令
+	 * @throws IOException 
 	 */
 	@Override
 	public int addELectricOrder(String masterCode, String electricCode, String orderData, String orderInfo) {
@@ -1042,6 +1056,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		electricOrder.setOrderInfo(orderInfo);
 		electricOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
 		electricOrder.setIsReaded('N');
+		
+		MasterWebSocket.sendElectricOrder(masterCode, electricOrder);
 		return electricOrderDao.insert(electricOrder);
 	}
 
@@ -1422,6 +1438,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		sceneOrder.setIsReaded('N');
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
+		
+		MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 		return sceneOrderDao.insert(sceneOrder);
 	}
 
@@ -1460,6 +1478,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			} else if (extras.equals("1")) {
 				electricOrder.setOrderData("TS");
 			}
+			MasterWebSocket.sendElectricOrder(masterCode, electricOrder);
 			electricOrderDao.insert(electricOrder);
 			// 保存电器
 			return electricDao.saveOrUpdate(electric);
@@ -1576,6 +1595,22 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			return electric.getElectricSequ();
 		} else {
 			return -1;
+		}
+	}
+	
+	@Override
+	public int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ) {
+		userDao.updateUserELectricTime(masterCode);
+		return electricDao.updateElectricSequ(masterCode, electricIndex, roomIndex, oldElectricSequ, newElectricSequ);
+	}
+	
+	@Override
+	public int isExistElectric(String masterCode, String electricCode) {
+		List<Electric> electrics = electricDao.select(masterCode, electricCode);
+		if (electrics.size()==0) {
+			return 0;
+		}else {
+			return 1;
 		}
 	}
 }

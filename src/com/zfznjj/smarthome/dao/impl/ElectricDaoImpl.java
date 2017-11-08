@@ -6,6 +6,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 
@@ -30,12 +31,10 @@ public class ElectricDaoImpl implements ElectricDao{
 
 	@Override
 	public int saveOrUpdate(Electric electric) {
-		// TODO Auto-generated method stub
 		try {
 			getSession().saveOrUpdate(electric);
 			return 1;
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -2;
 		}
@@ -52,6 +51,32 @@ public class ElectricDaoImpl implements ElectricDao{
 		String sql = "UPDATE electrics SET electrics.electric_sequ = electrics.electric_sequ - 1 WHERE "
 				+ "electrics.master_code = :masterCode AND electrics.electric_sequ > :electricSequ AND electrics.room_index = :roomIndex";
 		return getSession().createSQLQuery(sql).setString("masterCode", masterCode).setInteger("electricSequ", electricSequ).setInteger("roomIndex", roomIndex).executeUpdate();
+	}
+	
+	@Override
+	public int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ) {	
+		try {
+			//更新中间位置电器的sequ值
+			if (oldElectricSequ < newElectricSequ) {
+				String sql = "UPDATE electrics SET electric_sequ = electric_sequ - 1 WHERE master_code = :masterCode AND room_index = :roomIndex AND "
+						+ "electric_sequ > :oldElectricSequ AND electric_sequ <= :newElectricSequ";
+				getSession().createSQLQuery(sql).setString("masterCode", masterCode).setInteger("roomIndex", roomIndex)
+					.setInteger("oldElectricSequ", oldElectricSequ).setInteger("newElectricSequ", newElectricSequ).executeUpdate();
+			}else {
+				String sql = "UPDATE electrics SET electric_sequ = electric_sequ + 1 WHERE master_code = :masterCode AND room_index = :roomIndex AND "
+						+ "electric_sequ >= :newElectricSequ AND electric_sequ < :oldElectricSequ";
+				getSession().createSQLQuery(sql).setString("masterCode", masterCode).setInteger("roomIndex", roomIndex)
+					.setInteger("oldElectricSequ", oldElectricSequ).setInteger("newElectricSequ", newElectricSequ).executeUpdate();
+			}
+			
+			//更新指定电器的新sequ值
+			String sql2 = "UPDATE electrics SET electric_sequ = :newElectricSequ WHERE master_code = :masterCode AND electric_index = :electricIndex";
+			getSession().createSQLQuery(sql2).setInteger("newElectricSequ", newElectricSequ).setString("masterCode", masterCode).setInteger("electricIndex", electricIndex).executeUpdate();
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -2;
+		}
 	}
 	
 	@Override

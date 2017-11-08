@@ -24,7 +24,7 @@ public class ElectricOrderServlet extends BaseServlet {
 			SmarthomeService smarthomeService = (SmarthomeService)getCtx().getBean("smarthomeService");
 			// 获取状状态信息
 			String result = smarthomeService.ugetSceneOrderByMasterNode(masterCode);
-			if(result.equals("none")){
+			if(result.equals("none")) {
 				result = smarthomeService.ugetElectricOrderByMasterNode(masterCode);
 			}
 			

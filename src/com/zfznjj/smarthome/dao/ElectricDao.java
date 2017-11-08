@@ -10,6 +10,7 @@ public interface ElectricDao {
 	int saveOrUpdate(Electric electric);
 	int delete(String masterCode, int electricIndex);
 	int updateElectricSequ(String masterCode, int electricSequ,int roomIndex);
+	int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ);
 	int getMaxElectricSequ(String masterCode, int roomIndex);
 	int saveDoorRecord(String masterCode, String electricCode, String stateInfo);
 	Electric select(String masterCode, int electricIndex);

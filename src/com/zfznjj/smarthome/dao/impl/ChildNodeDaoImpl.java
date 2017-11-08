@@ -76,7 +76,6 @@ public class ChildNodeDaoImpl implements ChildNodeDao{
 
 		@Override
 		public List<ElectricState> getStateByMasterCode(String masterCode) {
-			// TODO Auto-generated method stub
 			String hql = "FROM ChildNode c WHERE c.masterCode = :masterCode";
 			List<ChildNode> childNodes = getSession().createQuery(hql).setString("masterCode", masterCode).list();	
 			return SmartHomeUtil.childNodesToElectricStates(childNodes);

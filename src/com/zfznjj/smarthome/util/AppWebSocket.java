@@ -20,7 +20,7 @@ import javax.websocket.server.ServerEndpoint;
 
 /** 
  * @Class: WebSocket
- * @Description: websocket类，这个类专门提供给主机使用，还有一个类专门提供给主机使用
+ * @Description: websocket类，这个类专门提供给App使用，还有一个类专门提供给主机使用
  * @author 孔翰文
  */
 @ServerEndpoint(value="/websocket_app/{masterCode}")

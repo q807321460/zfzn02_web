@@ -17,6 +17,9 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import com.zfznjj.smarthome.model.ElectricOrder;
+import com.zfznjj.smarthome.model.SceneOrder;
+
 
 /** 
  * @Class: WebSocket
@@ -62,6 +65,24 @@ public class MasterWebSocket {
     @OnError
     public void onError(Session session, Throwable error){
     	System.out.println("【主机】主机编号为：" + this.masterCode + "出现连接错误");
+    }
+    
+    public static void sendElectricOrder(String masterCode, ElectricOrder electricOrder) {
+    	String message = "<" + electricOrder.getElectricCode() + electricOrder.getOrderData() + electricOrder.getOrderInfo() +"FF" + ">";
+		try {
+			MasterWebSocket.sendMessage(masterCode, message);
+		} catch (Exception e) {
+			System.out.println("MasterWebSocket send failed...");
+		}
+    }
+    
+    public static void sendSceneOrder(String masterCode, SceneOrder sceneOrder) {
+    	String message = "<" + sceneOrder.getElectricCode() + sceneOrder.getOrderData() + sceneOrder.getOrderInfo() + sceneOrder.getSceneIndex() +"*******FF" + ">";
+		try {
+			MasterWebSocket.sendMessage(masterCode, message);
+		} catch (Exception e) {
+			System.out.println("MasterWebSocket send failed...");
+		}
     }
     
     public static void sendMessage(String masterCode, String message) throws IOException{

@@ -124,14 +124,9 @@ public class TestClass {
 
 	@Test
 	public void test() throws Exception {
-//		int a = smarthomeService.updateElectricState("AA00FFD9", "0D73001280FE", "ZF", "00********");
-		for (int i = 0; i < 30; i++) {
-			smarthomeService.updateElectricState("AA00FFDD", "0D73001280FE", "ZF", "03********");
-			smarthomeService.updateElectricState("AA00FFDD", "0D31001280FE", "ZF", "01********");
-		}
-//		smarthomeService.loadAlarmRecord("AA00FFD9");
-//		List<AlarmRecord> alarmRecords = alarmRecordDao.select("AA00FFD9", "0D73012315601280FE");
-		String string = smarthomeWs.deleteElectric1("AA00FFD9", "0D73001280FE", 11, 4, 0);
+//		String string = smarthomeWs.updateElectricSequ("AA00FFD9", 1, 0, 0, 3);
+//		String a = smarthomeWs.isExistElectric("AA00FFD9", "1000AAF28715");
+		smarthomeWs.updateElectricOrder("AA00FFD9", "020021B34E0B", "XH", "01");
 		System.out.println("finish");
 	}
 

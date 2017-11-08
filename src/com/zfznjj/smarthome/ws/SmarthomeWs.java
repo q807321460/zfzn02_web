@@ -460,4 +460,19 @@ public interface SmarthomeWs {
 	String loadDoorRecord(
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
 			@WebParam(name="electricCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String electricCode);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String updateElectricSequ(
+			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
+			@WebParam(name="electricIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int electricIndex,
+			@WebParam(name="roomIndex",targetNamespace="http://ws.smarthome.zfznjj.com/")int roomIndex,
+			@WebParam(name="oldElectricSequ",targetNamespace="http://ws.smarthome.zfznjj.com/")int oldElectricSequ,
+			@WebParam(name="newElectricSequ",targetNamespace="http://ws.smarthome.zfznjj.com/")int newElectricSequ);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String isExistElectric(
+			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
+			@WebParam(name="electricCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String electricCode);
 }

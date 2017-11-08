@@ -37,7 +37,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String isExistAccount(String accountCode) {
-		return smarthomeService.isExistAccount(accountCode);
+		return String.valueOf(smarthomeService.isExistAccount(accountCode));
 	}
 	
 	@Override
@@ -423,6 +423,15 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	@Override
 	public String loadDoorRecord(String masterCode, String electricCode) {
 		return String.valueOf(smarthomeService.loadDoorRecord(masterCode, electricCode));
+	}
+	
+	@Override
+	public String updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ) {
+		return String.valueOf(smarthomeService.updateElectricSequ(masterCode, electricIndex, roomIndex, oldElectricSequ, newElectricSequ));
+	}
+	
+	public String isExistElectric(String masterCode, String electricCode) {
+		return String.valueOf(smarthomeService.isExistElectric(masterCode, electricCode));
 	}
 	
 }
