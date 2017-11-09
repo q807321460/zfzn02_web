@@ -64,7 +64,6 @@ public class ElectricSharedDaoImpl implements ElectricSharedDao{
 	
 	@Override
 	public int deleteByUser(String accountCode, String masterCode) {
-		// TODO Auto-generated method stub
 		String sql = "DELETE FROM electricshared WHERE "
 				+ "user_id = "
 				+ "(SELECT user_id FROM users AS u WHERE u.ACCOUNT_CODE = :accountCode AND u.MASTER_CODE = :masterCode )";
@@ -107,6 +106,7 @@ public class ElectricSharedDaoImpl implements ElectricSharedDao{
 				return;
 		
 	}
+	
 	
 	@Override
 	public List<Electric> select(String accountCode, String masterCode) {

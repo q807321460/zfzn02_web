@@ -46,7 +46,7 @@ public class AppWebSocket {
 
     //¹Ø±ÕÊ±Ö´ÐÐ
     @OnClose
-    public void onClose(){
+    public void onClose() {
     	if (map.get(masterCode).size()>0) {
     		map.get(masterCode).remove(this);
     	}

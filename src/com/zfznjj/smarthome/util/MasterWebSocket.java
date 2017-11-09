@@ -41,6 +41,9 @@ public class MasterWebSocket {
         this.session = session;
         if (!map.containsKey(masterCode)) {
         	map.put(masterCode, this);
+        }else {
+        	map.remove(masterCode);
+        	map.put(masterCode, this);
         }
         System.out.println("【主机】新连入主机：" + masterCode);
     }
@@ -72,7 +75,7 @@ public class MasterWebSocket {
 		try {
 			MasterWebSocket.sendMessage(masterCode, message);
 		} catch (Exception e) {
-			System.out.println("MasterWebSocket send failed...");
+			System.out.println("failed to send to master: " +masterCode);
 		}
     }
     
@@ -81,7 +84,7 @@ public class MasterWebSocket {
 		try {
 			MasterWebSocket.sendMessage(masterCode, message);
 		} catch (Exception e) {
-			System.out.println("MasterWebSocket send failed...");
+			System.out.println("failed to send to master: " +masterCode);
 		}
     }
     

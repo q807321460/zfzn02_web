@@ -1173,6 +1173,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			masterNodeDao.saveOrUpdate(masterNode);
 		}
 		electricSharedDao.deleteByUser(accountCode, masterCode);
+		accountDao.updateUserTime(accountCode);
 		return userDao.delete(accountCode, masterCode);
 	}
 
