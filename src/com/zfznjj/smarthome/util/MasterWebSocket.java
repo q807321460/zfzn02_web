@@ -75,7 +75,7 @@ public class MasterWebSocket {
 		try {
 			MasterWebSocket.sendMessage(masterCode, message);
 		} catch (Exception e) {
-			System.out.println("failed to send to master: " +masterCode);
+			System.out.println("¡¾Ö÷»ú¡¿failed to send to master: " +masterCode);
 		}
     }
     

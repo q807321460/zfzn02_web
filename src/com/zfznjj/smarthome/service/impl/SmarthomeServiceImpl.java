@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.cxf.tools.corba.common.idltypes.IdlString;
+import org.apache.http.conn.util.PublicSuffixList;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.annotations.Check;
@@ -738,7 +739,6 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	@Override
 	public List<Account> loadSharedAccount(String masterCode) {
-		// TODO Auto-generated method stub
 		return accountDao.selectAccountByMasterCode(masterCode);
 	}
 
@@ -861,10 +861,11 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		if (user == null || (electricTime != null && user.getElectricTime().equals(electricTime))) {
 			return null;
 		}
-		/*
-		 * 若用户区域时间发生改变： 是否主账户： 1、是：则从主电器表读取 2、否：主节点是否有主账户： 有：从分享区域表读取 无：从主电器表读取
-		 * 
-		 */
+		//若用户区域时间发生改变： 是否主账户： 
+		//1、是：则从主电器表读取 
+		//2、否：主节点是否有主账户：
+		//			有：从分享区域表读取 
+		//			无：从主电器表读取
 		MasterNode masterNode = masterNodeDao.select(masterCode);
 		if (masterNode == null) {
 			return null;
@@ -1613,5 +1614,10 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}else {
 			return 1;
 		}
+	}
+	
+	@Override
+	public List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode) {
+		return electricSharedDao.select2(masterCode, accountCode);
 	}
 }

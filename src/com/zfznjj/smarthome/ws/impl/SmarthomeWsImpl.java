@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.loader.custom.Return;
+
 import com.zfznjj.smarthome.entity.AdminElectricBean;
 import com.zfznjj.smarthome.entity.ElectricForVoice;
 import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
@@ -68,8 +71,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String addUserRoom(String masterCode, int roomIndex, String roomName, int roomSequ, int roomImg) {
-		// TODO Auto-generated method stub
-		return ""+smarthomeService.addUserRoom(masterCode, roomIndex, roomName, roomSequ, roomImg);
+		int re = smarthomeService.addUserRoom(masterCode, roomIndex, roomName, roomSequ, roomImg);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -80,7 +84,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String updateSensorExtras(String masterCode, String electricCode, int electricIndex, String extras) {
-		return String.valueOf(smarthomeService.updateSensorExtras(masterCode, electricCode, electricIndex, extras));
+		int re = smarthomeService.updateSensorExtras(masterCode, electricCode, electricIndex, extras);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -109,8 +115,10 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 			String electricName, int electricSequ, int electricType, String extra, String orderInfo) throws Exception {
 		WriteLog.writeLog("electrics.log", "【addElectric】" + "masterCode:" + masterCode + "  electricIndex:" + electricIndex + "  electricCode:" + electricCode +
 				"  roomIndex:" + roomIndex + "  electricName:" + electricName + "  electricSequ:" + electricSequ + "  electricType:" + electricType + "  extra:" + extra + "  orderInfo:" + orderInfo);
-		return ""+smarthomeService.addElectric(masterCode, electricIndex, electricCode, roomIndex,
+		int re = smarthomeService.addElectric(masterCode, electricIndex, electricCode, roomIndex,
 				electricName, electricSequ, electricType, extra, orderInfo);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -120,18 +128,24 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String updateElectric(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex) {
-		return ""+smarthomeService.updateElectric(masterCode, electricCode, electricIndex, electricName, sceneIndex);
+		int re = smarthomeService.updateElectric(masterCode, electricCode, electricIndex, electricName, sceneIndex);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	//用于选择门磁的开关状态
 	@Override
 	public String updateElectric1(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex, String electricOrder) {
-		return ""+smarthomeService.updateElectric1(masterCode, electricCode, electricIndex, electricName, sceneIndex, electricOrder);
+		int re = smarthomeService.updateElectric1(masterCode, electricCode, electricIndex, electricName, sceneIndex, electricOrder);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
 	public String updateUserRoom(String masterCode, int roomIndex, String roomName, int roomImg) {
-		return ""+smarthomeService.updateUserRoom(masterCode, roomIndex, roomName, roomImg);
+		int re = smarthomeService.updateUserRoom(masterCode, roomIndex, roomName, roomImg);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -142,8 +156,8 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	@Override
 	public String updateAccount(String accountCode, String accountName, String accountPhone, String accountAddress,
 			String accountEmail) {
-		// TODO Auto-generated method stub
-		return ""+smarthomeService.updateAccount(accountCode, accountName, accountPhone, accountAddress, accountEmail);
+		int re = smarthomeService.updateAccount(accountCode, accountName, accountPhone, accountAddress, accountEmail);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -153,8 +167,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String updateIRKeyValue(String masterCode, int electricIndex, int keyKey, String keyValue) {
-		
-		return String.valueOf(smarthomeService.updateIRKeyValue(masterCode, electricIndex, keyKey, SmartHomeUtil.string2HexString(keyValue).toString()));
+		int re = smarthomeService.updateIRKeyValue(masterCode, electricIndex, keyKey, SmartHomeUtil.string2HexString(keyValue).toString());
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -175,7 +190,6 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String loadKeyByElectric(String masterCode, int electricIndex) {
-		// TODO Auto-generated method stub
 		return smarthomeService.loadKeyByElectric(masterCode, electricIndex);
 	}
 	
@@ -187,7 +201,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 
 	@Override
 	public String addUser(String accountCode,String masterCode, String userName, String userIp) {
-		return ""+smarthomeService.addUser(accountCode, masterCode, userName, userIp);
+		int re = smarthomeService.addUser(accountCode, masterCode, userName, userIp);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 
 	@Override
@@ -200,8 +216,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String deleteUser(String accountCode, String masterCode) {
-		// TODO Auto-generated method stub
-		return String.valueOf(smarthomeService.deleteUser(accountCode, masterCode));
+		int re = smarthomeService.deleteUser(accountCode, masterCode);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -210,6 +227,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		if(result > 0){
 			smarthomeService.updateSceneSequ(masterCode, sceneSequ);
 		}
+		AppWebSocket.sendSync(masterCode);
 		return String.valueOf(result);
 	}
 	
@@ -237,6 +255,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		if(result > 0){
 			smarthomeService.updateRoomSequ(masterCode, roomSequ);
 		}
+		AppWebSocket.sendSync(masterCode);
 		return String.valueOf(result);
 	}
 	
@@ -256,6 +275,7 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		if(result > 0){
 			smarthomeService.updateElectricSequ(masterCode, electricIndex, newElectricSequ, roomIndex);
 		}
+		AppWebSocket.sendSync(masterCode);
 		return String.valueOf(result);
 	}
 	
@@ -276,12 +296,15 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		if(result > 0){
 			smarthomeService.updateElectricSequ(masterCode, electricIndex, newElectricSequ, roomIndex);
 		}
+		AppWebSocket.sendSync(masterCode);
 		return String.valueOf(result);
 	}
 	
 	@Override
 	public String deleteSceneElectric(String masterCode, int electricIndex, int sceneIndex) {
-		return String.valueOf(smarthomeService.deleteSceneElectric(masterCode, electricIndex, sceneIndex));
+		int re = smarthomeService.deleteSceneElectric(masterCode, electricIndex, sceneIndex);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 
 	@Override
@@ -296,16 +319,21 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 
 	@Override
 	public String addScene(String accountCode, String masterCode, String sceneName, int sceneIndex,int sceneSequ, int sceneImg) {
-		return ""+smarthomeService.addScene(accountCode, masterCode, sceneName, sceneIndex,sceneSequ,sceneImg);
+		int re = smarthomeService.addScene(accountCode, masterCode, sceneName, sceneIndex,sceneSequ,sceneImg);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 
 	@Override
 	public String addSceneElectric(String masterCode, String electricCode, String electricOrder, String accountCode,
 			int sceneIndex, String orderInfo,int electricIndex,String electricName, int roomIndex, int electricType) {
-		return ""+smarthomeService.addSceneElectric(masterCode, electricCode, electricOrder, accountCode, sceneIndex, orderInfo,
+		int re = smarthomeService.addSceneElectric(masterCode, electricCode, electricOrder, accountCode, sceneIndex, orderInfo,
 				electricIndex, electricName, roomIndex, electricType);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
+	//远程控制电器
 	@Override
 	public void updateElectricOrder(String masterCode,String electricCode, String order,String orderInfo) {
 		smarthomeService.addELectricOrder(masterCode, electricCode, order, orderInfo);
@@ -313,12 +341,16 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 
 	@Override
 	public String giveUpAdmin(String masterCode, String owner) {
-		return ""+smarthomeService.giveUpAdmin(masterCode, owner);
+		int re = smarthomeService.giveUpAdmin(masterCode, owner);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 
 	@Override
 	public String accessAdmin(String masterCode, String owner) {
-		return ""+smarthomeService.accessAdmin(masterCode, owner);
+		int re = smarthomeService.accessAdmin(masterCode, owner);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 
 	@Override
@@ -375,7 +407,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	@Override
 	public String addSceneOrder(String masterCode, String electricCode, String electricOrder, String orderInfo,
 			int sceneIndex) {
-		return String.valueOf(smarthomeService.addSceneOrder(masterCode, electricCode, electricOrder, orderInfo, sceneIndex));
+		int re = smarthomeService.addSceneOrder(masterCode, electricCode, electricOrder, orderInfo, sceneIndex);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -390,7 +424,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 
 	@Override
 	public String updateSceneElectricOrder(String masterCode, int electricIndex, String electricCode, int sceneIndex, String electricOrder, String orderInfo) {
-		return String.valueOf(smarthomeService.updateSceneElectricOrder(masterCode, electricIndex, electricCode, sceneIndex, electricOrder, orderInfo));
+		int re = smarthomeService.updateSceneElectricOrder(masterCode, electricIndex, electricCode, sceneIndex, electricOrder, orderInfo);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -412,7 +448,9 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 
 	@Override
 	public String updateUserName(String accountCode, String masterCode, String userName) {
-		return String.valueOf(smarthomeService.updateUserName(accountCode, masterCode, userName));
+		int re = smarthomeService.updateUserName(accountCode, masterCode, userName);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
@@ -427,11 +465,17 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	
 	@Override
 	public String updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ) {
-		return String.valueOf(smarthomeService.updateElectricSequ(masterCode, electricIndex, roomIndex, oldElectricSequ, newElectricSequ));
+		int re = smarthomeService.updateElectricSequ(masterCode, electricIndex, roomIndex, oldElectricSequ, newElectricSequ);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	public String isExistElectric(String masterCode, String electricCode) {
 		return String.valueOf(smarthomeService.isExistElectric(masterCode, electricCode));
+	}
+	
+	public List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode) {
+		return smarthomeService.loadSharedElectric(masterCode, accountCode);
 	}
 	
 }

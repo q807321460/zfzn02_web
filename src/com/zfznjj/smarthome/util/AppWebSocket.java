@@ -6,7 +6,12 @@ import java.util.HashMap;
 //import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
 //import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 //import javax.crypto.Mac;
 import javax.websocket.OnClose;
@@ -63,11 +68,7 @@ public class AppWebSocket {
     //连接错误时执行
     @OnError
     public void onError(Session session, Throwable error){
-//    	if (map.get(masterCode).size()>0) {
-//    		map.get(masterCode).remove(this);
-//    	}
     	System.out.println("【客户端】主机编号为：" + this.masterCode + "出现连接错误");
-//        error.printStackTrace();
     }
     
     public static void sendMessage(String masterCode, String message) throws IOException{
@@ -78,4 +79,22 @@ public class AppWebSocket {
 		}
     }
 
+    public static void sendSync(String masterCode) {
+    	// 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  //设置两秒的延时
+        Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				try {
+					if (map.containsKey(masterCode)) {
+						for (AppWebSocket webSocket : map.get(masterCode)) {
+							webSocket.session.getBasicRemote().sendText("Sync");
+						}
+					}
+				} catch (Exception e) {
+					System.out.println("【客户端】failed to send to master: " + masterCode);
+				}
+				timer.cancel();
+			}
+		}, 2000, 1000);
+    }
 }

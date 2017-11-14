@@ -475,4 +475,10 @@ public interface SmarthomeWs {
 	String isExistElectric(
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
 			@WebParam(name="electricCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String electricCode);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	List<ElectricSharedLoacl> loadSharedElectric(
+			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
+			@WebParam(name="accountCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String accountCode);
 }

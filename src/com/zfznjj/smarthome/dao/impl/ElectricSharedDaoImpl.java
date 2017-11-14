@@ -158,6 +158,33 @@ public class ElectricSharedDaoImpl implements ElectricSharedDao{
 	}
 	
 	@Override
+	public List<ElectricSharedLoacl> select2(String masterCode, String accountCode) {
+		String sql = "SELECT e.master_code as masterCode, account_code as accountCode,"
+				+ "electric_code as electricCode, electric_index as electricIndex,"
+				+ "electric_type as electricType, order_info as orderInfo,"
+				+ "electric_name as electricName, room_index as roomIndex, is_shared as isShared "
+				+ "FROM (electrics e RIGHT JOIN users u ON e.master_code = u.master_code) "
+				+ "RIGHT JOIN electricshared es "
+				+ "ON es.electric_id = e.electric_id AND es.user_id = u.user_id  "
+				+ "WHERE e.master_code = :masterCode AND u.account_code = :accountCode";
+//		String sql2 =  "SELECT master_code as masterCode, account_code as accountCode, electric_code as electricCode, electric_index as electricIndex, "
+//				+ "electric_type as electricType, order_info as orderInfo, electric_name as electricName, room_index as roomIndex, is_shared as isShared" + 
+//				" FROM electrics WHERE electric_id in ("
+//				+ "select electric_id FROM electricshared WHERE ) ";
+		SQLQuery query  = getSession().createSQLQuery(sql)
+				.addScalar("masterCode", StandardBasicTypes.STRING)
+				.addScalar("accountCode", StandardBasicTypes.STRING)
+				.addScalar("electricCode", StandardBasicTypes.STRING)
+				.addScalar("electricIndex", StandardBasicTypes.INTEGER)
+				.addScalar("electricType", StandardBasicTypes.INTEGER)
+				.addScalar("orderInfo", StandardBasicTypes.STRING)
+				.addScalar("electricName", StandardBasicTypes.STRING)
+				.addScalar("roomIndex", StandardBasicTypes.INTEGER)
+				.addScalar("isShared", StandardBasicTypes.INTEGER);
+		return query.setString("masterCode", masterCode).setString("accountCode", accountCode).setResultTransformer(Transformers.aliasToBean(ElectricSharedLoacl.class)).list();
+	}
+	
+	@Override
 	public int adminElectricShared(String accountCode, String masterCode, int electricIndex, int admin) {
 		String sql = "UPDATE electricshared SET is_shared = :admin "
 				+ "WHERE user_id = "

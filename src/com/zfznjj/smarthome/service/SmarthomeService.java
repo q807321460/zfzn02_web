@@ -119,5 +119,6 @@ public interface SmarthomeService {
 	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException;//删除电器时用，将比删除的电器的sequ值大的sequ全部减一
 	int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ);//调整电器顺序时用，将新旧sequ值中间的sequ全部减一
 	int isExistElectric(String masterCode, String electricCode);
+	List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode);
 	//TODO 需要在这里用websocket发送一个同步消息，向其他处于登录状态的手机发送同步消息，使这些移动端重新load所有的数据
 }

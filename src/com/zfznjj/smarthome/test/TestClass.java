@@ -126,7 +126,8 @@ public class TestClass {
 	public void test() throws Exception {
 //		String string = smarthomeWs.updateElectricSequ("AA00FFD9", 1, 0, 0, 3);
 //		String a = smarthomeWs.isExistElectric("AA00FFD9", "1000AAF28715");
-		smarthomeWs.updateElectricOrder("AA00FFD9", "020021B34E0B", "XH", "01");
+//		smarthomeService.validLogin("18105631968", "qwe");
+		List<ElectricSharedLoacl> electricSharedLoacls = electricSharedDao.select2("AA00FFD9", "15305630329");
 		System.out.println("finish");
 	}
 

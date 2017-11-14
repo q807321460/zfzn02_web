@@ -9,7 +9,6 @@ import com.zfznjj.smarthome.model.Electric;
 import com.zfznjj.smarthome.model.ElectricShared;
 
 public interface ElectricSharedDao {
-
 	void addSharedElectric(String accountCode,String masterCode);
 	void addSharedElectric(String accountCode,String masterCode,int electricIndex);
 	int saveOrUpdate(ElectricShared electricShared);
@@ -21,6 +20,6 @@ public interface ElectricSharedDao {
 	ElectricShared select(int electricId, int userId);
 	List<Electric> select(String accountCode, String masterCode);
 	List<ElectricSharedLoacl> select(String masterCode);
+	List<ElectricSharedLoacl> select2(String masterCode, String accountCode);
 	int adminElectricShared(String accountCode, String masterCode, int electricIndex,int admin);
-	
 }
