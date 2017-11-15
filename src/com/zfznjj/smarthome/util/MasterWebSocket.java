@@ -41,20 +41,28 @@ public class MasterWebSocket {
         this.session = session;
         if (!map.containsKey(masterCode)) {
         	map.put(masterCode, this);
+        	System.out.println("【主机】连入主机：" + masterCode);
         }else {
+        	MasterWebSocket masterWebSocket = (MasterWebSocket) map.get(masterCode);
+        	masterWebSocket.session.close();
         	map.remove(masterCode);
         	map.put(masterCode, this);
+        	System.out.println("【主机】重新新连入主机：" + masterCode);
         }
-        System.out.println("【主机】新连入主机：" + masterCode);
     }
 
     //关闭时执行
     @OnClose
     public void onClose(){
-		if (!map.containsKey(masterCode)) {
+		if (map.containsKey(masterCode)) {
+//			try {
+//				session.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 			map.remove(masterCode);
+			System.out.println("【主机】断开主机：" + masterCode);
 		}
-    	System.out.println("【主机】断开主机：" + masterCode);
     }
 
     //收到消息时执行
@@ -66,8 +74,9 @@ public class MasterWebSocket {
 
     //连接错误时执行
     @OnError
-    public void onError(Session session, Throwable error){
-    	System.out.println("【主机】主机编号为：" + this.masterCode + "出现连接错误");
+    public void onError(Session session, Throwable error) {
+    	System.out.println("【主机】编号：" + this.masterCode + "出现错误：");
+    	System.out.println(error);
     }
     
     public static void sendElectricOrder(String masterCode, ElectricOrder electricOrder) {
