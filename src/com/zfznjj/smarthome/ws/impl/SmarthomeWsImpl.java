@@ -477,5 +477,12 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	public List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode) {
 		return smarthomeService.loadSharedElectric(masterCode, accountCode);
 	}
+
+	@Override
+	public String updateSceneName(String masterCode, int sceneIndex, String sceneName, int sceneImg) {
+		int re = smarthomeService.updateSceneName(masterCode, sceneIndex, sceneName, sceneImg);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
+	}
 	
 }

@@ -55,6 +55,7 @@ public interface SmarthomeService {
 	int updateAccountPhoto(String accountCode, byte[] photo);
 	int updateUserIP(String masterCode, String userIP);
 	int updateUserRoom(String masterCode, int roomIndex, String roomName, int roomImg);
+	int updateSceneName(String masterCode,int sceneIndex,String sceneName,int sceneImg);
 	int updateRoomSequ(String masterCode, int roomSequ);
 	int updateElectric(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex);
 	int updateSceneElectrics(String masterCode, int electricIndex, String electricName);

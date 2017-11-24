@@ -1620,4 +1620,15 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	public List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode) {
 		return electricSharedDao.select2(masterCode, accountCode);
 	}
+
+	@Override
+	public int updateSceneName(String masterCode, int sceneIndex, String sceneName, int sceneImg) {
+		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		if(scene != null){
+			scene.setSceneName(sceneName);
+			userDao.updateUserSceneTime(masterCode);
+			return sceneDao.saveOrUpdate(scene);
+		}
+	return -1;
+	}
 }

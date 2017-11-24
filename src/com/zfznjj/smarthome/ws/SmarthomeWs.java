@@ -481,4 +481,14 @@ public interface SmarthomeWs {
 	List<ElectricSharedLoacl> loadSharedElectric(
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
 			@WebParam(name="accountCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String accountCode);
+
+
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String updateSceneName(
+			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
+			@WebParam(name = "sceneIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int sceneIndex, 
+			@WebParam(name = "sceneName", targetNamespace = "http://ws.smarthome.zfznjj.com/") String sceneName, 
+			@WebParam(name = "sceneImg", targetNamespace = "http://ws.smarthome.zfznjj.com/") int sceneImg);
+	
 }
