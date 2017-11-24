@@ -34,7 +34,7 @@
 		
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="user" value="root"></property>
-		<property name="password" value="sy199400"></property>
+		<property name="password" value="123456"></property>
 		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
 		<property name="jdbcUrl" value="jdbc:mysql:///zfzn02"></property>
 		<property name="initialPoolSize" value="10"></property>

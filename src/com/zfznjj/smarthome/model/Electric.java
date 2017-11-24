@@ -6,7 +6,7 @@ public class Electric {
 	private int roomIndex;
 	private int electricIndex;
 	private String electricName;
-	private int electricSequ;
+	private Integer electricSequ;
 	private String electricCode;
 	private int electricType;
 	private String orderInfo;
@@ -49,10 +49,10 @@ public class Electric {
 	public void setElectricName(String electricName) {
 		this.electricName = electricName;
 	}
-	public int getElectricSequ() {
+	public Integer getElectricSequ() {
 		return electricSequ;
 	}
-	public void setElectricSequ(int electricSequ) {
+	public void setElectricSequ(Integer electricSequ) {
 		this.electricSequ = electricSequ;
 	}
 	public String getElectricCode() {

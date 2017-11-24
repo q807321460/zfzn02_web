@@ -10,6 +10,8 @@ import java.io.StringReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -875,12 +877,12 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			electrics = electricDao.select(masterCode);
 		} else {
 			electrics = electricSharedDao.select(accountCode, masterCode);
+			electrics = FixSharedElectricSequ(electrics);
 		}
 		Electric electric = new Electric();
 		electric.setExtraTime(user.getElectricTime());
 		electrics.add(electric);
 		return electrics;
-
 	}
 
 	@Override
@@ -1631,4 +1633,33 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}
 	return -1;
 	}
+	
+	@Override
+	public List<Electric> FixSharedElectricSequ(List<Electric>electrics) {
+		Map<Integer, List<Electric>> map = new HashMap<Integer, List<Electric>>();
+		for(Electric electric : electrics) {
+			Integer roomIndex = electric.getRoomIndex();
+            List<Electric> list = map.get(roomIndex);
+            if(list==null){
+            	list = new ArrayList<Electric>();
+            }
+            list.add(electric);
+            map.put(roomIndex, list);
+        }
+		List<Electric> returnElectircs = new ArrayList<Electric>(); 
+		for (Integer key : map.keySet()) {
+			List<Electric> list = map.get(key);
+			Collections.sort(list, new Comparator<Electric>() {
+                public int compare(Electric o1, Electric o2) {
+                    return o1.getElectricSequ().compareTo(o2.getElectricSequ());
+                }
+            });
+			for (int i = 0; i < list.size(); i++) {
+				list.get(i).setElectricSequ(i);
+				returnElectircs.add(list.get(i));
+			}
+		}
+		return returnElectircs;
+	}
+	
 }

@@ -236,17 +236,20 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		List<AdminElectricBean> adminElectricBeans = new ArrayList<>();
 		String string1 = new String(bytes);
 		String[] strings = string1.split(";");
+		String masterCode = "";
 		for (String string : strings) {
 			String[] params = string.split("\\|");
 			AdminElectricBean bean = new AdminElectricBean();
 			bean.setAccountCode(params[0]);
 			bean.setMasterCode(params[1]);
+			masterCode = params[1];
 			bean.setElectricIndex(Integer.parseInt(params[2]));
 			bean.setAdmin(Integer.parseInt(params[3]));
 			adminElectricBeans.add(bean);
 		}
-		// TODO Auto-generated method stub
-		return String.valueOf(smarthomeService.adminSharedElectric(adminElectricBeans));
+		int result = smarthomeService.adminSharedElectric(adminElectricBeans);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(result);
 	}
 	
 	@Override

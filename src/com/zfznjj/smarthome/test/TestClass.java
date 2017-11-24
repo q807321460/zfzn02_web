@@ -124,18 +124,14 @@ public class TestClass {
 
 	@Test
 	public void test() throws Exception {
-//		String string = smarthomeWs.updateElectricSequ("AA00FFD9", 1, 0, 0, 3);
-//		String a = smarthomeWs.isExistElectric("AA00FFD9", "1000AAF28715");
-//		smarthomeService.validLogin("18105631968", "qwe");
-//		List<ElectricSharedLoacl> electricSharedLoacls = electricSharedDao.select2("AA00FFD9", "15305630329");
-		 String str = smarthomeWs.updateSceneName("AA00FFEB", 0, "jiudian56", 0);
-		System.out.println(str);
+		List<Electric> electrics = smarthomeService.loadElectricFromWs("15305630329", "AA00FFD9", "");
+		System.out.println(electrics);
 	}
 
 	class MyLogHander extends Formatter { 
 	    @Override 
 	    public String format(LogRecord record) { 
-	            return record.getLevel() + ":" + record.getMessage()+"\n" ; 
+	    	return record.getLevel() + ":" + record.getMessage()+"\n" ; 
 	    } 
 	}
 	
