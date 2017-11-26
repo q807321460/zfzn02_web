@@ -20,7 +20,6 @@ import javax.websocket.server.ServerEndpoint;
 import com.zfznjj.smarthome.model.ElectricOrder;
 import com.zfznjj.smarthome.model.SceneOrder;
 
-
 /** 
  * @Class: WebSocket
  * @Description: websocket类，这个类专门提供给移动端使用，还有一个类专门提供给主机使用
@@ -33,7 +32,8 @@ public class MasterWebSocket {
     private static Map<String, MasterWebSocket> map;//用于保存各个主机对应的一组session，服务器主动发送数据时，会根据主机编号给该编号下的所有的session发送数据
     static {  
     	map = new HashMap<String, MasterWebSocket>();  
-    }  
+    } 
+    
     //连接时执行
     @OnOpen
     public void onOpen(@PathParam("masterCode") String masterCode,Session session) throws IOException{
@@ -69,7 +69,7 @@ public class MasterWebSocket {
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
     	System.out.println("【主机】收到主机" + this.masterCode + "的消息：" + message);
-        session.getBasicRemote().sendText("get message from "+this.masterCode+" message：" + message); //回复用户
+        session.getBasicRemote().sendText(message); //回复用户
     }
 
     //连接错误时执行

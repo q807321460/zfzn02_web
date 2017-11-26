@@ -372,8 +372,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			sceneOrder.setIsReaded('N');
 			Timestamp timestamp = new Timestamp(new Date().getTime());
 			sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
-			
-			
+
 			MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 			sceneOrderDao.insert(sceneOrder);
 
@@ -427,7 +426,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		sceneOrder.setIsReaded('N');
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
-		
+
 		MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 		return sceneOrderDao.insert(sceneOrder);
 	}
@@ -578,7 +577,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				sceneOrder.setIsReaded('N');
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
-				
+
 				MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 				sceneOrderDao.insert(sceneOrder);
 			}
@@ -619,7 +618,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				sceneOrder.setIsReaded('N');
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
-				
+
 				MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 				sceneOrderDao.insert(sceneOrder);
 			}
@@ -666,7 +665,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		sceneOrder.setOrderInfo("**");
 		sceneOrder.setSceneIndex(sceneIndex);
 		sceneOrder.setIsReaded('N');
-		
+
 		MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 		sceneOrderDao.insert(sceneOrder);
 
@@ -699,7 +698,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				sceneOrder.setIsReaded('N');
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
-				
+
 				MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 				sceneOrderDao.insert(sceneOrder);
 			}
@@ -863,11 +862,11 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		if (user == null || (electricTime != null && user.getElectricTime().equals(electricTime))) {
 			return null;
 		}
-		//若用户区域时间发生改变： 是否主账户： 
-		//1、是：则从主电器表读取 
-		//2、否：主节点是否有主账户：
-		//			有：从分享区域表读取 
-		//			无：从主电器表读取
+		// 若用户区域时间发生改变： 是否主账户：
+		// 1、是：则从主电器表读取
+		// 2、否：主节点是否有主账户：
+		// 有：从分享区域表读取
+		// 无：从主电器表读取
 		MasterNode masterNode = masterNodeDao.select(masterCode);
 		if (masterNode == null) {
 			return null;
@@ -1046,7 +1045,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	/**
 	 * 更新电器指令
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Override
 	public int addELectricOrder(String masterCode, String electricCode, String orderData, String orderInfo) {
@@ -1059,7 +1059,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		electricOrder.setOrderInfo(orderInfo);
 		electricOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
 		electricOrder.setIsReaded('N');
-		
+
 		MasterWebSocket.sendElectricOrder(masterCode, electricOrder);
 		return electricOrderDao.insert(electricOrder);
 	}
@@ -1442,7 +1442,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		sceneOrder.setIsReaded('N');
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		sceneOrder.setWriteTime(SmartHomeUtil.TimestampToString(timestamp));
-		
+
 		MasterWebSocket.sendSceneOrder(masterCode, sceneOrder);
 		return sceneOrderDao.insert(sceneOrder);
 	}
@@ -1601,23 +1601,24 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			return -1;
 		}
 	}
-	
+
 	@Override
-	public int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ) {
+	public int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ,
+			int newElectricSequ) {
 		userDao.updateUserELectricTime(masterCode);
 		return electricDao.updateElectricSequ(masterCode, electricIndex, roomIndex, oldElectricSequ, newElectricSequ);
 	}
-	
+
 	@Override
 	public int isExistElectric(String masterCode, String electricCode) {
 		List<Electric> electrics = electricDao.select(masterCode, electricCode);
-		if (electrics.size()==0) {
+		if (electrics.size() == 0) {
 			return 0;
-		}else {
+		} else {
 			return 1;
 		}
 	}
-	
+
 	@Override
 	public List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode) {
 		return electricSharedDao.select2(masterCode, accountCode);
@@ -1626,34 +1627,34 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	@Override
 	public int updateSceneName(String masterCode, int sceneIndex, String sceneName, int sceneImg) {
 		Scene scene = sceneDao.select(masterCode, sceneIndex);
-		if(scene != null){
+		if (scene != null) {
 			scene.setSceneName(sceneName);
 			userDao.updateUserSceneTime(masterCode);
 			return sceneDao.saveOrUpdate(scene);
 		}
-	return -1;
+		return -1;
 	}
-	
+
 	@Override
-	public List<Electric> FixSharedElectricSequ(List<Electric>electrics) {
+	public List<Electric> FixSharedElectricSequ(List<Electric> electrics) {
 		Map<Integer, List<Electric>> map = new HashMap<Integer, List<Electric>>();
-		for(Electric electric : electrics) {
+		for (Electric electric : electrics) {
 			Integer roomIndex = electric.getRoomIndex();
-            List<Electric> list = map.get(roomIndex);
-            if(list==null){
-            	list = new ArrayList<Electric>();
-            }
-            list.add(electric);
-            map.put(roomIndex, list);
-        }
-		List<Electric> returnElectircs = new ArrayList<Electric>(); 
+			List<Electric> list = map.get(roomIndex);
+			if (list == null) {
+				list = new ArrayList<Electric>();
+			}
+			list.add(electric);
+			map.put(roomIndex, list);
+		}
+		List<Electric> returnElectircs = new ArrayList<Electric>();
 		for (Integer key : map.keySet()) {
 			List<Electric> list = map.get(key);
 			Collections.sort(list, new Comparator<Electric>() {
-                public int compare(Electric o1, Electric o2) {
-                    return o1.getElectricSequ().compareTo(o2.getElectricSequ());
-                }
-            });
+				public int compare(Electric o1, Electric o2) {
+					return o1.getElectricSequ().compareTo(o2.getElectricSequ());
+				}
+			});
 			for (int i = 0; i < list.size(); i++) {
 				list.get(i).setElectricSequ(i);
 				returnElectircs.add(list.get(i));
@@ -1661,5 +1662,5 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}
 		return returnElectircs;
 	}
-	
+
 }
