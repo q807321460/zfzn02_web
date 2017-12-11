@@ -28,7 +28,6 @@ public class AccountDaoImpl implements AccountDao {
 
 	@Override
 	public int saveOrUpdate(Account account) {
-		// TODO Auto-generated method stub
 		try {
 			getSession().saveOrUpdate(account);
 			return 1;
@@ -71,7 +70,6 @@ public class AccountDaoImpl implements AccountDao {
 
 	@Override
 	public Account select(String accountCode) {
-		// TODO Auto-generated method stub
 		String hql = "FROM Account a WHERE a.accountCode = :accountCode";
 		return (Account)getSession().createQuery(hql).setString("accountCode", accountCode).uniqueResult();
 	}

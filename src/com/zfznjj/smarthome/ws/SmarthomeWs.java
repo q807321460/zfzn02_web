@@ -482,7 +482,6 @@ public interface SmarthomeWs {
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
 			@WebParam(name="accountCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String accountCode);
 
-
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
 	String updateSceneName(
