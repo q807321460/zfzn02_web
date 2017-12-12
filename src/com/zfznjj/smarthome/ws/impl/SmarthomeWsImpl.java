@@ -473,10 +473,12 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		return String.valueOf(re);
 	}
 	
+	@Override
 	public String isExistElectric(String masterCode, String electricCode) {
 		return String.valueOf(smarthomeService.isExistElectric(masterCode, electricCode));
 	}
 	
+	@Override
 	public List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode) {
 		return smarthomeService.loadSharedElectric(masterCode, accountCode);
 	}
@@ -484,6 +486,13 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	@Override
 	public String updateSceneName(String masterCode, int sceneIndex, String sceneName, int sceneImg) {
 		int re = smarthomeService.updateSceneName(masterCode, sceneIndex, sceneName, sceneImg);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
+	}
+	
+	@Override
+	public String moveElectricToAnotherRoom(String masterCode, int electricIndex, int roomIndex) {
+		int re = smarthomeService.moveElectricToAnotherRoom(masterCode, electricIndex, roomIndex);
 		AppWebSocket.sendSync(masterCode);
 		return String.valueOf(re);
 	}

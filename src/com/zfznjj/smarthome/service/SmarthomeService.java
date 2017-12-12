@@ -119,7 +119,8 @@ public interface SmarthomeService {
 	int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo);//保存报警记录
 	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException;//删除电器时用，将比删除的电器的sequ值大的sequ全部减一
 	int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ);//调整电器顺序时用，将新旧sequ值中间的sequ全部减一
-	int isExistElectric(String masterCode, String electricCode);
-	List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode);
-	List<Electric> FixSharedElectricSequ(List<Electric>electrics);
+	int isExistElectric(String masterCode, String electricCode);//添加电器时，判断该电器是否被重复添加过
+	List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode);//加载被分享的电器列表
+	List<Electric> FixSharedElectricSequ(List<Electric>electrics);//加载被分享的电器列表时，sequ有可能不正确，修复之
+	int moveElectricToAnotherRoom(String masterCode, int electricIndex, int roomIndex);//将指定的电器移动到另一个房间
 }

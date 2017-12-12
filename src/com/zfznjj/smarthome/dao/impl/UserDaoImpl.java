@@ -72,7 +72,7 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	public int updateUserELectricTime(String masterCode) {
+	public int updateUserElectricTime(String masterCode) {
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		String electricTime = SmartHomeUtil.TimestampToString(timestamp);
 		String sql = "UPDATE USERS SET electric_time = :electricTime WHERE master_code = :masterCode";

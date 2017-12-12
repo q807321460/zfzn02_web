@@ -11,7 +11,7 @@ public interface UserDao {
 	User select(String accountCode, String masterCode);
 	int updateUserIP(String masterCode, String userIP);
 	int updateUserName(String accountCode, String masterCode, String userName);
-	int updateUserELectricTime(String masterCode);
+	int updateUserElectricTime(String masterCode);
 	int updateUserELectricTime(String accountCode, String masterCode);
 	int updateUserAreaTime(String masterCode);
 	int updateUserSceneTime(String masterCode);

@@ -490,4 +490,10 @@ public interface SmarthomeWs {
 			@WebParam(name = "sceneName", targetNamespace = "http://ws.smarthome.zfznjj.com/") String sceneName, 
 			@WebParam(name = "sceneImg", targetNamespace = "http://ws.smarthome.zfznjj.com/") int sceneImg);
 	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String moveElectricToAnotherRoom(
+			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
+			@WebParam(name = "electricIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex, 
+			@WebParam(name = "roomIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int roomIndex);
 }

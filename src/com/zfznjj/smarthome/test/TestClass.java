@@ -122,16 +122,17 @@ public class TestClass {
 		return sessionFactory.getCurrentSession();
 	}
 
+	//用于本地接口测试
 	@Test
 	public void test() throws Exception {
-		List<Electric> electrics = smarthomeService.loadElectricFromWs("15305630329", "AA00FFD9", "");
-		System.out.println(electrics);
+		String str = smarthomeWs.moveElectricToAnotherRoom("AA00FFD9", 14, 1);
+		System.out.println(str);
 	}
 
 	class MyLogHander extends Formatter { 
 	    @Override 
 	    public String format(LogRecord record) { 
-	    	return record.getLevel() + ":" + record.getMessage()+"\n" ; 
+	    	return record.getLevel() + ":" + record.getMessage()+"\n"; 
 	    } 
 	}
 	

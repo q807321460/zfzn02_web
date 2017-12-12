@@ -460,7 +460,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		addSceneOrder(masterCode, electricCode, "SH", electric.getOrderInfo(), sceneIndex);
 
 		accountDao.updateUserTimeByMasterCode(masterCode);
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 		return electricDao.saveOrUpdate(electric);
 	}
 
@@ -488,7 +488,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		// electricOrder为SH，说明门锁开时触发情景模式，为SG说明门锁关时触发情景模式
 		addSceneOrder(masterCode, electricCode, electricOrder, electric.getOrderInfo(), sceneIndex);
 		accountDao.updateUserTimeByMasterCode(masterCode);
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 		return electricDao.saveOrUpdate(electric);
 	}
 
@@ -556,11 +556,11 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return userRoomDao.updateRoomSequ(masterCode, roomSequ);
 	}
 
-	// 不再使用，删除电器时： 1、更新user的electric_time 2、删除情景模式电器表中的电器 3、删除分享电器表中的电器
+	// 【已弃用】
 	@Override
 	public int deleteElectric(String masterCode, int electricIndex) {
 		// 更新电器时间
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 		List<SceneElectric> list = sceneElectricDao.select(masterCode, electricIndex);
 		if (list != null && list.size() > 0) {
 			// 更新情景电器时间
@@ -599,9 +599,10 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return electricDao.delete(masterCode, electricIndex);
 	}
 
+	// 删除电器时： 1、更新user的electric_time 2、删除情景模式电器表中的电器 3、删除分享电器表中的电器
 	public int deleteElectric(String masterCode, String electricCode, int electricIndex) {
 		// 更新电器时间
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 		List<SceneElectric> list = sceneElectricDao.select(masterCode, electricIndex);
 		if (list != null && list.size() > 0) {
 			// 更新情景电器时间
@@ -1039,7 +1040,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	public int updateIRKeyValue(String masterCode, int electricIndex, int keyKey, String keyValue) {
 		// 更新该主控下用户的电器时间标识
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 		return eTKeyDao.updateIRKeyValue(masterCode, electricIndex, keyKey, keyValue);
 	}
 
@@ -1451,7 +1452,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	@Override
 	public int updateSensorExtras(String masterCode, String electricCode, int electricIndex, String extras) {
 		// 更新电器时间
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 
 		Electric electric = electricDao.select(masterCode, electricIndex);
 		if (electric != null) {
@@ -1533,7 +1534,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	@Override
 	public int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex)
 			throws IOException {
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 		return electricDao.updateElectricSequ(masterCode, electricSequ, roomIndex);
 	}
 
@@ -1583,7 +1584,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				electric.setOrderInfo(orderInfo);
 			}
 			// 更新电器时间标识
-			userDao.updateUserELectricTime(masterCode);
+			userDao.updateUserElectricTime(masterCode);
 			int result = electricDao.saveOrUpdate(electric);
 			// 分享给该主控下的全部已分享用户
 			shareNewAddElectric(masterCode, electricIndex);
@@ -1605,7 +1606,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	@Override
 	public int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ,
 			int newElectricSequ) {
-		userDao.updateUserELectricTime(masterCode);
+		userDao.updateUserElectricTime(masterCode);
 		return electricDao.updateElectricSequ(masterCode, electricIndex, roomIndex, oldElectricSequ, newElectricSequ);
 	}
 
@@ -1661,6 +1662,26 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			}
 		}
 		return returnElectircs;
+	}
+	
+	@Override
+	public int moveElectricToAnotherRoom(String masterCode, int electricIndex, int roomIndex) {
+		userDao.updateUserElectricTime(masterCode);
+		Electric electric = electricDao.select(masterCode, electricIndex);
+		//调整之前房间中的sequ值
+		electricDao.updateElectricSequ(masterCode, electric.getElectricSequ(), electric.getRoomIndex());
+		//调整目标房间中该电器的sequ值
+		int newSequ = electricDao.getMaxElectricSequ(masterCode, roomIndex);
+		electric.setRoomIndex(roomIndex);
+		electric.setElectricSequ(newSequ+1);
+		//调整sceneElectrics表中的roomIndex值
+		List<SceneElectric> sceneElectrics = sceneElectricDao.select(masterCode, electricIndex);
+		for (SceneElectric sceneElectric : sceneElectrics) {
+			sceneElectric.setRoomIndex(roomIndex);
+			sceneElectricDao.saveOrUpdate(sceneElectric);
+		}
+		//更新该电器属性
+		return electricDao.saveOrUpdate(electric);
 	}
 
 }

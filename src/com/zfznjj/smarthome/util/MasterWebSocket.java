@@ -68,7 +68,7 @@ public class MasterWebSocket {
     //收到消息时执行
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-    	System.out.println("【主机】收到主机" + this.masterCode + "的消息：" + message);
+//    	System.out.println("【主机】收到主机" + this.masterCode + "的消息：" + message);
         session.getBasicRemote().sendText(message); //回复用户
     }
 
