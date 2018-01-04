@@ -1296,17 +1296,27 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	// 以下为konnn添加或修复的接口
 
-	// 更新电器状态，当主机返回当前电器状态时进入这个函数，重要性高
+	// 更新电器状态，当主机返回当前电器状态时进入这个函数，完成各种核心功能
 	@Override
 	public int updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo)
 			throws IOException {
-		// 调用websocket发送当前电器状态字符串到指定的socket客户端
+		// 调用websocket发送当前电器状态字符串到指定的socket客户端，所有的电器状态都要发送出去
 		String message = "<" + electricCode + electricState + stateInfo + "00>";
 		AppWebSocket.sendMessage(masterCode, message);
-		// 保存门锁记录，触发错误也不return，因为需要让程序继续跑下去
+		
+		//if (electricCode.substring(0, 2).equals("1000")) { // 说明是新门锁，需要保存开锁记录
+			
+		//}
+		
+		
+		// 保存门锁记录
 		saveDoorRecord(masterCode, electricCode, stateInfo);
 		// 传感器报警，发送短信提醒，并将记录保存到数据库中
 		checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
+		
+		//需要重构这里的代码，直接在这里判断电器的类型
+		
+		
 		return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
 	}
 
