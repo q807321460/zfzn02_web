@@ -30,9 +30,17 @@ private SessionFactory sessionFactory;
 		return appVersion;
 	}
 	
+	@Override
 	public String getAppVersionOs(){
 		String sql = "SElECT mvalue FROM i_param WHERE mkey = :appVersionOs";
 		String appVersion= (String)getSession().createSQLQuery(sql).setString("appVersionOs", "appVersionOs").uniqueResult();
+		return appVersion;
+	}
+	
+	@Override
+	public String getMasterVersion() {
+		String sql = "SElECT mvalue FROM i_param WHERE mkey = :masterVersion";
+		String appVersion= (String)getSession().createSQLQuery(sql).setString("masterVersion", "masterVersion").uniqueResult();
 		return appVersion;
 	}
 	

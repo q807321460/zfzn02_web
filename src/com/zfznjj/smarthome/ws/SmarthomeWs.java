@@ -496,4 +496,20 @@ public interface SmarthomeWs {
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode, 
 			@WebParam(name = "electricIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex, 
 			@WebParam(name = "roomIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int roomIndex);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String updateDoorOpenPerson(
+			@WebParam(name = "electricCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String electricCode, 
+			@WebParam(name = "accountCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String accountCode);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")
+	@WebMethod
+	String getMasterVersion();
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String getMasterVersionBy(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode);
+	
 }

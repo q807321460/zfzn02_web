@@ -125,8 +125,12 @@ public class TestClass {
 	//用于本地接口测试
 	@Test
 	public void test() throws Exception {
-		String str = smarthomeWs.moveElectricToAnotherRoom("AA00FFD9", 14, 1);
-		System.out.println(str);
+		//String re = smarthomeWs.loadDoorRecord("AA00FFD9", "1000AAF28715");//("AA00FFD9", "1000AAF28715", "ZF", "28001*******");
+		//String str = smarthomeWs.moveElectricToAnotherRoom("AA00FFD9", 14, 1);
+		//String message = "\"version\":\"v1.0.5t23701(a)\"";
+		//String masterVersion = message.substring(11, message.length() - 1);
+		String re = smarthomeWs.getMasterVersionBy("AA00FFD9");
+		System.out.println(re);
 	}
 
 	class MyLogHander extends Formatter { 

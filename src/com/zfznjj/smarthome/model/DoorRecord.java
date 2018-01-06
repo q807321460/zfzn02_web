@@ -7,7 +7,7 @@ public class DoorRecord {
 	private String masterCode;
 	private String electricCode;
 	private String openTime;
-	private String extras;
+	private String byPerson; // 是谁开的门锁
 	private int recordSequ;
 	
 	public int getDoorRecordId() {
@@ -34,11 +34,11 @@ public class DoorRecord {
 	public void setOpenTime(String openTime) {
 		this.openTime = openTime;
 	}
-	public String getExtras() {
-		return extras;
+	public String getByPerson() {
+		return byPerson;
 	}
-	public void setExtras(String extras) {
-		this.extras = extras;
+	public void setByPerson(String byPerson) {
+		this.byPerson = byPerson;
 	}
 	public int getRecordSequ() {
 		return recordSequ;
@@ -46,9 +46,9 @@ public class DoorRecord {
 	public void setRecordSequ(int recordSequ) {
 		this.recordSequ = recordSequ;
 	}
-	@Override
-	public String toString() {
-		return "DoorRecord [electricId=" + doorRecordId + ", masterCode=" + masterCode + ", electricCode=" + electricCode
-				+ ", openTime=" + openTime + ", extras=" + extras + ", recordSequ=" + recordSequ + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "DoorRecord [electricId=" + doorRecordId + ", masterCode=" + masterCode + ", electricCode=" + electricCode
+//				+ ", openTime=" + openTime + ", recordSequ=" + recordSequ + "]";
+//	}
 }

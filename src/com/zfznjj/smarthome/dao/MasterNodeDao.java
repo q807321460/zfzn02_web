@@ -12,4 +12,5 @@ public interface MasterNodeDao {
 	int updateSharedElectricTime(String masterCode);
 	int updateSharedSceneTime(String masterCode);
 	String getAdminCode(String masterCode);
+	int updateMasterVersion(String masterCode, String masterVersion);
 }

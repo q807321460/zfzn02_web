@@ -23,5 +23,8 @@
         <property name="sharedSceneTime" type="java.lang.String">
         	<column name="shared_scene_time"></column>
         </property>
+        <property name="masterVersion" type="java.lang.String">
+        	<column name="master_version"></column>
+        </property>
     </class>
 </hibernate-mapping>

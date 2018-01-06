@@ -54,22 +54,20 @@ public class DoorRecordDaoImpl implements DoorRecordDao {
 	}
 
 	@Override
-	public String select2(String electricCode) {
-		String sql = "SELECT record_sequ, open_time from doorrecords WHERE electric_code = :electricCode";
+	public List<Object[]> select(String electricCode) {
+		String sql = "SELECT record_sequ, by_person, open_time from doorrecords WHERE electric_code = :electricCode";
 		Query query = getSession().createSQLQuery(sql).setString("electricCode", electricCode);
 		List<Object[]> lists = query.list();
-		//这里需要做进一步处理
-		//[{"masterCode":"AA00FFD9","extras":"","recordSequ":0,"electricCode":"1000AAF28715","doorRecordId":1,"openTime":"2017-10-17 15:05:47"}]
-		String sReturn = "[";
-		int size = lists.size();
-		for (int i=0;i<size;i++) {
-			sReturn = sReturn + "{" + "\"recordSequ\"" + ":" + lists.get(i)[0].toString() + "," + "\"openTime\"" + ":" + "\"" + lists.get(i)[1].toString() + "\"" + "}";
-			if(i!=size-1) {
-				sReturn += ",";
-			}
-		}
-		sReturn+="]";
-		return sReturn;
+		return lists;
+	}
+	
+	@Override
+	public DoorRecord selectTop(String electricCode) {
+		String hql = "FROM DoorRecord WHERE electricCode = :electricCode ORDER BY recordSequ DESC";
+		Query q = getSession().createQuery(hql).setString("electricCode", electricCode);
+		q.setMaxResults(1);
+		DoorRecord t = (DoorRecord)q.uniqueResult();
+		return t;
 	}
 	
 	@Override

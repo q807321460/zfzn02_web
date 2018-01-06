@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.cxf.tools.corba.common.idltypes.IdlString;
 import org.apache.http.conn.util.PublicSuffixList;
@@ -1300,23 +1301,18 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	@Override
 	public int updateElectricState(String masterCode, String electricCode, String electricState, String stateInfo)
 			throws IOException {
-		// 调用websocket发送当前电器状态字符串到指定的socket客户端，所有的电器状态都要发送出去
+		if (electricCode.startsWith("1000")) {
+			if (electricState.equals("Z#")) // 说明是新门锁的控制码，不应该保存和推送
+				return 1;
+			// 说明是新门锁，需要确定是否保存开锁记录
+			saveDoorRecord(masterCode, electricCode, stateInfo);
+		} else if (electricCode.startsWith("0D")) {
+			// 说明是传感器，需要确定是否发送短信并保存报警记录
+			sensorAlarm(masterCode, electricCode, electricState, stateInfo);
+		}
+		// 调用websocket发送当前电器状态字符串到指定的socket客户端，将电器状态发送给客户端
 		String message = "<" + electricCode + electricState + stateInfo + "00>";
 		AppWebSocket.sendMessage(masterCode, message);
-		
-		//if (electricCode.substring(0, 2).equals("1000")) { // 说明是新门锁，需要保存开锁记录
-			
-		//}
-		
-		
-		// 保存门锁记录
-		saveDoorRecord(masterCode, electricCode, stateInfo);
-		// 传感器报警，发送短信提醒，并将记录保存到数据库中
-		checkIfSendSms(masterCode, electricCode, electricState, stateInfo);
-		
-		//需要重构这里的代码，直接在这里判断电器的类型
-		
-		
 		return childNodeDao.updateChildNodeState(masterCode, electricCode, electricState, stateInfo);
 	}
 
@@ -1353,6 +1349,10 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				doorRecord.setElectricCode(electricCode);
 				Timestamp timestamp = new Timestamp(new Date().getTime());
 				doorRecord.setOpenTime(SmartHomeUtil.TimestampToString(timestamp));
+				
+				//如果不用app开锁的话，则记录门锁上的开锁者
+				doorRecord.setByPerson(stateInfo.substring(1, 5));
+				
 				int newSequ = doorRecordDao.getMaxRecordSequ(electricCode) + 1;
 				int maxSequ = 300;// 当前需求为300
 				if (newSequ == maxSequ) {//
@@ -1369,33 +1369,33 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return -2;
 	}
 
-	// 发送短信报警通知
-	private void checkIfSendSms(String masterCode, String electricCode, String electricState, String stateInfo) {
-		// if (electricCode.startsWith("0D") && stateInfo.startsWith("01")) {
+	// 传感器报警，需要在这里判断是否报警和保存报警记录
+	private void sensorAlarm(String masterCode, String electricCode, String electricState, String stateInfo) {
+		
+		// 传感器的报警消息解析格式——<0D31001280FEAB0000******> A=0，B=0~7
+		// 00 没事 01 报警 02 防拆 03 报警+防拆 04 电量低 05 报警+电量低 06 防拆+电量低 07 报警+防拆+电量低
+		
 		if (electricCode.startsWith("0D")) {
+			// 历史遗留问题，这里理应只select到一个电器，但是之前可能在同一主机下，存在多个相同编号的传感器
 			List<Electric> electrics = electricDao.select(masterCode, electricCode);
-			String electricName = "";
-			if (electrics.size() > 0) {
-				electricName = electrics.get(0).getElectricName();
-			}
-			// <0D215239ZFAB0000******>
-			// A=0，B=0~7
-			// 00 没事
-			// 01 报警
-			// 02 防拆
-			// 03 报警+防拆
-			// 04 电量低
-			// 05 报警+电量低
-			// 06 防拆+电量低
-			// 07 报警+防拆+电量低
-			// 00~07均为字符串
-			ChildNode childNode = childNodeDao.select(masterCode, electricCode);
-			String oldStateInfo = childNode.getStateInfo();
-			if (stateInfo.equals(oldStateInfo) == true) {// 状态不变，则退出
+			Electric electric = electrics.get(0);
+			if (electric.getExtras().equals("0")) { // 说明该传感器处于撤防状态，直接退出
 				return;
 			}
-			boolean isOldAlarm;// 旧状态是否处于警报状态
-			boolean isAlarm;// 当前新状态是否处于警报状态
+			if (electric.getElectricCode().startsWith("0D31")) { // 对于门磁传感器，要对extras进行json字符串处理
+				String sJson = electric.getExtras();
+				if (sJson.equals("") == false) {
+					Map map = JsonPluginsUtil.jsonToMap(sJson);
+					if (map.containsKey("BuFang") && map.get("BuFang").equals("0")) {
+						return;
+					}
+				}
+			}
+			
+			boolean isOldAlarm; // 旧状态是否处于警报状态
+			boolean isAlarm; // 当前新状态是否处于警报状态
+			ChildNode childNode = childNodeDao.select(masterCode, electricCode);
+			String oldStateInfo = childNode.getStateInfo();
 			String flag = oldStateInfo.substring(0, 2);
 			if (flag.equals("00") || flag.equals("02") || flag.equals("04") || flag.equals("06")) {
 				isOldAlarm = false;
@@ -1408,7 +1408,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			} else {
 				isAlarm = true;
 			}
-			if (isOldAlarm == isAlarm) {// 报警的状态没有改变的话，是不需要发送短信的
+			if (isOldAlarm == isAlarm) { // 报警的状态没有改变的话，是不需要发送短信的
 				return;
 			}
 			// 保存到报警列表中去
@@ -1417,16 +1417,18 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			}
 			Timestamp timestamp = new Timestamp(new Date().getTime());
 			String time = SmartHomeUtil.TimestampToString(timestamp);
-			String msg = time + " 传感器：" + electricName + " ： " + electricCode + "状态切换为：" + stateInfo;
+			String electricName = electric.getElectricName();
+			String msg = time + " 传感器：" + electricName + " ： " + electricCode + " 状态切换为：" + stateInfo;
 			System.out.println(msg);
-			// 发送给所有被分享的手机号上去
+			
+			// 发送短信给所有被分享的手机号上去
 			List<User> list = userDao.selectByMasterCodeAll(masterCode);
 			List<String> phones = new ArrayList<String>();
 			for (User user : list) {
 				phones.add(user.getAccountCode());
 			}
 			try {
-				SmsUtil.sendAlarm(phones, electricName, time, isAlarm);// 根据是报警还是解除，确定发送短信的格式
+				SmsUtil.sendAlarm(phones, electricName, time, isAlarm); // 根据是报警还是解除，确定发送短信的格式
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1538,7 +1540,23 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	@Override
 	public String loadDoorRecord(String masterCode, String electricCode) {
-		return doorRecordDao.select2(electricCode);
+		List<Object[]> lists = (List<Object[]>) doorRecordDao.select(electricCode);
+		String sReturn = "[";
+		int size = lists.size();
+		for (int i=0;i<size;i++) {
+			sReturn = sReturn +
+						"{" +
+						"\"recordSequ\"" + ":" + lists.get(i)[0].toString() + "," + 
+						"\"byPerson\"" + ":" + "\"" + lists.get(i)[1].toString() + "\"" + ","  + // 该参数有可能是****或者是空
+						"\"openTime\"" + ":" + "\"" + lists.get(i)[2].toString() + "\"" + 
+						"}";
+			if(i!=size-1) {
+				sReturn += ",";
+			}
+		}
+		sReturn+="]";
+		System.out.println(sReturn);
+		return sReturn;
 	}
 
 	@Override
@@ -1693,5 +1711,38 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		//更新该电器属性
 		return electricDao.saveOrUpdate(electric);
 	}
+	
+	@Override
+	public String updateDoorOpenPerson(String electricCode, String accountCode) {
+		Timestamp curTime = new Timestamp(new Date().getTime());
+		DoorRecord doorRecord = (DoorRecord) doorRecordDao.selectTop(electricCode);
+		Timestamp openTime = SmartHomeUtil.StringToTimestamp(doorRecord.getOpenTime());
+		System.out.println(curTime);
+		System.out.println(openTime);
+		long deltaTime = curTime.getTime() - openTime.getTime();
+		System.out.println("门锁开锁时间间隔毫秒数：" + deltaTime);
+		if (deltaTime < 3000) { // 如果间隔不超过3000毫秒，则认为是当前账号开启的，其实这里可以不进行这个判断
+			doorRecord.setByPerson(accountCode);
+			doorRecordDao.saveOrUpdate(doorRecord);
+		}
+		return "1"; // 这里返回值没有太大意义
+	}
 
+	@Override
+	public String getMasterVersion() {
+		return otherDao.getMasterVersion();
+	}
+	
+	@Override
+	public String getMasterVersion(String masterCode) {
+		MasterNode masterNode = masterNodeDao.select(masterCode);
+		return masterNode.getMasterVersion();
+	}
+	
+	@Override
+	public int updateMasterVersion(String masterCode, String masterVersion) {
+		return masterNodeDao.updateMasterVersion(masterCode, masterVersion);
+	}
+	
+	
 }

@@ -7,6 +7,8 @@ public class MasterNode {
 	private String owner;
 	private String sharedElectricTime;
 	private String sharedSceneTime;
+	private String masterVersion;
+	
 	public MasterNode() {
 		super();
 	}
@@ -46,13 +48,19 @@ public class MasterNode {
 	public void setSharedSceneTime(String sharedSceneTime) {
 		this.sharedSceneTime = sharedSceneTime;
 	}
-	
-	@Override
-	public String toString() {
-		return "MasterNode [masterId=" + masterId + ", masterCode=" + masterCode + ", masterName=" + masterName
-				+ ", owner=" + owner + ", sharedElectricTime=" + sharedElectricTime + ", sharedSceneTime="
-				+ sharedSceneTime + "]";
+	public String getMasterVersion() {
+		return masterVersion;
 	}
+	public void setMasterVersion(String masterVersion) {
+		this.masterVersion = masterVersion;
+	}
+	
+//	@Override
+//	public String toString() {
+//		return "MasterNode [masterId=" + masterId + ", masterCode=" + masterCode + ", masterName=" + masterName
+//				+ ", owner=" + owner + ", sharedElectricTime=" + sharedElectricTime + ", sharedSceneTime="
+//				+ sharedSceneTime + "]";
+//	}
 	
 	
 }

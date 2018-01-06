@@ -79,5 +79,11 @@ public class MasterNodeDaoImpl implements MasterNodeDao {
 		String hql = "Select m.owner From MasterNode m WHERE m.masterCode = :masterCode";
 		return (String)getSession().createQuery(hql).setString("masterCode", masterCode).uniqueResult();
 	}
+	
+	@Override
+	public int updateMasterVersion(String masterCode, String masterVersion) {
+		String hql = "UPDATE MasterNode SET masterVersion = :masterVersion WHERE masterCode = :masterCode";
+		return getSession().createQuery(hql).setString("masterVersion", masterVersion).setString("masterCode", masterCode).executeUpdate();
+	}
 
 }

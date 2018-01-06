@@ -17,8 +17,14 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.zfznjj.smarthome.dao.MasterNodeDao;
 import com.zfznjj.smarthome.model.ElectricOrder;
 import com.zfznjj.smarthome.model.SceneOrder;
+import com.zfznjj.smarthome.service.SmarthomeService;
 
 /** 
  * @Class: WebSocket
@@ -29,9 +35,13 @@ import com.zfznjj.smarthome.model.SceneOrder;
 public class MasterWebSocket {
     private Session session;
     private String masterCode;
+    private static ApplicationContext ctx = null;
+    private static SmarthomeService smarthomeService;
     private static Map<String, MasterWebSocket> map;//用于保存各个主机对应的一组session，服务器主动发送数据时，会根据主机编号给该编号下的所有的session发送数据
     static {  
     	map = new HashMap<String, MasterWebSocket>();  
+    	ctx = new ClassPathXmlApplicationContext("ApplicationContext.xml");
+    	smarthomeService = ctx.getBean(SmarthomeService.class);
     } 
     
     //连接时执行
@@ -55,11 +65,6 @@ public class MasterWebSocket {
     @OnClose
     public void onClose(){
 		if (map.containsKey(masterCode)) {
-//			try {
-//				session.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
 			map.remove(masterCode);
 			System.out.println("【主机】断开主机：" + masterCode);
 		}
@@ -68,8 +73,16 @@ public class MasterWebSocket {
     //收到消息时执行
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-//    	System.out.println("【主机】收到主机" + this.masterCode + "的消息：" + message);
-        session.getBasicRemote().sendText(message); //回复用户
+    	if (message.startsWith("\"version\":")) {
+    		// 主机首次连入时，需要将版本号发送给服务器，版本格式为——"version":"v1.0.5t23701(a)"
+    		String masterVersion = message.substring(11, message.length() - 1);
+    		smarthomeService.updateMasterVersion(masterCode, masterVersion);
+    		
+    		
+    	} else { 
+    		// 将相同的信息返回给主机，实现心跳包
+    		session.getBasicRemote().sendText(message); 
+    	}
     }
 
     //连接错误时执行

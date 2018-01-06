@@ -103,24 +103,28 @@ public interface SmarthomeService {
 	String getAppVersionVoice(String appName);
 	
 	//konnn
-	int updateUserName(String accountCode, String masterCode, String userName);//更新主机名
-	int updateSceneElectricOrder(String masterCode, int electricIndex, String electricCode, int sceneIndex, String electricOrder, String orderInfo);//更新情景模式中的电器信息
-	void sendSms(String phoneNum, String msg);//向指定手机号发送指定信息的短信
-	String sendSmsCode(String phoneNum);//向指定手机号发送短信
-	String checkSmsCode(String phoneNum, String code);//根据传感器状态判断是否发送短信
-	String resetAccountPassword(String accountCode, String newPassword);//重置密码时用
-	int isExistAccount(String accountCode);//是否存在该账号，注册账号或者是忘记密码时用
-	int updateElectric1(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex, String electricOrder);//更新电器一些相关信息
-	int updateElectricState(String masterCode,String electricCode, String electricState, String stateInfo) throws IOException;//更新电器状态，这里需要实现很多的额外功能
-	String loadAlarmRecord(String masterCode);//加载报警历史记录
-	String loadDoorRecord(String masterCode, String electricCode);//加载门锁开锁记录
-	int getElectricSequ(String masterCode, int electricIndex);//获取电器排序值
-	int saveDoorRecord(String masterCode, String electricCode, String stateInfo);//保存门锁开锁记录
-	int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo);//保存报警记录
-	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException;//删除电器时用，将比删除的电器的sequ值大的sequ全部减一
-	int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ);//调整电器顺序时用，将新旧sequ值中间的sequ全部减一
-	int isExistElectric(String masterCode, String electricCode);//添加电器时，判断该电器是否被重复添加过
-	List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode);//加载被分享的电器列表
-	List<Electric> FixSharedElectricSequ(List<Electric>electrics);//加载被分享的电器列表时，sequ有可能不正确，修复之
-	int moveElectricToAnotherRoom(String masterCode, int electricIndex, int roomIndex);//将指定的电器移动到另一个房间
+	int updateUserName(String accountCode, String masterCode, String userName); //更新主机名
+	int updateSceneElectricOrder(String masterCode, int electricIndex, String electricCode, int sceneIndex, String electricOrder, String orderInfo); //更新情景模式中的电器信息
+	void sendSms(String phoneNum, String msg); //向指定手机号发送指定信息的短信
+	String sendSmsCode(String phoneNum); //向指定手机号发送短信
+	String checkSmsCode(String phoneNum, String code); //根据传感器状态判断是否发送短信
+	String resetAccountPassword(String accountCode, String newPassword); //重置密码时用
+	int isExistAccount(String accountCode); //是否存在该账号，注册账号或者是忘记密码时用
+	int updateElectric1(String masterCode, String electricCode, int electricIndex, String electricName, int sceneIndex, String electricOrder); //更新电器一些相关信息
+	int updateElectricState(String masterCode,String electricCode, String electricState, String stateInfo) throws IOException; //更新电器状态，这里需要实现很多的额外功能
+	String loadAlarmRecord(String masterCode); //加载报警历史记录
+	String loadDoorRecord(String masterCode, String electricCode); //加载门锁开锁记录
+	int getElectricSequ(String masterCode, int electricIndex); //获取电器排序值
+	int saveDoorRecord(String masterCode, String electricCode, String stateInfo); //保存门锁开锁记录
+	int saveAlarmRecord(String masterCode, String electricCode, String electricState, String stateInfo); //保存报警记录
+	int updateElectricSequ(String masterCode, int electricIndex, int electricSequ, int roomIndex) throws IOException; //删除电器时用，将比删除的电器的sequ值大的sequ全部减一
+	int updateElectricSequ(String masterCode, int electricIndex, int roomIndex, int oldElectricSequ, int newElectricSequ); //调整电器顺序时用，将新旧sequ值中间的sequ全部减一
+	int isExistElectric(String masterCode, String electricCode); //添加电器时，判断该电器是否被重复添加过
+	List<ElectricSharedLoacl> loadSharedElectric(String masterCode, String accountCode); //加载被分享的电器列表
+	List<Electric> FixSharedElectricSequ(List<Electric>electrics); //加载被分享的电器列表时，sequ有可能不正确，修复之
+	int moveElectricToAnotherRoom(String masterCode, int electricIndex, int roomIndex); //将指定的电器移动到另一个房间
+	String updateDoorOpenPerson(String electricCode, String accountCode); //将开锁记录中的开锁人更新为手机号
+	String getMasterVersion(); // 获取最新的主机版本号
+	String getMasterVersion(String masterCode); // 根据主机编号获取版本号
+	int updateMasterVersion(String masterCode, String masterVersion); // 更新主机版本号
 }

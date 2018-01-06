@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebResult;
+
 import org.hibernate.loader.custom.Return;
 
 import com.zfznjj.smarthome.entity.AdminElectricBean;
@@ -497,4 +500,18 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		return String.valueOf(re);
 	}
 	
+	@Override
+	public String updateDoorOpenPerson(String electricCode, String accountCode) {
+		return smarthomeService.updateDoorOpenPerson(electricCode, accountCode);
+	}
+	
+	@Override
+	public String getMasterVersion() {
+		return smarthomeService.getMasterVersion();
+	}
+	
+	@Override
+	public String getMasterVersionBy(String masterCode) {
+		return smarthomeService.getMasterVersion(masterCode);
+	}
 }
