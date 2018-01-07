@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.servlet.base.BaseServlet;
 
-public class ElectricStateServlet extends BaseServlet{
+public class ElectricStateServlet extends BaseServlet {
 
 	public void service(HttpServletRequest request ,
 			HttpServletResponse response)

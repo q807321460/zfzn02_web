@@ -77,8 +77,6 @@ public class MasterWebSocket {
     		// 主机首次连入时，需要将版本号发送给服务器，版本格式为——"version":"v1.0.5t23701(a)"
     		String masterVersion = message.substring(11, message.length() - 1);
     		smarthomeService.updateMasterVersion(masterCode, masterVersion);
-    		
-    		
     	} else { 
     		// 将相同的信息返回给主机，实现心跳包
     		session.getBasicRemote().sendText(message); 

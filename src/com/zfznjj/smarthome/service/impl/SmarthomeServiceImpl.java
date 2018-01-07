@@ -941,7 +941,6 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	@Override
 	public String ugetElectricOrderByMasterNode(String masterCode) {
-		// TODO Auto-generated method stub
 		StringBuffer result = new StringBuffer();
 		List<OrderInfo> list1 = electricOrderDao.ugetElectricOrders(masterCode);
 		List<OrderInfo> list = checkElectricOrderList(list1);
