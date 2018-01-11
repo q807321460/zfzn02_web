@@ -73,6 +73,22 @@ public class SmartHomeUtil {
 		return sdf.format(timestamp);
 	}
 	
+	/*
+	* 将10 or 13 位时间戳转为时间字符串
+	* convert the number 1407449951 1407499055617 to date/time format timestamp
+	*/
+	public static String string2Date(String str_num,String format ) {
+		//String str_num=Long.toString(num);
+	    SimpleDateFormat sdf = new SimpleDateFormat(format);
+	    if (str_num.length() == 13) {
+	        String date = sdf.format(new Date(Long.parseLong(str_num)));
+	        return date;
+	    } else {
+	        String date = sdf.format(new Date(Integer.parseInt(str_num) * 1000L));
+	        return date;
+	    }
+	}
+	
 	//16进制字符串转换成字节码
     public static byte[] hex2byte(String str) {
         byte[] bytes = new byte[str.length() / 2];

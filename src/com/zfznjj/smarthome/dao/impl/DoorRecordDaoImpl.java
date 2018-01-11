@@ -63,11 +63,9 @@ public class DoorRecordDaoImpl implements DoorRecordDao {
 	
 	@Override
 	public DoorRecord selectTop(String electricCode) {
-		String hql = "FROM DoorRecord WHERE electricCode = :electricCode ORDER BY recordSequ DESC";
-		Query q = getSession().createQuery(hql).setString("electricCode", electricCode);
-		q.setMaxResults(1);
-		DoorRecord t = (DoorRecord)q.uniqueResult();
-		return t;
+		String sql = "SELECT * from doorrecords WHERE electric_code = :electricCode";
+		List<DoorRecord> lists = getSession().createSQLQuery(sql).setString("electricCode", electricCode).list();
+		return lists.get(lists.size()-1); // 返回最后一个，也就是最新的数据
 	}
 	
 	@Override

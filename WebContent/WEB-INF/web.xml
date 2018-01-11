@@ -39,4 +39,23 @@
     <servlet-name>ElectricOrderServlet</servlet-name>
     <url-pattern>/servlet/ElectricOrderServlet</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>TestServlet</servlet-name>
+    <servlet-class>com.zfznjj.smarthome.servlet.TestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TestServlet</servlet-name>
+    <url-pattern>/servlet/TestServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>MasterMessageServlet</servlet-name>
+    <servlet-class>com.zfznjj.smarthome.servlet.MasterMessageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MasterMessageServlet</servlet-name>
+    <url-pattern>/servlet/MasterMessageServlet</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

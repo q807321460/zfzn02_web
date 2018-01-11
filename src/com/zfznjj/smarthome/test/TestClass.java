@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
@@ -64,6 +65,7 @@ import com.zfznjj.smarthome.service.impl.SmarthomeServiceImpl;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
 import com.zfznjj.smarthome.util.AppWebSocket;
+import com.zfznjj.smarthome.util.JsonPluginsUtil;
 import com.zfznjj.smarthome.util.WriteLog;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
 
@@ -126,11 +128,10 @@ public class TestClass {
 	@Test
 	public void test() throws Exception {
 		//String re = smarthomeWs.loadDoorRecord("AA00FFD9", "1000AAF28715");//("AA00FFD9", "1000AAF28715", "ZF", "28001*******");
-		//String str = smarthomeWs.moveElectricToAnotherRoom("AA00FFD9", 14, 1);
-		//String message = "\"version\":\"v1.0.5t23701(a)\"";
-		//String masterVersion = message.substring(11, message.length() - 1);
-		String re = smarthomeWs.getMasterVersionBy("AA00FFD9");
-		System.out.println(re);
+		String string = "{\"type\"=1}";
+		Map map = JsonPluginsUtil.jsonToMap(string);
+		String type =string.valueOf(map.get("type"));
+		System.out.println(type);
 	}
 
 	class MyLogHander extends Formatter { 

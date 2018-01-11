@@ -3,6 +3,7 @@ package com.zfznjj.smarthome.dao.impl;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +14,7 @@ import org.hibernate.type.StandardBasicTypes;
 import com.zfznjj.smarthome.dao.ElectricDao;
 import com.zfznjj.smarthome.entity.ElectricForVoice;
 import com.zfznjj.smarthome.entity.ElectricSharedLoacl;
+import com.zfznjj.smarthome.model.DoorRecord;
 import com.zfznjj.smarthome.model.Electric;
 import com.zfznjj.smarthome.model.UserRoom;
 
@@ -137,6 +139,15 @@ public class ElectricDaoImpl implements ElectricDao{
 		return query.setString("masterCode", masterCode)
 				.setResultTransformer(Transformers.aliasToBean(ElectricForVoice.class))
 				.list();
+	}
+	
+	@Override
+	public Electric getLechangeCamera(String electricCode) {
+		String hql = "FROM Electric WHERE electricCode = :electricCode";
+		Query query = getSession().createQuery(hql).setString("electricCode", electricCode);
+		// query.setMaxResults(1); // sqlserver中不能这么写，会报错
+		List<Electric> electrics = query.list();
+		return electrics.get(0); // 正常应该只有一个结果
 	}
 
 }

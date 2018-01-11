@@ -33,6 +33,7 @@ public class SmsUtil {
     //短信模板ID
     private static final String TEMPLATE_ALARM="3059875";//报警模板
     private static final String TEMPLATE_ALARMRESET="3062740";//解除报警模板
+    private static final String TEMPLATE_LECHANGE="3872154";//乐橙摄像头动检报警模板，暂时还无法修改
     
     //验证码长度，范围4～10，默认为4
     private static final String CODELEN="6";
@@ -192,7 +193,7 @@ public class SmsUtil {
     }
     
     //发送报警信息 String phones, 
-    public static String sendAlarm(List<String> phones, String electircName, String time, boolean isAlarm) throws Exception {
+    public static String sendAlarm(List<String> phones, String electircName, String time, String flag) throws Exception {
     	DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL_NOTIFICATION);
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
@@ -208,10 +209,12 @@ public class SmsUtil {
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         String sPhones = JsonPluginsUtil.listToJson(phones);
         String sParams = "[\"" + electircName + "\",\"" + time + "\"]";
-        if (isAlarm) {
+        if(flag.equals("alarm")) {
         	nvps.add(new BasicNameValuePair("templateid", TEMPLATE_ALARM));
-		}else {
+		} else if(flag.equals("alarm_reset")) {
 			nvps.add(new BasicNameValuePair("templateid", TEMPLATE_ALARMRESET));
+		} else { // 如果是lechange
+			nvps.add(new BasicNameValuePair("templateid", TEMPLATE_LECHANGE));
 		}
         nvps.add(new BasicNameValuePair("mobiles", sPhones));
         nvps.add(new BasicNameValuePair("params", sParams));//手动编辑 "[\"水浸\", \"11时44分44秒\"]"
@@ -251,5 +254,4 @@ public class SmsUtil {
         str = JsonPluginsUtil.mapToJson(map);
         return str;
     }
-    
 }

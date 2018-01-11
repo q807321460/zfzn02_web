@@ -15,6 +15,7 @@ public interface ElectricDao {
 	int saveDoorRecord(String masterCode, String electricCode, String stateInfo);
 	Electric select(String masterCode, int electricIndex);
 	Electric select(String masterCode, int electricIndex, String extras);
+	Electric getLechangeCamera(String electricCode);
 	List<Electric> select(String masterCode);
 	List<Electric> select(String masterCode, String electricCode);
 	List<ElectricForVoice> selectForVoice(String masterCode);

@@ -82,8 +82,9 @@ public class MasterNodeDaoImpl implements MasterNodeDao {
 	
 	@Override
 	public int updateMasterVersion(String masterCode, String masterVersion) {
-		String hql = "UPDATE MasterNode SET masterVersion = :masterVersion WHERE masterCode = :masterCode";
-		return getSession().createQuery(hql).setString("masterVersion", masterVersion).setString("masterCode", masterCode).executeUpdate();
+		//String hql = "UPDATE MasterNode m SET m.masterVersion = :masterVersion WHERE m.masterCode = :masterCode";
+		String sql = "update masternodes SET master_version = :masterVersion WHERE master_code = :masterCode";
+		return getSession().createSQLQuery(sql).setString("masterVersion", masterVersion).setString("masterCode", masterCode).executeUpdate();
 	}
 
 }

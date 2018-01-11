@@ -1427,7 +1427,11 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				phones.add(user.getAccountCode());
 			}
 			try {
-				SmsUtil.sendAlarm(phones, electricName, time, isAlarm); // 根据是报警还是解除，确定发送短信的格式
+				if (isAlarm == true) {
+					SmsUtil.sendAlarm(phones, electricName, time, "alarm"); // 根据是报警还是解除，确定发送短信的格式
+				} else {
+					SmsUtil.sendAlarm(phones, electricName, time, "alarm_reset"); // 根据是报警还是解除，确定发送短信的格式
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1743,5 +1747,27 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return masterNodeDao.updateMasterVersion(masterCode, masterVersion);
 	}
 	
+	@Override
+	public void lechageAlarm(String electricCode, String type, String time) {
+		if (type.equals("1")) {
+			Electric electric = electricDao.getLechangeCamera(electricCode);
+			String electricName = electric.getElectricName();
+			String sTime = SmartHomeUtil.string2Date(time, "yyyy-MM-dd HH:mm:ss");	
+			String msg = sTime + " 摄像头：" + electricName + " ： " + electricCode + " 触发动检报警";
+			System.out.println(msg);
+//			// 发送短信给所有被分享的手机号上去
+//			String masterCode = electric.getMasterCode();
+//			List<User> list = userDao.selectByMasterCodeAll(masterCode);
+//			List<String> phones = new ArrayList<String>();
+//			for (User user : list) {
+//				phones.add(user.getAccountCode());
+//			}
+//			try {
+//				SmsUtil.sendAlarm(phones, electricName, time, "lechange"); // 根据是报警还是解除，确定发送短信的格式
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+		}
+	}
 	
 }

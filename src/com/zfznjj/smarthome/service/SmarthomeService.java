@@ -127,4 +127,5 @@ public interface SmarthomeService {
 	String getMasterVersion(); // 获取最新的主机版本号
 	String getMasterVersion(String masterCode); // 根据主机编号获取版本号
 	int updateMasterVersion(String masterCode, String masterVersion); // 更新主机版本号
+	void lechageAlarm(String electricCode, String type, String time); // 乐橙摄像头触发报警，乐橙云将信息推送给服务器的后续处理
 }
