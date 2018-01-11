@@ -1353,8 +1353,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				doorRecord.setByPerson(stateInfo.substring(1, 5));
 				
 				int newSequ = doorRecordDao.getMaxRecordSequ(electricCode) + 1;
-				int maxSequ = 300;// 当前需求为300
-				if (newSequ == maxSequ) {//
+				int maxSequ = 300; // 当前需求为300
+				if (newSequ == maxSequ) { //
 					doorRecordDao.delete(electricCode, 0);
 					doorRecordDao.updateDoorRecordSequ(electricCode);
 					doorRecord.setRecordSequ(newSequ - 1);
