@@ -10,8 +10,12 @@ public class Scene {
 	private int sceneSequ;
 	private int sceneImg;
 	private String buildTime;
-	private String extraTime;
+	private String detailTiming; // 具体的某个时间点的定时
+	private String weeklyDays; // 每周有哪几天定时
+	private String daliyTiming; // 每天的定时时间
+
 	public Scene(){}
+	
 	public int getSceneId() {
 		return sceneId;
 	}
@@ -54,18 +58,36 @@ public class Scene {
 	public void setBuildTime(String buildTime) {
 		this.buildTime = buildTime;
 	}
+
+	public String getDetailTiming() {
+		return detailTiming;
+	}
+
+	public void setDetailTiming(String detailTiming) {
+		this.detailTiming = detailTiming;
+	}
+
+	public String getWeeklyDays() {
+		return weeklyDays;
+	}
+
+	public void setWeeklyDays(String weeklyDays) {
+		this.weeklyDays = weeklyDays;
+	}
+
+	public String getDaliyTiming() {
+		return daliyTiming;
+	}
+
+	public void setDaliyTiming(String daliyTiming) {
+		this.daliyTiming = daliyTiming;
+	}
 	
-	public String getExtraTime() {
-		return extraTime;
-	}
-	public void setExtraTime(String extraTime) {
-		this.extraTime = extraTime;
-	}
-	@Override
-	public String toString() {
-		return "Scene [sceneId=" + sceneId + ", masterCode=" + masterCode + ", sceneName=" + sceneName + ", sceneIndex="
-				+ sceneIndex + ", sceneSequ=" + sceneSequ + ", sceneImg=" + sceneImg + ", buildTime=" + buildTime
-				+ ", extraTime=" + extraTime + "]";
-	}
-	
+//	@Override
+//	public String toString() {
+//		return "Scene [sceneId=" + sceneId + ", masterCode=" + masterCode + ", sceneName=" + sceneName + ", sceneIndex="
+//				+ sceneIndex + ", sceneSequ=" + sceneSequ + ", sceneImg=" + sceneImg + ", buildTime=" + buildTime
+//				+ ", extraTime=" + extraTime + "]";
+//	}
+//	
 }

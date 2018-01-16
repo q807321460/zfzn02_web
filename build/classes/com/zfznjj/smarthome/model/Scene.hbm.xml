@@ -26,5 +26,14 @@
         <property name="buildTime" type="java.lang.String">
             <column name="BUILD_TIME" />
         </property>
+        <property name="detailTiming" type="java.lang.String">
+            <column name="detail_timing" />
+        </property>
+        <property name="weeklyDays" type="java.lang.String">
+            <column name="weekly_days" />
+        </property>
+        <property name="daliyTiming" type="java.lang.String">
+            <column name="daliy_timing" />
+        </property>
     </class>
 </hibernate-mapping>

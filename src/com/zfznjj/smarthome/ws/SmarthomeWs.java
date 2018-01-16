@@ -512,4 +512,19 @@ public interface SmarthomeWs {
 	String getMasterVersionBy(
 			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode);
 	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String updateSceneDetailTiming(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
+			@WebParam(name = "sceneIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int sceneIndex, 
+			@WebParam(name = "detailTiming", targetNamespace = "http://ws.smarthome.zfznjj.com/") String detailTiming);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String updateSceneDaliyTiming(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
+			@WebParam(name = "sceneIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int sceneIndex, 
+			@WebParam(name = "weeklyDays", targetNamespace = "http://ws.smarthome.zfznjj.com/") String weeklyDays, 
+			@WebParam(name = "daliyTiming", targetNamespace = "http://ws.smarthome.zfznjj.com/") String daliyTiming);
+	
 }

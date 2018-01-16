@@ -514,4 +514,19 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	public String getMasterVersionBy(String masterCode) {
 		return smarthomeService.getMasterVersion(masterCode);
 	}
+	
+	@Override
+	public String updateSceneDetailTiming(String masterCode, int sceneIndex, String detailTiming) {
+		int re = smarthomeService.updateSceneDetailTiming(masterCode, sceneIndex, detailTiming);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
+	}
+	
+	@Override
+	public String updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming) {
+		int re = smarthomeService.updateSceneDaliyTiming(masterCode, sceneIndex, weeklyDays, daliyTiming);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
+	}
+	
 }

@@ -1078,7 +1078,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		 */
 		List<Scene> scenes = sceneDao.select(masterCode);
 		Scene scene = new Scene();
-		scene.setExtraTime(user.getSceneTime());
+		//scene.setExtraTime(user.getSceneTime());
 		scenes.add(scene);
 		return scenes;
 	}
@@ -1768,6 +1768,25 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 //				e.printStackTrace();
 //			}
 		}
+	}
+	
+	@Override
+	public int updateSceneDetailTiming(String masterCode, int sceneIndex, String detailTiming) {
+		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		scene.setDetailTiming(detailTiming);
+		scene.setWeeklyDays("");
+		scene.setDaliyTiming("");
+		// 需要在这里将时间信息合成为主机能够识别的指令
+		return sceneDao.saveOrUpdate(scene);
+	}
+	
+	@Override
+	public int updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming) {
+		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		scene.setWeeklyDays(weeklyDays);
+		scene.setDaliyTiming(daliyTiming);
+		// 需要在这里将时间信息合成为主机能够识别的指令
+		return sceneDao.saveOrUpdate(scene);
 	}
 	
 }

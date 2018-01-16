@@ -128,4 +128,6 @@ public interface SmarthomeService {
 	String getMasterVersion(String masterCode); // 根据主机编号获取版本号
 	int updateMasterVersion(String masterCode, String masterVersion); // 更新主机版本号
 	void lechageAlarm(String electricCode, String type, String time); // 乐橙摄像头触发报警，乐橙云将信息推送给服务器的后续处理
+	int updateSceneDetailTiming(String masterCode, int sceneIndex, String detailTiming); // 设置具体某个时间点的情景定时
+	int updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming); // 设置每周的循环定时
 }

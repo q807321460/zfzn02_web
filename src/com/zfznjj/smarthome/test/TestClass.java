@@ -128,10 +128,10 @@ public class TestClass {
 	@Test
 	public void test() throws Exception {
 		//String re = smarthomeWs.loadDoorRecord("AA00FFD9", "1000AAF28715");//("AA00FFD9", "1000AAF28715", "ZF", "28001*******");
-		String string = "{\"type\"=1}";
-		Map map = JsonPluginsUtil.jsonToMap(string);
-		String type =string.valueOf(map.get("type"));
-		System.out.println(type);
+		Timestamp timestamp = new Timestamp(new Date().getTime());
+		String time = SmartHomeUtil.TimestampToString(timestamp);
+		String re = smarthomeWs.updateSceneDetailTiming("AA00FFD9", 0, time);
+		System.out.println(re);
 	}
 
 	class MyLogHander extends Formatter { 
