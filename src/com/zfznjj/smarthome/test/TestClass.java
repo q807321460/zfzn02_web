@@ -129,7 +129,8 @@ public class TestClass {
 	public void test() throws Exception {
 		//String re = smarthomeWs.loadDoorRecord("AA00FFD9", "1000AAF28715");//("AA00FFD9", "1000AAF28715", "ZF", "28001*******");
 		Timestamp timestamp = new Timestamp(new Date().getTime());
-		String time = SmartHomeUtil.TimestampToString(timestamp);
+		//String time = SmartHomeUtil.TimestampToString(timestamp);
+		String time = "2018-01-22 13:50:50";
 		String re = smarthomeWs.updateSceneDetailTiming("AA00FFD9", 0, time);
 		System.out.println(re);
 	}

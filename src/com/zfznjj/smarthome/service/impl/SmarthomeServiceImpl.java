@@ -1776,7 +1776,11 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		scene.setDetailTiming(detailTiming);
 		scene.setWeeklyDays("");
 		scene.setDaliyTiming("");
-		// 需要在这里将时间信息合成为主机能够识别的指令
+		// 需要在这里将时间信息合成为主机能够识别的指令 2017-10-17 11:24:43
+		String sTime = detailTiming.substring(0, 4) + detailTiming.substring(5, 7) + detailTiming.substring(8, 10) + 
+				detailTiming.substring(11, 13) + detailTiming.substring(14, 16) + detailTiming.substring(17, 19);
+		String info = "<********PH" + String.valueOf(sceneIndex) + "*F" + sTime + ">";
+		System.out.println(info);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
