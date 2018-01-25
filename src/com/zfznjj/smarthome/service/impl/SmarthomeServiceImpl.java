@@ -1759,54 +1759,66 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			String msg = sTime + " 摄像头：" + electricName + " ： " + electricCode + " 触发动检报警";
 			System.out.println(msg);
 //			// 发送短信给所有被分享的手机号上去
-//			String masterCode = electric.getMasterCode();
-//			List<User> list = userDao.selectByMasterCodeAll(masterCode);
-//			List<String> phones = new ArrayList<String>();
-//			for (User user : list) {
-//				phones.add(user.getAccountCode());
-//			}
-//			try {
-//				SmsUtil.sendAlarm(phones, electricName, time, "lechange"); // 根据是报警还是解除，确定发送短信的格式
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			String masterCode = electric.getMasterCode();
+			List<User> list = userDao.selectByMasterCodeAll(masterCode);
+			List<String> phones = new ArrayList<String>();
+			for (User user : list) {
+				phones.add(user.getAccountCode());
+			}
+			try {
+				SmsUtil.sendAlarm(phones, electricName, time, "lechange"); // 根据是报警还是解除，确定发送短信的格式
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	@Override
 	public int updateSceneDetailTiming(String masterCode, int sceneIndex, String detailTiming) {
 		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		String sHead;
+		if (scene.getDetailTiming().equals("")) {
+			sHead = "<********PH";
+		} else {
+			sHead = "<********PG";
+		}
 		scene.setDetailTiming(detailTiming);
 		scene.setWeeklyDays("");
 		scene.setDaliyTiming("");
-//		String sTime = detailTiming.substring(0, 4) + detailTiming.substring(5, 7) + detailTiming.substring(8, 10) + 
-//				detailTiming.substring(11, 13) + detailTiming.substring(14, 16) + detailTiming.substring(17, 19);
-//		String message = "<********PH" + String.valueOf(sceneIndex) + "*F" + sTime + ">";
-//		try {
-//			MasterWebSocket.sendMessage(masterCode, message);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println(message);
+		String sTime = detailTiming.substring(0, 4) + detailTiming.substring(5, 7) + detailTiming.substring(8, 10) + 
+				detailTiming.substring(11, 13) + detailTiming.substring(14, 16) + detailTiming.substring(17, 19);
+		String message = sHead + String.valueOf(sceneIndex) + "*F" + sTime + ">";
+		try {
+			MasterWebSocket.sendMessage(masterCode, message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(message);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
 	@Override
 	public int updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming) {
 		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		String sHead;
+		if (scene.getDaliyTiming().equals("")) {
+			sHead = "<********PH";
+		} else {
+			sHead = "<********PG";
+		}
 		scene.setDetailTiming("");
 		scene.setWeeklyDays(weeklyDays);
 		scene.setDaliyTiming(daliyTiming);
 //		// 需要在这里将时间信息合成为主机能够识别的指令，这里要涉及json字符串的处理，相对复杂一些
-//		String sTime = daliyTiming.substring(0, 2) + daliyTiming.substring(3, 5) + daliyTiming.substring(6, 8);
-////		String[] weekDays = JsonPluginsUtil.jsonToStringArray(weeklyDays);
-//		String message = "<********PH" + String.valueOf(sceneIndex) + "*W" + weeklyDays + "-" + sTime + ">";
-//		try {
-//			MasterWebSocket.sendMessage(masterCode, message);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println(message);
+		String sTime = daliyTiming.substring(0, 2) + daliyTiming.substring(3, 5) + daliyTiming.substring(6, 8);
+//		String[] weekDays = JsonPluginsUtil.jsonToStringArray(weeklyDays);
+		String message = sHead + String.valueOf(sceneIndex) + "*W" + weeklyDays + "-" + sTime + ">";
+		try {
+			MasterWebSocket.sendMessage(masterCode, message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(message);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
@@ -1817,6 +1829,12 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		scene.setWeeklyDays("");
 		scene.setDaliyTiming("");
 		String message = "<********PR" + String.valueOf(sceneIndex) + "**********>";
+		try {
+			MasterWebSocket.sendMessage(masterCode, message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(message);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
