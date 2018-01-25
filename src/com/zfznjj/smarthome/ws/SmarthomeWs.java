@@ -514,6 +514,12 @@ public interface SmarthomeWs {
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
+	String deleteSceneTiming(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
+			@WebParam(name = "sceneIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int sceneIndex);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
 	String updateSceneDetailTiming(
 			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
 			@WebParam(name = "sceneIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int sceneIndex, 

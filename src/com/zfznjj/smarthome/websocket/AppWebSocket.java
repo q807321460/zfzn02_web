@@ -1,4 +1,4 @@
-package com.zfznjj.smarthome.util;
+package com.zfznjj.smarthome.websocket;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;

@@ -2,6 +2,7 @@ package com.zfznjj.smarthome.service.impl;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
+import java.awt.print.Printable;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -75,11 +76,13 @@ import com.zfznjj.smarthome.model.User;
 import com.zfznjj.smarthome.model.UserRoom;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.util.JsonPluginsUtil;
-import com.zfznjj.smarthome.util.MasterWebSocket;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
-import com.zfznjj.smarthome.util.AppWebSocket;
 import com.zfznjj.smarthome.util.WriteLog;
+import com.zfznjj.smarthome.websocket.AppWebSocket;
+import com.zfznjj.smarthome.websocket.MasterWebSocket;
+
+import net.sf.json.JSONArray;
 
 //import javafx.scene.chart.ScatterChart;
 //import javafx.scene.control.cell.CheckBoxListCell;
@@ -1776,20 +1779,44 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		scene.setDetailTiming(detailTiming);
 		scene.setWeeklyDays("");
 		scene.setDaliyTiming("");
-		// 需要在这里将时间信息合成为主机能够识别的指令 2017-10-17 11:24:43
-		String sTime = detailTiming.substring(0, 4) + detailTiming.substring(5, 7) + detailTiming.substring(8, 10) + 
-				detailTiming.substring(11, 13) + detailTiming.substring(14, 16) + detailTiming.substring(17, 19);
-		String info = "<********PH" + String.valueOf(sceneIndex) + "*F" + sTime + ">";
-		System.out.println(info);
+//		String sTime = detailTiming.substring(0, 4) + detailTiming.substring(5, 7) + detailTiming.substring(8, 10) + 
+//				detailTiming.substring(11, 13) + detailTiming.substring(14, 16) + detailTiming.substring(17, 19);
+//		String message = "<********PH" + String.valueOf(sceneIndex) + "*F" + sTime + ">";
+//		try {
+//			MasterWebSocket.sendMessage(masterCode, message);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println(message);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
 	@Override
 	public int updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming) {
 		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		scene.setDetailTiming("");
 		scene.setWeeklyDays(weeklyDays);
 		scene.setDaliyTiming(daliyTiming);
-		// 需要在这里将时间信息合成为主机能够识别的指令
+//		// 需要在这里将时间信息合成为主机能够识别的指令，这里要涉及json字符串的处理，相对复杂一些
+//		String sTime = daliyTiming.substring(0, 2) + daliyTiming.substring(3, 5) + daliyTiming.substring(6, 8);
+////		String[] weekDays = JsonPluginsUtil.jsonToStringArray(weeklyDays);
+//		String message = "<********PH" + String.valueOf(sceneIndex) + "*W" + weeklyDays + "-" + sTime + ">";
+//		try {
+//			MasterWebSocket.sendMessage(masterCode, message);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println(message);
+		return sceneDao.saveOrUpdate(scene);
+	}
+	
+	@Override
+	public int deleteSceneTiming(String masterCode, int sceneIndex) {
+		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		scene.setDetailTiming("");
+		scene.setWeeklyDays("");
+		scene.setDaliyTiming("");
+		String message = "<********PR" + String.valueOf(sceneIndex) + "**********>";
 		return sceneDao.saveOrUpdate(scene);
 	}
 	

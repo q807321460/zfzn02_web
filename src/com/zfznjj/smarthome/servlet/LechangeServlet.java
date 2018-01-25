@@ -17,7 +17,7 @@ import com.zfznjj.smarthome.servlet.base.BaseServlet;
 import com.zfznjj.smarthome.util.JsonPluginsUtil;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 
-public class TestServlet extends BaseServlet {
+public class LechangeServlet extends BaseServlet {
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		// 可以获取POST推送中的数据body为一个MAP格式的JSON字符串，key值包含有——
 		// id, time, username, customDeveloperCallbackUrl, did, mid, type, cid,

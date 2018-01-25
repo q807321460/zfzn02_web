@@ -1,4 +1,4 @@
-package com.zfznjj.smarthome.util;
+package com.zfznjj.smarthome.websocket;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -43,25 +43,10 @@ import com.zfznjj.smarthome.servlet.base.BaseServlet;
 public class MasterWebSocket {
     private Session session;
     private String masterCode;
-//    private ApplicationContext ctx; // Spring应用上下文环境
-//    private static SmarthomeService smarthomeService;
     private static Map<String, MasterWebSocket> map;//用于保存各个主机对应的一组session，服务器主动发送数据时，会根据主机编号给该编号下的所有的session发送数据
     static {  
     	map = new HashMap<String, MasterWebSocket>();  
-//    	// 应该是这里的初始化失败了
-//    	ctx = new ClassPathXmlApplicationContext("ApplicationContext.xml");
-//		smarthomeService = ctx.getBean(SmarthomeService.class);
     } 
-    
-    /*
-     * 实现了ApplicationContextAware 接口，必须实现该方法；
-     *通过传递applicationContext参数初始化成员变量applicationContext
-     */
-//    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-//    	ctx = applicationContext;
-//    	smarthomeService = ctx.getBean(SmarthomeService.class);
-//    	System.out.println("【DEBUG】测试setApplicationContext是否被正常调用");
-//    }
     
     //连接时执行
     @OnOpen

@@ -130,4 +130,5 @@ public interface SmarthomeService {
 	void lechageAlarm(String electricCode, String type, String time); // 乐橙摄像头触发报警，乐橙云将信息推送给服务器的后续处理
 	int updateSceneDetailTiming(String masterCode, int sceneIndex, String detailTiming); // 设置具体某个时间点的情景定时
 	int updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming); // 设置每周的循环定时
+	int deleteSceneTiming(String masterCode, int sceneIndex); // 清除某个情景下的定时
 }

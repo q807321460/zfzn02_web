@@ -64,9 +64,9 @@ import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.service.impl.SmarthomeServiceImpl;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
-import com.zfznjj.smarthome.util.AppWebSocket;
 import com.zfznjj.smarthome.util.JsonPluginsUtil;
 import com.zfznjj.smarthome.util.WriteLog;
+import com.zfznjj.smarthome.websocket.AppWebSocket;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
 
 public class TestClass {
@@ -128,10 +128,9 @@ public class TestClass {
 	@Test
 	public void test() throws Exception {
 		//String re = smarthomeWs.loadDoorRecord("AA00FFD9", "1000AAF28715");//("AA00FFD9", "1000AAF28715", "ZF", "28001*******");
-		Timestamp timestamp = new Timestamp(new Date().getTime());
-		//String time = SmartHomeUtil.TimestampToString(timestamp);
-		String time = "2018-01-22 13:50:50";
-		String re = smarthomeWs.updateSceneDetailTiming("AA00FFD9", 0, time);
+
+		//String re = smarthomeWs.updateSceneDetailTiming("AA00FFD9", 0, "2018-01-22 13:50:50");
+		String re = smarthomeWs.updateSceneDaliyTiming("AA00FFD9", 1, "[1,3,5,6]", "14:40:00");
 		System.out.println(re);
 	}
 

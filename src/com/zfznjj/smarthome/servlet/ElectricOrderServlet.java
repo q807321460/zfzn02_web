@@ -13,6 +13,8 @@ import com.zfznjj.smarthome.model.MasterNode;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.servlet.base.BaseServlet;
 
+// 主机向服务器询问数据
+
 public class ElectricOrderServlet extends BaseServlet {
 
 	public void service(HttpServletRequest request ,

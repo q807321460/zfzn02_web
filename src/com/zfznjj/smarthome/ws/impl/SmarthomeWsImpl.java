@@ -25,8 +25,8 @@ import com.zfznjj.smarthome.model.UserRoom;
 import com.zfznjj.smarthome.service.SmarthomeService;
 import com.zfznjj.smarthome.util.SmartHomeUtil;
 import com.zfznjj.smarthome.util.SmsUtil;
-import com.zfznjj.smarthome.util.AppWebSocket;
 import com.zfznjj.smarthome.util.WriteLog;
+import com.zfznjj.smarthome.websocket.AppWebSocket;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
 
 public class SmarthomeWsImpl implements SmarthomeWs {
@@ -513,6 +513,13 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	@Override
 	public String getMasterVersionBy(String masterCode) {
 		return smarthomeService.getMasterVersion(masterCode);
+	}
+	
+	@Override
+	public String deleteSceneTiming(String masterCode, int sceneIndex) {
+		int re = smarthomeService.deleteSceneTiming(masterCode, sceneIndex);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
 	}
 	
 	@Override
