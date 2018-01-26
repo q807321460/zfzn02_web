@@ -10,6 +10,7 @@ public class Scene {
 	private int sceneSequ;
 	private int sceneImg;
 	private String buildTime;
+	private String extraTime;
 	private String detailTiming; // 具体的某个时间点的定时
 	private String weeklyDays; // 每周有哪几天定时
 	private String daliyTiming; // 每天的定时时间
@@ -82,6 +83,14 @@ public class Scene {
 	public void setDaliyTiming(String daliyTiming) {
 		this.daliyTiming = daliyTiming;
 	}
+
+	public String getExtraTime() {
+		return extraTime;
+	}
+	
+	public void setExtraTime(String extraTime) {
+		this.extraTime = extraTime;
+	}
 	
 //	@Override
 //	public String toString() {
@@ -90,4 +99,5 @@ public class Scene {
 //				+ ", extraTime=" + extraTime + "]";
 //	}
 //	
+	
 }

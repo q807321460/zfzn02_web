@@ -1075,13 +1075,12 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		if (user == null || (sceneTime != null && user.getSceneTime().equals(sceneTime))) {
 			return null;
 		}
-
 		/*
 		 * 区域不设置权限，都从主区域表读取
 		 */
 		List<Scene> scenes = sceneDao.select(masterCode);
 		Scene scene = new Scene();
-		//scene.setExtraTime(user.getSceneTime());
+		scene.setExtraTime(user.getSceneTime());
 		scenes.add(scene);
 		return scenes;
 	}
@@ -1766,7 +1765,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 				phones.add(user.getAccountCode());
 			}
 			try {
-				SmsUtil.sendAlarm(phones, electricName, time, "lechange"); // 根据是报警还是解除，确定发送短信的格式
+				System.out.println("需要发送给以下手机：" + phones);
+				SmsUtil.sendAlarm(phones, electricName, sTime, "lechange"); // 根据是报警还是解除，确定发送短信的格式
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1788,12 +1788,9 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		String sTime = detailTiming.substring(0, 4) + detailTiming.substring(5, 7) + detailTiming.substring(8, 10) + 
 				detailTiming.substring(11, 13) + detailTiming.substring(14, 16) + detailTiming.substring(17, 19);
 		String message = sHead + String.valueOf(sceneIndex) + "*F" + sTime + ">";
-		try {
-			MasterWebSocket.sendMessage(masterCode, message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		System.out.println(message);
+		System.out.println("将情景定时指令发送给服务器");
+		MasterWebSocket.sendMessage(masterCode, message);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
@@ -1809,16 +1806,12 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		scene.setDetailTiming("");
 		scene.setWeeklyDays(weeklyDays);
 		scene.setDaliyTiming(daliyTiming);
-//		// 需要在这里将时间信息合成为主机能够识别的指令，这里要涉及json字符串的处理，相对复杂一些
+//		// 需要在这里将时间信息合成为主机能够识别的指令
 		String sTime = daliyTiming.substring(0, 2) + daliyTiming.substring(3, 5) + daliyTiming.substring(6, 8);
 //		String[] weekDays = JsonPluginsUtil.jsonToStringArray(weeklyDays);
 		String message = sHead + String.valueOf(sceneIndex) + "*W" + weeklyDays + "-" + sTime + ">";
-		try {
-			MasterWebSocket.sendMessage(masterCode, message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println(message);
+		MasterWebSocket.sendMessage(masterCode, message);
+		System.out.println("scenetiming：" + masterCode + " " + message);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
@@ -1829,12 +1822,8 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		scene.setWeeklyDays("");
 		scene.setDaliyTiming("");
 		String message = "<********PR" + String.valueOf(sceneIndex) + "**********>";
-		try {
-			MasterWebSocket.sendMessage(masterCode, message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println(message);
+		MasterWebSocket.sendMessage(masterCode, message);
+		System.out.println("scenetiming：" + masterCode + " " + message);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	

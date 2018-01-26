@@ -127,11 +127,12 @@ public class TestClass {
 	//用于本地接口测试
 	@Test
 	public void test() throws Exception {
-		//String re = smarthomeWs.loadDoorRecord("AA00FFD9", "1000AAF28715");//("AA00FFD9", "1000AAF28715", "ZF", "28001*******");
-
-		//String re = smarthomeWs.updateSceneDetailTiming("AA00FFD9", 0, "2018-01-22 13:50:50");
-		String re = smarthomeWs.updateSceneDaliyTiming("AA00FFD9", 1, "[1,3,5,6]", "14:40:00");
-		System.out.println(re);
+		List<String> phones = new ArrayList<String>();
+		phones.add("18105631968");
+		phones.add("18105631969");
+		phones.add("18105631970");
+		System.out.println("需要发送给以下手机：" + phones);
+		//System.out.println(re);
 	}
 
 	class MyLogHander extends Formatter { 

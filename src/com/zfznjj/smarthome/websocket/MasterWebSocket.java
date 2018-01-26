@@ -108,9 +108,13 @@ public class MasterWebSocket {
 		}
     }
     
-    public static void sendMessage(String masterCode, String message) throws IOException{
+    public static void sendMessage(String masterCode, String message) throws IOException {
     	if (map.containsKey(masterCode)) {
-    		map.get(masterCode).session.getBasicRemote().sendText(message);
+    		try {
+    			map.get(masterCode).session.getBasicRemote().sendText(message);
+    		} catch (Exception e) {
+    			System.out.println("failed to send to master: " +masterCode);
+    		}
 		}
     }
 
