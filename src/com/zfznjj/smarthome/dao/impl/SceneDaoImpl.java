@@ -29,8 +29,7 @@ public class SceneDaoImpl implements SceneDao {
 			getSession().saveOrUpdate(scene);
 			return 1;
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 			return -2;
 		}
 	}
@@ -59,6 +58,17 @@ public class SceneDaoImpl implements SceneDao {
 	public List<Scene> select(String masterCode) {
 		String hql = "FROM Scene s WHERE s.masterCode = :masterCode";
 		return getSession().createQuery(hql).setString("masterCode", masterCode).list();
+	}
+	
+	@Override
+	public int getMaxSceneSequ(String masterCode) {
+		String sql = "SELECT MAX(scene_sequ) FROM scenes WHERE master_code = :masterCode";
+		Object object = getSession().createSQLQuery(sql).setString("masterCode", masterCode).uniqueResult();
+		if (object==null) {
+			return -1;
+		}else {
+			return (int)object;
+		}
 	}
 
 }

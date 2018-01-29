@@ -11,4 +11,5 @@ public interface SceneDao {
 	int updateSceneSequ(String masterCode, int sceneSequ);
 	Scene select(String masterCode, int sceneIndex);
 	List<Scene> select(String masterCode);
+	int getMaxSceneSequ(String masterCode);
 }

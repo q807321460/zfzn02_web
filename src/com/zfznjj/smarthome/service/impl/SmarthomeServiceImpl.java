@@ -342,9 +342,20 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 			scene.setSceneIndex(sceneIndex);
 			scene.setSceneName(sceneName);
 			scene.setSceneImg(sceneImg);
-			scene.setSceneSequ(sceneSequ);
+			
+			int newSceneSequ = sceneDao.getMaxSceneSequ(masterCode) + 1;
+			if (newSceneSequ != sceneSequ) {
+				try {
+					WriteLog.writeLog("error.log",
+							"【addScene错误】" + "masterCode:" + masterCode + "  sceneIndex:" + sceneIndex + "  sceneSequ:"
+									+ sceneSequ + "  newSceneSequ:" + newSceneSequ);
+				} catch (IOException e) {
+					System.out.println("WriteLog addScene error");
+				}
+			}
+			scene.setSceneSequ(newSceneSequ);
+//			scene.setSceneSequ(sceneSequ); // TODO：问题可能出在了这里，sequ值不正确导致了苹果情景不显示的问题
 			scene.setBuildTime(SmartHomeUtil.TimestampToString(buildTime));
-
 			userDao.updateUserSceneTime(masterCode);
 			return sceneDao.saveOrUpdate(scene);
 		}
@@ -1782,15 +1793,18 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		} else {
 			sHead = "<********PG";
 		}
-		scene.setDetailTiming(detailTiming);
-		scene.setWeeklyDays("");
-		scene.setDaliyTiming("");
 		String sTime = detailTiming.substring(0, 4) + detailTiming.substring(5, 7) + detailTiming.substring(8, 10) + 
 				detailTiming.substring(11, 13) + detailTiming.substring(14, 16) + detailTiming.substring(17, 19);
 		String message = sHead + String.valueOf(sceneIndex) + "*F" + sTime + ">";
-		System.out.println(message);
-		System.out.println("将情景定时指令发送给服务器");
-		MasterWebSocket.sendMessage(masterCode, message);
+		if (MasterWebSocket.sendMessage(masterCode, message) == false) {
+			System.out.println("scenetiming - error：" + masterCode + " " + message + " 主机没有连入websocket");
+			return 0;
+		}
+		System.out.println("scenetiming：" + masterCode + " " + message);
+		scene.setDetailTiming(detailTiming);
+		scene.setWeeklyDays("");
+		scene.setDaliyTiming("");
+		userDao.updateUserSceneTime(masterCode);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
@@ -1803,27 +1817,35 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		} else {
 			sHead = "<********PG";
 		}
-		scene.setDetailTiming("");
-		scene.setWeeklyDays(weeklyDays);
-		scene.setDaliyTiming(daliyTiming);
 //		// 需要在这里将时间信息合成为主机能够识别的指令
 		String sTime = daliyTiming.substring(0, 2) + daliyTiming.substring(3, 5) + daliyTiming.substring(6, 8);
 //		String[] weekDays = JsonPluginsUtil.jsonToStringArray(weeklyDays);
 		String message = sHead + String.valueOf(sceneIndex) + "*W" + weeklyDays + "-" + sTime + ">";
-		MasterWebSocket.sendMessage(masterCode, message);
+		if (MasterWebSocket.sendMessage(masterCode, message) == false) {
+			System.out.println("scenetiming - error：" + masterCode + " " + message + " 主机没有连入websocket");
+			return 0;
+		}
 		System.out.println("scenetiming：" + masterCode + " " + message);
+		scene.setDetailTiming("");
+		scene.setWeeklyDays(weeklyDays);
+		scene.setDaliyTiming(daliyTiming);
+		userDao.updateUserSceneTime(masterCode);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	
 	@Override
 	public int deleteSceneTiming(String masterCode, int sceneIndex) {
 		Scene scene = sceneDao.select(masterCode, sceneIndex);
+		String message = "<********PR" + String.valueOf(sceneIndex) + "**********>";
+		if (MasterWebSocket.sendMessage(masterCode, message) == false) {
+			System.out.println("scenetiming - error：" + masterCode + " " + message + " 主机没有连入websocket");
+			return 0;
+		}
+		System.out.println("scenetiming：" + masterCode + " " + message);
 		scene.setDetailTiming("");
 		scene.setWeeklyDays("");
 		scene.setDaliyTiming("");
-		String message = "<********PR" + String.valueOf(sceneIndex) + "**********>";
-		MasterWebSocket.sendMessage(masterCode, message);
-		System.out.println("scenetiming：" + masterCode + " " + message);
+		userDao.updateUserSceneTime(masterCode);
 		return sceneDao.saveOrUpdate(scene);
 	}
 	

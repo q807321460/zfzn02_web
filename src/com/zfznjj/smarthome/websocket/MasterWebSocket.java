@@ -43,7 +43,7 @@ import com.zfznjj.smarthome.servlet.base.BaseServlet;
 public class MasterWebSocket {
     private Session session;
     private String masterCode;
-    private static Map<String, MasterWebSocket> map;//用于保存各个主机对应的一组session，服务器主动发送数据时，会根据主机编号给该编号下的所有的session发送数据
+    private static Map<String, MasterWebSocket> map; // 用于保存各个主机对应的一组session，服务器主动发送数据时，会根据主机编号给该编号下的所有的session发送数据
     static {  
     	map = new HashMap<String, MasterWebSocket>();  
     } 
@@ -108,13 +108,17 @@ public class MasterWebSocket {
 		}
     }
     
-    public static void sendMessage(String masterCode, String message) throws IOException {
+    public static boolean sendMessage(String masterCode, String message) {
     	if (map.containsKey(masterCode)) {
     		try {
     			map.get(masterCode).session.getBasicRemote().sendText(message);
-    		} catch (Exception e) {
+    			return true;
+    		} catch (IOException e) {
     			System.out.println("failed to send to master: " +masterCode);
+    			return false;
     		}
+		} else {
+			return false;
 		}
     }
 
