@@ -36,7 +36,7 @@ import com.zfznjj.smarthome.servlet.base.BaseServlet;
 
 /** 
  * @Class: WebSocket
- * @Description: websocket类，这个类专门提供给移动端使用，还有一个类专门提供给主机使用
+ * @Description: websocket类，这个类专门提供给主机使用，还有一个类专门提供给App使用
  * @author 孔翰文
  */
 @ServerEndpoint(value="/websocket_master/{masterCode}")
@@ -104,7 +104,7 @@ public class MasterWebSocket {
 		try {
 			MasterWebSocket.sendMessage(masterCode, message);
 		} catch (Exception e) {
-			System.out.println("failed to send to master: " +masterCode);
+			System.out.println("failed to send to master: " + masterCode);
 		}
     }
     
@@ -114,10 +114,11 @@ public class MasterWebSocket {
     			map.get(masterCode).session.getBasicRemote().sendText(message);
     			return true;
     		} catch (IOException e) {
-    			System.out.println("failed to send to master: " +masterCode);
+    			System.out.println("failed to send to master: " + masterCode);
     			return false;
     		}
 		} else {
+			System.out.println("websocket is not connected: " + masterCode);
 			return false;
 		}
     }

@@ -533,4 +533,18 @@ public interface SmarthomeWs {
 			@WebParam(name = "weeklyDays", targetNamespace = "http://ws.smarthome.zfznjj.com/") String weeklyDays, 
 			@WebParam(name = "daliyTiming", targetNamespace = "http://ws.smarthome.zfznjj.com/") String daliyTiming);
 	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String addCentralAir(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
+			@WebParam(name = "electricCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
+			@WebParam(name = "airCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airCode);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String deleteCentralAir(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
+			@WebParam(name = "electricCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
+			@WebParam(name = "airCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airCode);
+	
 }

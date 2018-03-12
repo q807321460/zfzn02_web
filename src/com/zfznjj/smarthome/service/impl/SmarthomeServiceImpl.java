@@ -11,13 +11,16 @@ import java.io.StringReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import org.apache.cxf.tools.corba.common.idltypes.IdlString;
 import org.apache.http.conn.util.PublicSuffixList;
@@ -1788,7 +1791,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	public int updateSceneDetailTiming(String masterCode, int sceneIndex, String detailTiming) {
 		Scene scene = sceneDao.select(masterCode, sceneIndex);
 		String sHead;
-		if (scene.getDetailTiming().equals("")) {
+		if (scene.getDetailTiming() != null && scene.getDetailTiming().equals("")) {
 			sHead = "<********PH";
 		} else {
 			sHead = "<********PG";
@@ -1812,7 +1815,7 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	public int updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming) {
 		Scene scene = sceneDao.select(masterCode, sceneIndex);
 		String sHead;
-		if (scene.getDaliyTiming().equals("")) {
+		if (scene.getDaliyTiming() != null && scene.getDaliyTiming().equals("")) {
 			sHead = "<********PH";
 		} else {
 			sHead = "<********PG";
@@ -1847,6 +1850,52 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		scene.setDaliyTiming("");
 		userDao.updateUserSceneTime(masterCode);
 		return sceneDao.saveOrUpdate(scene);
+	}
+	
+	@Override
+	public int addCentralAir(String masterCode, int electricIndex, String airCode) {
+		Electric electric = electricDao.select(masterCode, electricIndex);
+		String sJson = electric.getExtras();
+		if (sJson == null || sJson.equals("")) {
+			sJson = "[]";
+		}
+		String ss[] = JsonPluginsUtil.jsonToStringArray(sJson);
+		Set<String> staffsSet = new HashSet<>(Arrays.asList(ss));
+		staffsSet.add(airCode);
+		List<String> list = new ArrayList<>(staffsSet);
+		Collections.sort(list,new Comparator<String>(){
+            public int compare(String arg0, String arg1) {
+                return arg0.compareTo(arg1);
+            }
+        });
+		String extras = JsonPluginsUtil.listToJson(list);
+		electric.setExtras(extras);
+		accountDao.updateUserTimeByMasterCode(masterCode);
+		userDao.updateUserElectricTime(masterCode);
+		return electricDao.saveOrUpdate(electric);
+	}
+	
+	@Override
+	public int deleteCentralAir(String masterCode, int electricIndex, String airCode) {
+		Electric electric = electricDao.select(masterCode, electricIndex);
+		String sJson = electric.getExtras();
+		if (sJson == null || sJson.equals("")) {
+			return -2;
+		}
+		String ss[] = JsonPluginsUtil.jsonToStringArray(sJson);
+		Set<String> staffsSet = new HashSet<>(Arrays.asList(ss));
+		staffsSet.remove(airCode);
+		List<String> list = new ArrayList<>(staffsSet);
+		Collections.sort(list,new Comparator<String>(){
+            public int compare(String arg0, String arg1) {
+                return arg0.compareTo(arg1);
+            }
+        });
+		String extras = JsonPluginsUtil.listToJson(list);
+		electric.setExtras(extras);
+		accountDao.updateUserTimeByMasterCode(masterCode);
+		userDao.updateUserElectricTime(masterCode);
+		return electricDao.saveOrUpdate(electric);
 	}
 	
 }

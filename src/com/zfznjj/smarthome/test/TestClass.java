@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,8 @@ import com.zfznjj.smarthome.util.JsonPluginsUtil;
 import com.zfznjj.smarthome.util.WriteLog;
 import com.zfznjj.smarthome.websocket.AppWebSocket;
 import com.zfznjj.smarthome.ws.SmarthomeWs;
+
+import net.sf.json.JSON;
 
 public class TestClass {
 
@@ -127,12 +130,8 @@ public class TestClass {
 	//用于本地接口测试
 	@Test
 	public void test() throws Exception {
-		List<String> phones = new ArrayList<String>();
-		phones.add("18105631968");
-		phones.add("18105631969");
-		phones.add("18105631970");
-		System.out.println("需要发送给以下手机：" + phones);
-		//System.out.println(re);
+		String re = smarthomeWs.deleteCentralAir("0717A5A0", 24, "0103");
+		System.out.println(re);
 	}
 
 	class MyLogHander extends Formatter { 

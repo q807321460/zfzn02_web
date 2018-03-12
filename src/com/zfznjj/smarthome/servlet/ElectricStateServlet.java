@@ -21,12 +21,13 @@ public class ElectricStateServlet extends BaseServlet {
 			String state = request.getParameter("electricState");
 			System.out.println(state);
 			String masterCode = "", electricCode = "", electricState = "", stateInfo = "";
-			if(state.length() == 22) { //旧电器，编号只有8位
+			// 这里将来很可能会添加中央空调的处理逻辑，这个反馈状态的长度是可变的，因此需要处理
+			if(state.length() == 22) { // 旧电器，编号只有8位
 				masterCode = state.substring(1,9);
 				electricCode = state.substring(9,17);
 				electricState = state.substring(17,19);
 				stateInfo = state.substring(19,21);
-			} else if (state.length() == 26) { //新电器，编号有12位
+			} else if (state.length() == 26) { // 新电器，编号有12位
 				masterCode = state.substring(1,9);
 				electricCode = state.substring(9,21);
 				electricState = state.substring(21,23);
@@ -36,6 +37,14 @@ public class ElectricStateServlet extends BaseServlet {
 				electricCode = state.substring(9,21);
 				electricState = state.substring(21,23);
 				stateInfo = state.substring(23,28);
+			} else { // 对于中央空调而言，长度一般是远超过29位的，至少应该是36位
+				masterCode = state.substring(1,9);
+				electricCode = state.substring(9,21);
+				if (!electricCode.startsWith("1100")) 
+					return;
+				electricState = "00";
+				int len = state.length();
+				stateInfo = state.substring(21,len-1);
 			}
 			StringBuffer sb = new StringBuffer(stateInfo);
 			while(sb.length() < 10){
