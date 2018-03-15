@@ -22,7 +22,7 @@
 	
 	<!-- 配置数据源 -->
 	
-<!-- 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+<!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="user" value="sa"></property>
 		<property name="password" value="zfznjj"></property>
 		<property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>

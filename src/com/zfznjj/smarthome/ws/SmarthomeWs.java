@@ -537,14 +537,14 @@ public interface SmarthomeWs {
 	@WebMethod
 	String addCentralAir(
 			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
-			@WebParam(name = "electricCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
+			@WebParam(name = "electricIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
 			@WebParam(name = "airCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airCode);
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
 	String deleteCentralAir(
 			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
-			@WebParam(name = "electricCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
+			@WebParam(name = "electricIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
 			@WebParam(name = "airCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airCode);
 	
 }
