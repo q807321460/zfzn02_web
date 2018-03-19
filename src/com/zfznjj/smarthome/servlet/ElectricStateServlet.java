@@ -42,9 +42,9 @@ public class ElectricStateServlet extends BaseServlet {
 				electricCode = state.substring(9,21);
 				if (!electricCode.startsWith("1100")) 
 					return;
-				electricState = "00";
+				electricState = state.substring(21,23);
 				int len = state.length();
-				stateInfo = state.substring(21,len-1);
+				stateInfo = state.substring(23,len-1);
 			}
 			StringBuffer sb = new StringBuffer(stateInfo);
 			while(sb.length() < 10){
