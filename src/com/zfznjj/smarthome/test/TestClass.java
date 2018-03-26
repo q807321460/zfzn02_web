@@ -130,8 +130,14 @@ public class TestClass {
 	//用于本地接口测试
 	@Test
 	public void test() throws Exception {
-		String re = smarthomeWs.deleteCentralAir("0717A5A0", 24, "0103");
-		System.out.println(re);
+		Account account1 = accountDao.select("18105631968");
+		InputStream inputStream;
+		inputStream = new FileInputStream("C:/logo.jpg");
+		byte[] photo = new byte[inputStream.available()];
+		inputStream.read(photo);
+		account1.setPhoto(photo);
+		inputStream.close();
+		accountDao.saveOrUpdate(account1);
 	}
 
 	class MyLogHander extends Formatter { 

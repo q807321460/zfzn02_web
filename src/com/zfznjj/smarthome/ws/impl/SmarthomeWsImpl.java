@@ -62,6 +62,11 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	}
 	
 	@Override
+	public String addAccountDaFuGui(String accountCode, String password,String accountName) {
+		return ""+smarthomeService.addAccountDaFuGui(accountCode, password,accountName);
+	}
+	
+	@Override
 	public String getAdminAccountCode(String masterCode) {
 		return smarthomeService.getAdminAccountCode(masterCode);
 	}

@@ -268,45 +268,6 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		return userDao.updateUserIP(masterCode, userIP);
 	}
 
-	/**
-	 * return -2:插入失败，1：插入成功，2：该用户已注册
-	 */
-	@Override
-	public int addAccount(String accountCode, String password, String accountName) {
-		// TODO Auto-generated method stub
-		Account account1 = accountDao.select(accountCode);
-		if (account1 == null) {
-			Account account = new Account();
-			InputStream inputStream;
-			try {
-				inputStream = new FileInputStream("C:/logo.jpg");
-				byte[] photo = new byte[inputStream.available()];
-				inputStream.read(photo);
-				account.setPhoto(photo);
-				inputStream.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("addAccount 图片文件读取失败");
-			} catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("addAccount 其他的错误");
-			}
-			account.setAccountCode(accountCode);
-			account.setPassword(password);
-			account.setAccountName(accountName);
-			account.setLePhone(accountCode);
-			account.setLeSign(0);
-			Timestamp timestamp = new Timestamp(new Date().getTime());
-			account.setSignTime(SmartHomeUtil.TimestampToString(timestamp));
-			account.setAccountTime(SmartHomeUtil.TimestampToString(timestamp));
-			account.setUserTime(SmartHomeUtil.TimestampToString(timestamp));
-			return accountDao.saveOrUpdate(account);
-		}
-		return 2;
-
-	}
-
 	@Override
 	public List<String> getAccountCodesByMaster(String masterCode) {
 		// TODO Auto-generated method stub
@@ -764,7 +725,6 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 
 	@Override
 	public Account loadAccountFromWs(String accountCode, String accountTime) {
-		// TODO Auto-generated method stub
 		Account account = accountDao.select(accountCode);
 		if (account == null) {
 			return null;
@@ -1896,6 +1856,63 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		accountDao.updateUserTimeByMasterCode(masterCode);
 		userDao.updateUserElectricTime(masterCode);
 		return electricDao.saveOrUpdate(electric);
+	}
+
+	/**
+	 * return -2:插入失败，1：插入成功，2：该用户已注册
+	 */
+	@Override
+	public int addAccount(String accountCode, String password, String accountName) {
+		return _addAccount(accountCode, password, accountName, 0);
+	}
+	
+	/**
+	 * return -2:插入失败，1：插入成功，2：该用户已注册
+	 */
+	@Override
+	public int addAccountDaFuGui(String accountCode, String password, String accountName) {
+		return _addAccount(accountCode, password, accountName, 1);
+	}
+	
+	@Override
+	public int _addAccount(String accountCode, String password, String accountName, int flag) {
+		Account account1 = accountDao.select(accountCode);
+		if (account1 == null) {
+			Account account = new Account();
+			InputStream inputStream = null;
+			try {
+				switch (flag) {
+				case 0:
+					inputStream = new FileInputStream("C:/logo.jpg");
+					break;
+				case 1:
+					inputStream = new FileInputStream("C:/logo_dafugui.jpg");
+					break;
+				default:
+					inputStream = new FileInputStream("C:/logo.jpg");
+					break;
+				}
+				byte[] photo = new byte[inputStream.available()];
+				inputStream.read(photo);
+				account.setPhoto(photo);
+				inputStream.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("addAccountDaFuGui 图片文件读取失败");
+			} catch (Exception e) {
+				System.out.println("addAccountDaFuGui 其他的错误");
+			}
+			account.setAccountCode(accountCode);
+			account.setPassword(password);
+			account.setAccountName(accountName);
+			account.setLePhone(accountCode);
+			account.setLeSign(0);
+			Timestamp timestamp = new Timestamp(new Date().getTime());
+			account.setSignTime(SmartHomeUtil.TimestampToString(timestamp));
+			account.setAccountTime(SmartHomeUtil.TimestampToString(timestamp));
+			account.setUserTime(SmartHomeUtil.TimestampToString(timestamp));
+			return accountDao.saveOrUpdate(account);
+		}
+		return 2;
 	}
 	
 }

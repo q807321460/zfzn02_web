@@ -60,6 +60,13 @@ public interface SmarthomeWs {
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod
+	String addAccountDaFuGui(
+			@WebParam(name="accountCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String accountCode,
+			@WebParam(name="password",targetNamespace="http://ws.smarthome.zfznjj.com/")String password,
+			@WebParam(name="accountName",targetNamespace="http://ws.smarthome.zfznjj.com/")String accountName);
+	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
 	String getAdminAccountCode(
 			@WebParam(name="masterCode",targetNamespace="http://ws.smarthome.zfznjj.com/")String masterCode);
 	
