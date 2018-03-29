@@ -131,7 +131,7 @@ public interface SmarthomeService {
 	int updateSceneDetailTiming(String masterCode, int sceneIndex, String detailTiming); // 设置具体某个时间点的情景定时
 	int updateSceneDaliyTiming(String masterCode, int sceneIndex, String weeklyDays, String daliyTiming); // 设置每周的循环定时
 	int deleteSceneTiming(String masterCode, int sceneIndex); // 清除某个情景下的定时
-	int addCentralAir(String masterCode, int electricIndex, String airCode); // 在指定的中央空调下添加一个新的子空调
+	int addCentralAir(String masterCode, int electricIndex, String airCode,String airName); // 在指定的中央空调下添加一个新的子空调
 	int deleteCentralAir(String masterCode, int electricIndex, String airCode); // 在指定的中央空调下删除一个子空调
 	int _addAccount(String accountCode,String password, String accountName, int flag); // 内部static函数，防止代码重复
 	int addAccountDaFuGui(String accountCode,String password, String accountName); // 添加大富贵智慧云账号，唯一的区别是默认的头像不一样

@@ -130,14 +130,17 @@ public class TestClass {
 	//用于本地接口测试
 	@Test
 	public void test() throws Exception {
-		Account account1 = accountDao.select("18105631968");
-		InputStream inputStream;
-		inputStream = new FileInputStream("C:/logo.jpg");
-		byte[] photo = new byte[inputStream.available()];
-		inputStream.read(photo);
-		account1.setPhoto(photo);
-		inputStream.close();
-		accountDao.saveOrUpdate(account1);
+//		Account account1 = accountDao.select("18105631968");
+//		InputStream inputStream;
+//		inputStream = new FileInputStream("C:/logo.jpg");
+//		byte[] photo = new byte[inputStream.available()];
+//		inputStream.read(photo);
+//		account1.setPhoto(photo);
+//		inputStream.close();
+//		accountDao.saveOrUpdate(account1);
+		 smarthomeService.addCentralAir("aa00ffd0", 15, "0102", "卧室");
+		
+		
 	}
 
 	class MyLogHander extends Formatter { 

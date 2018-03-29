@@ -545,7 +545,8 @@ public interface SmarthomeWs {
 	String addCentralAir(
 			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
 			@WebParam(name = "electricIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
-			@WebParam(name = "airCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airCode);
+			@WebParam(name = "airCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airCode,
+			@WebParam(name = "airName", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airName);
 	
 	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
 	@WebMethod

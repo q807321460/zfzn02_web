@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -1811,25 +1812,19 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		userDao.updateUserSceneTime(masterCode);
 		return sceneDao.saveOrUpdate(scene);
 	}
-	
 	@Override
-	public int addCentralAir(String masterCode, int electricIndex, String airCode) {
+	public int addCentralAir(String masterCode, int electricIndex, String airCode,String airName) {
 		Electric electric = electricDao.select(masterCode, electricIndex);
 		String sJson = electric.getExtras();
 		if (sJson == null || sJson.equals("")) {
 			sJson = "[]";
 		}
-		String ss[] = JsonPluginsUtil.jsonToStringArray(sJson);
-		Set<String> staffsSet = new HashSet<>(Arrays.asList(ss));
-		staffsSet.add(airCode);
-		List<String> list = new ArrayList<>(staffsSet);
-		Collections.sort(list,new Comparator<String>(){
-            public int compare(String arg0, String arg1) {
-                return arg0.compareTo(arg1);
-            }
-        });
-		String extras = JsonPluginsUtil.listToJson(list);
-		electric.setExtras(extras);
+		Map map;
+		map = JsonPluginsUtil.jsonToMap(sJson);
+		map = new LinkedHashMap();
+		map.put(airName,airCode);
+		String sExtras = JsonPluginsUtil.mapToJson(map);
+		electric.setExtras(sExtras);
 		accountDao.updateUserTimeByMasterCode(masterCode);
 		userDao.updateUserElectricTime(masterCode);
 		return electricDao.saveOrUpdate(electric);
