@@ -1816,13 +1816,13 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	public int addCentralAir(String masterCode, int electricIndex, String airCode,String airName) {
 		Electric electric = electricDao.select(masterCode, electricIndex);
 		String sJson = electric.getExtras();
-		if (sJson == null || sJson.equals("")) {
-			sJson = "[]";
-		}
 		Map map;
-		map = JsonPluginsUtil.jsonToMap(sJson);
-		map = new LinkedHashMap();
-		map.put(airName,airCode);
+		if (sJson == null ||sJson.equals("")) {
+			map = new HashMap();
+		} else {
+			map = JsonPluginsUtil.jsonToMap(sJson);
+		}
+		map.put(airCode,airName);
 		String sExtras = JsonPluginsUtil.mapToJson(map);
 		electric.setExtras(sExtras);
 		accountDao.updateUserTimeByMasterCode(masterCode);
@@ -1831,23 +1831,17 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 	}
 	
 	@Override
-	public int deleteCentralAir(String masterCode, int electricIndex, String airCode) {
+	public int deleteCentralAir(String masterCode, int electricIndex, String airCode,String airName) {
 		Electric electric = electricDao.select(masterCode, electricIndex);
 		String sJson = electric.getExtras();
 		if (sJson == null || sJson.equals("")) {
 			return -2;
 		}
-		String ss[] = JsonPluginsUtil.jsonToStringArray(sJson);
-		Set<String> staffsSet = new HashSet<>(Arrays.asList(ss));
-		staffsSet.remove(airCode);
-		List<String> list = new ArrayList<>(staffsSet);
-		Collections.sort(list,new Comparator<String>(){
-            public int compare(String arg0, String arg1) {
-                return arg0.compareTo(arg1);
-            }
-        });
-		String extras = JsonPluginsUtil.listToJson(list);
-		electric.setExtras(extras);
+		Map map;
+		map = JsonPluginsUtil.jsonToMap(sJson);
+		map.remove(airCode,airName);
+		String sExtras = JsonPluginsUtil.mapToJson(map);
+		electric.setExtras(sExtras);
 		accountDao.updateUserTimeByMasterCode(masterCode);
 		userDao.updateUserElectricTime(masterCode);
 		return electricDao.saveOrUpdate(electric);

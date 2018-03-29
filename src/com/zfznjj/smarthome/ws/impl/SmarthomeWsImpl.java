@@ -548,8 +548,8 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 	}
 	
 	@Override
-	public String deleteCentralAir(String masterCode, int electricIndex, String airCode) {
-		int re = smarthomeService.deleteCentralAir(masterCode, electricIndex, airCode);
+	public String deleteCentralAir(String masterCode, int electricIndex, String airCode,String airName) {
+		int re = smarthomeService.deleteCentralAir(masterCode, electricIndex, airCode,airName);
 		AppWebSocket.sendSync(masterCode);
 		return String.valueOf(re);
 	}

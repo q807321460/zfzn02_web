@@ -138,8 +138,8 @@ public class TestClass {
 //		account1.setPhoto(photo);
 //		inputStream.close();
 //		accountDao.saveOrUpdate(account1);
-		 smarthomeService.addCentralAir("aa00ffd0", 15, "0102", "Œ‘ “");
-		
+		 smarthomeService.addCentralAir("0717A5A0", 25, "0102", "Œ‘ “");
+//		smarthomeService.updateSceneName("0717A5A0", 25, "◊ˆ¥Ì¡À", 1);
 		
 	}
 
