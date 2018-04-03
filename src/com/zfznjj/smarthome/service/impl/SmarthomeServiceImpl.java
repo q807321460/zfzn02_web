@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.cxf.tools.corba.common.idltypes.IdlString;
 import org.apache.http.conn.util.PublicSuffixList;
@@ -1820,9 +1821,9 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		if (sJson == null ||sJson.equals("")) {
 			map = new HashMap();
 		} else {
-			map = JsonPluginsUtil.jsonToMap(sJson);
-		}
-		map.put(airCode,airName);
+			map =  JsonPluginsUtil.jsonToMap(sJson);
+		} 
+		map.put(airCode,airName);	
 		String sExtras = JsonPluginsUtil.mapToJson(map);
 		electric.setExtras(sExtras);
 		accountDao.updateUserTimeByMasterCode(masterCode);
@@ -1903,5 +1904,21 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		}
 		return 2;
 	}
-	
-}
+
+	@Override
+	public int updateCentralAirName(String masterCode, int electricIndex, String airCode, String newAirName) {
+		Electric electric = electricDao.select(masterCode, electricIndex);
+		String sJson = electric.getExtras();
+		if (sJson == null || sJson.equals("")) {
+			return -2;
+		}
+		Map map;
+		map = JsonPluginsUtil.jsonToMap(sJson);
+		map.put(airCode,newAirName);
+		String sExtras = JsonPluginsUtil.mapToJson(map);
+		electric.setExtras(sExtras);
+		accountDao.updateUserTimeByMasterCode(masterCode);
+		userDao.updateUserElectricTime(masterCode);
+		return electricDao.saveOrUpdate(electric);
+	}
+	}

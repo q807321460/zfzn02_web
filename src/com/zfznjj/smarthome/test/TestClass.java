@@ -138,7 +138,7 @@ public class TestClass {
 //		account1.setPhoto(photo);
 //		inputStream.close();
 //		accountDao.saveOrUpdate(account1);
-		 smarthomeService.addCentralAir("0717A5A0", 25, "0102", "卧室");
+		 smarthomeService.updateCentralAirName("0717A5A0",25, "0101","我爱丁元");
 //		smarthomeService.updateSceneName("0717A5A0", 25, "做错了", 1);
 		
 	}

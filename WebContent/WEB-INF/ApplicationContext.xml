@@ -29,7 +29,7 @@
 		<property name="jdbcUrl" value="jdbc:sqlserver://101.201.211.87:1433;DatabaseName=zfzn02"></property>
 		<property name="initialPoolSize" value="100"></property>
 		<property name="maxPoolSize" value="300"></property>
-	</bean> -->
+	</bean>--> 
 	
 		
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
