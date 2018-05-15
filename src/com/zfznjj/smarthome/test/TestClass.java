@@ -138,8 +138,10 @@ public class TestClass {
 //		account1.setPhoto(photo);
 //		inputStream.close();
 //		accountDao.saveOrUpdate(account1);
-		 smarthomeService.updateCentralAirName("0717A5A0",25, "0101","我爱丁元");
+//		 smarthomeService.updateCentralAirName("0717A5A0",25, "0101","我爱丁元");
 //		smarthomeService.updateSceneName("0717A5A0", 25, "做错了", 1);
+		System.out.println(145);
+		//smarthomeService.bindingDuplexSwift("0717A5A0", 26, "1", "25");
 		
 	}
 

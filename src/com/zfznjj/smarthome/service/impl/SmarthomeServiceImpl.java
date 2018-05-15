@@ -1921,4 +1921,24 @@ public class SmarthomeServiceImpl implements SmarthomeService {
 		userDao.updateUserElectricTime(masterCode);
 		return electricDao.saveOrUpdate(electric);
 	}
+
+	@Override
+	public int bindingDuplexSwift(String masterCode, int electricIndex, String roomIndex, String bindingIndex) {
+		Electric electric = electricDao.select(masterCode, electricIndex);
+		String extras;
+		extras = roomIndex + "-" +bindingIndex;
+		electric.setExtras(extras);
+		accountDao.updateUserTimeByMasterCode(masterCode);
+		userDao.updateUserElectricTime(masterCode);
+		return electricDao.saveOrUpdate(electric);
+	}
+
+	@Override
+	public int deleteDuplexSwift(String masterCode, int electricIndex) {
+		Electric electric = electricDao.select(masterCode, electricIndex);
+		electric.setExtras("");
+		accountDao.updateUserTimeByMasterCode(masterCode);
+		userDao.updateUserElectricTime(masterCode);
+		return electricDao.saveOrUpdate(electric);
+	}
 	}

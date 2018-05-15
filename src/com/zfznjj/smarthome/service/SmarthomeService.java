@@ -136,4 +136,6 @@ public interface SmarthomeService {
 	int updateCentralAirName(String masterCode, int electricIndex, String airCode,String newAirName);//在制定中央空调下修改空调名字
 	int _addAccount(String accountCode,String password, String accountName, int flag); // 内部static函数，防止代码重复
 	int addAccountDaFuGui(String accountCode,String password, String accountName); // 添加大富贵智慧云账号，唯一的区别是默认的头像不一样
+	int bindingDuplexSwift(String masterCode,int electricIndex,String roomIndex,String bindingIndex);//绑定双联开关
+	int deleteDuplexSwift(String masterCode,int electricIndex);//绑定双联开关
 }

@@ -22,24 +22,24 @@
 	
 	<!-- 配置数据源 -->
 	
-	<!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="user" value="sa"></property>
 		<property name="password" value="zfznjj"></property>
 		<property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
 		<property name="jdbcUrl" value="jdbc:sqlserver://101.201.211.87:1433;DatabaseName=zfzn02"></property>
 		<property name="initialPoolSize" value="100"></property>
 		<property name="maxPoolSize" value="300"></property>
-	</bean>--> 
+	</bean> 
 	
 		
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="user" value="root"></property>
 		<property name="password" value="123456"></property>
 		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
 		<property name="jdbcUrl" value="jdbc:mysql:///zfzn02"></property>
 		<property name="initialPoolSize" value="10"></property>
 		<property name="maxPoolSize" value="100"></property>
-	</bean>
+	</bean>--> 
 	
 	
 	<!-- 配置Hibernate 的SessionFactory 实例 :通过Spring提供的LocalSessionFactoryBean进行配置-->

@@ -563,4 +563,16 @@ public interface SmarthomeWs {
 			@WebParam(name = "airCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String airCode,
 			@WebParam(name = "newAirName", targetNamespace = "http://ws.smarthome.zfznjj.com/") String newAirName);
 	
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String bindingDuplexSwift(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
+			@WebParam(name = "electricIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex,
+			@WebParam(name = "roomIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") String roomIndex,
+			@WebParam(name = "bindingIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") String bindingIndex);
+	@WebResult(name="result",targetNamespace="http://ws.smarthome.zfznjj.com/")  
+	@WebMethod
+	String deleteDuplexSwift(
+			@WebParam(name = "masterCode", targetNamespace = "http://ws.smarthome.zfznjj.com/") String masterCode, 
+			@WebParam(name = "electricIndex", targetNamespace = "http://ws.smarthome.zfznjj.com/") int electricIndex);
 }

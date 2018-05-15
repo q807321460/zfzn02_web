@@ -560,5 +560,18 @@ public class SmarthomeWsImpl implements SmarthomeWs {
 		AppWebSocket.sendSync(masterCode);
 		return String.valueOf(re);
 	}
-	
+
+	@Override
+	public String bindingDuplexSwift(String masterCode, int electricIndex, String roomIndex, String bindingIndex) {
+		int re = smarthomeService.bindingDuplexSwift(masterCode, electricIndex, roomIndex, bindingIndex);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
+	}
+
+	@Override
+	public String deleteDuplexSwift(String masterCode, int electricIndex) {
+		int re = smarthomeService.deleteDuplexSwift(masterCode, electricIndex);
+		AppWebSocket.sendSync(masterCode);
+		return String.valueOf(re);
+	}
 }
